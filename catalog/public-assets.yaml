@@ -1,5 +1,5 @@
 schema: pai-public-catalog/v1
-catalog_revision: 1
+catalog_revision: 2
 source_repository: tantanpq/PAI
 assets:
   - asset_id: pai.assurance.community-baseline
@@ -42,3 +42,27 @@ assets:
     release_class: AUTO_RELEASE_AFTER_IQA
     provenance: tantanpq/pai-reliability-evidence/patterns/verification-intake-checklist.md
     license_source: CC-BY-4.0 public source terms
+  - asset_id: pai.foundation.quickstart
+    asset_class: runbook
+    path: docs/QUICKSTART.md
+    version: 0.1.0
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE
+    provenance: tantanpq/PAI public-foundation bootstrap
+    license_source: pending repository content-license scope
+  - asset_id: pai.assurance.synthetic-intake
+    asset_class: example
+    path: examples/assurance-intake.yaml
+    version: 0.1.0
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE
+    provenance: synthetic PAI public example
+    license_source: pending repository content-license scope
+  - asset_id: pai.foundation.open-starter
+    asset_class: pack
+    path: packs/open-foundation-starter/README.md
+    version: 0.1.0
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE
+    provenance: curated from current public PAI assets
+    license_source: mixed: inherited CC-BY-4.0 sources plus pending repository content-license scope
