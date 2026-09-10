@@ -1,0 +1,37 @@
+schema: pai-public-assurance-intake/v1
+example: true
+system_authorization: "Only use on a system you own or are authorized to evaluate."
+claim:
+  statement: "The candidate release changes only the declared files and survives a clean restart."
+  unsupported_claims:
+    - "general security certification"
+    - "zero defects"
+    - "universal production readiness"
+pinned_inputs:
+  baseline: "synthetic-baseline-sha"
+  candidate: "synthetic-candidate-sha"
+  configuration: "synthetic-config-v1"
+acceptance:
+  positive_checks:
+    - "declared behavior passes"
+    - "complete candidate delta equals authorized delta"
+    - "restart produces the expected bounded state"
+  negative_checks:
+    - "an undeclared extra file causes release-scope rejection"
+    - "a stale baseline identity fails closed"
+  independent_review_required: true
+evidence:
+  source_provenance: "synthetic"
+  preserve_failures: true
+  unknown_is_allowed: true
+publication_boundary:
+  exclude:
+    - credentials
+    - private source
+    - internal host or filesystem identities
+    - customer or company data
+    - protected evaluation corpus
+    - proprietary failure intelligence
+terminal_receipt:
+  status: "PENDING"
+  public_claim_must_not_exceed_evidence: true
