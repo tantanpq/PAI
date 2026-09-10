@@ -1,0 +1,19 @@
+name: Public integrity
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  public-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out exact revision
+        uses: actions/checkout@v4
+      - name: Validate public asset catalog and bounded content
+        run: python3 scripts/check-public-integrity.py
