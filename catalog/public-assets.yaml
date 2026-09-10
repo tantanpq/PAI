@@ -1,0 +1,44 @@
+schema: pai-public-catalog/v1
+catalog_revision: 1
+source_repository: tantanpq/PAI
+assets:
+  - asset_id: pai.assurance.community-baseline
+    asset_class: workflow
+    path: workflows/community-assurance-baseline.md
+    version: 0.1.0
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE_AFTER_IQA
+    provenance: tantanpq/pai-reliability-evidence/workflows/community-assurance-baseline.md
+    license_source: CC-BY-4.0 public source terms
+  - asset_id: pai.context.source-only-resume
+    asset_class: runbook
+    path: runbooks/source-only-resume.md
+    version: 0.1.0
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE_AFTER_IQA
+    provenance: tantanpq/pai-reliability-evidence/runbooks/source-only-resume.md
+    license_source: CC-BY-4.0 public source terms
+  - asset_id: pai.assurance.release-scope-integrity
+    asset_class: skill
+    path: skills/release-scope-integrity.md
+    version: 0.1.0
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE_AFTER_IQA
+    provenance: tantanpq/pai-reliability-evidence/skills/release-scope-integrity.md
+    license_source: CC-BY-4.0 public source terms
+  - asset_id: pai.assurance.green-tests-wrong-release
+    asset_class: case-study
+    path: case-studies/green-tests-wrong-release.md
+    version: 0.1.0
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE_AFTER_IQA
+    provenance: tantanpq/pai-reliability-evidence/case-studies/green-tests-wrong-release.md
+    license_source: CC-BY-4.0 public source terms
+  - asset_id: pai.assurance.verification-intake
+    asset_class: pattern
+    path: patterns/verification-intake-checklist.md
+    version: 0.1.0
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE_AFTER_IQA
+    provenance: tantanpq/pai-reliability-evidence/patterns/verification-intake-checklist.md
+    license_source: CC-BY-4.0 public source terms
