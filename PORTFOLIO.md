@@ -8,18 +8,22 @@ This page tracks public-facing PAI capability families without treating roadmap 
 | W_Flow | reusable resumable work-loop specifications and verification-friendly workflow patterns | public workflow foundation available; package convergence in progress | autonomous internal Program compilation/orchestration |
 | Assurance & SimLab | deterministic verification patterns, synthetic labs, failure/recovery reasoning | extensive public reliability evidence exists; SimLab Core packaging in progress | protected evaluators, failure intelligence, advanced repair/assurance engine |
 | Skills & Patterns | small reusable verification and engineering recipes | active public foundation | private/customer-specific adaptations |
-| Packs & Labs | versioned examples, synthetic fixtures and reusable bounded distributions | staged expansion | private corpora, customer evidence, sovereign/private execution |
+| Packs & Labs | versioned examples, synthetic fixtures and reusable bounded distributions | Open Foundation Starter Pack available; software/lab expansion staged | private corpora, customer evidence, sovereign/private execution |
 | PAI Personal | user-owned continuity and productive assistance | not publicly released as a supported product | core product experience, private memory/continuity and adaptation |
 | PAI Assurance | deeper evidence-backed private verification | public methodology/evidence boundary; commercial maturity still evidence-gated | private reconstruction, customer-specific execution, proprietary assurance intelligence |
 
 ## Available now
+
+Start with [`docs/QUICKSTART.md`](docs/QUICKSTART.md) or the [`Open Foundation Starter Pack`](packs/open-foundation-starter/README.md).
 
 The following material is already useful independently:
 
 1. **Community Assurance Baseline** — a tool-agnostic workflow for locking claims, pinning evidence, separating PASS/LIVE/DONE, testing positive and negative cases, and publishing only the reusable lesson.
 2. **Source-Only Resume Runbook** — a continuity pattern for reconstructing durable context from verified sources while fetching volatile truth just-in-time.
 3. **Release-Scope Integrity Review** — a compact skill for proving that a release contains only the authorized composition delta.
-4. **PAI Reliability Evidence archive** — a larger public collection of evidence summaries, case studies, patterns, demos, runbooks, skills and workflows accumulated before this monorepo became the primary public PAI surface.
+4. **Verification Intake Checklist + Green Tests case study** — a bounded pattern and real public lesson showing why passing focused tests do not authorize the wrong release composition.
+5. **Open Foundation Starter Pack** — one curated path through the current resume, verification, assurance and synthetic-intake assets.
+6. **PAI Reliability Evidence archive** — a larger public collection of evidence summaries, case studies, patterns, demos, runbooks, skills and workflows accumulated before this monorepo became the primary public PAI surface.
 
 Archive: https://github.com/tantanpq/pai-reliability-evidence
 
