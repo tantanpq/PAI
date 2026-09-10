@@ -16,6 +16,7 @@ The public repository also hosts reusable **Skills, Tools, Packs, Labs, examples
 
 ## Start here
 
+- [`docs/QUICKSTART.md`](docs/QUICKSTART.md) — use the current Open Foundation in a few bounded steps.
 - [`PORTFOLIO.md`](PORTFOLIO.md) — current public capability and portfolio map.
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — how public PAI relates to the protected private core.
 - [`docs/PUBLIC_RELEASE_POLICY.md`](docs/PUBLIC_RELEASE_POLICY.md) — what is allowed to become public and how releases are qualified.
