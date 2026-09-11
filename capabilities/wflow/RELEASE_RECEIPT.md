@@ -7,6 +7,7 @@
 - public repository: `tantanpq/PAI`
 - first package merge: PR #17
 - first package merge commit: `95e169c5be95b61d683e9f28b4e2fa361f995ac6`
+- public-state reconciliation: PR #18
 - distribution surface: repository source package under `capabilities/wflow/`
 - PyPI publication: **not claimed**
 - license: Apache-2.0
@@ -44,7 +45,23 @@ First post-merge `main` workflow on `95e169c...`:
 - same five source hashes, 8/8 suite, benchmark, public QA and clean-consumer gates passed
 - wheel SHA-256: `a109ca20b7b3816bd584a4a2dd6c096b7684eaeae82fdc8e94e59e68dd622c40`
 
-The wheel hash can differ between reproducible source-equivalent builds because wheel ZIP metadata is not claimed byte-reproducible here. The acceptance boundary is source-locked behavior + exact-revision package/consumer verification, not equality of wheel archives across independent builds.
+PR #18 final public-state merge-ref qualification:
+
+- run: `34618576748`
+- job: `103326531051`
+- conclusion: `success`
+- public integrity: `PUBLIC_INTEGRITY_PASS assets=14 markdown_links=checked`
+- source identities: 5/5 `OK`
+- original suite: `8/8 PASS`
+- benchmark: 1,000 iterations / 1 unique output digest
+- public QA: PASS
+- wheel build: PASS, 15,618 bytes
+- wheel SHA-256: `da8d6ea21077086503e9507ca9daaee1ec94269ee10a6ec3c5c5d4c3dcb245d4`
+- clean consumer: `WFLOW_CLEAN_CONSUMER_PASS files=13`
+
+Wheel archive SHA values are not claimed reproducible across independent builds because ZIP metadata can vary. The acceptance boundary is source-locked semantics + exact-revision tests/benchmark/public QA + package build + clean-consumer verification.
+
+`RELEASE_RECEIPT.md` is not a runtime dependency and this evidence-only update changes no source-locked W_Flow core artifact.
 
 ## Claim boundary
 
