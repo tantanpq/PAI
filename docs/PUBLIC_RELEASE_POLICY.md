@@ -101,6 +101,16 @@ GitHub is the canonical public technical/package/evidence source. Website and me
 
 A website, article, image or video failure does not invalidate a correct GitHub release unless it falsifies the release claim itself.
 
-## Software licensing boundary
+## Selected licensing strategy
 
-Public documentation or evidence licensing does not silently license future software. Each software family must carry an explicit approved software license before it is represented as an openly reusable software package.
+The founder license gate is resolved for the current Open Foundation strategy:
+
+- original PAI software intentionally released as reusable public software uses **Apache-2.0**;
+- original PAI public non-code content uses **CC BY 4.0** unless a more specific file/provenance record controls;
+- trademarks, product names and branding remain reserved;
+- third-party or migrated material keeps its exact upstream terms;
+- the public license scopes never extend to `pai-core-private`, unpublished private implementation, protected eval/failure intelligence, private/customer/company data, credentials or trust roots.
+
+This selection removes the license-choice blocker. It does **not** turn an internal/source PASS into a public package release. Exact public package bytes must still pass clean-consumer verification, the benchmark gates in `docs/BENCHMARKS.md`, independent QA where required, and public readback.
+
+Changing this license strategy remains a `HUMAN_GATE` legal/founder decision.
