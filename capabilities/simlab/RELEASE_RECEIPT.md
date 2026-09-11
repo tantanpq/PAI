@@ -52,7 +52,19 @@ First post-merge public `main` qualification:
 - conclusion: `success`
 - the same Context/W_Flow regression gates and all SimLab test/benchmark/QA/pack/clean-consumer gates passed on public `main`.
 
-A final read-model PR reruns these gates because this README is included in the package tarball. Its final package evidence is additive to this receipt; changing this receipt alone does not change packed bytes.
+Final public-state PR #20 qualification:
+
+- run: `34621834296`
+- job: `103337428439`
+- conclusion: `success`
+- public integrity: `PUBLIC_INTEGRITY_PASS assets=15 markdown_links=checked`
+- public suite: `6/6 PASS`
+- benchmark: 1,000 iterations, 1 unique digest, `PASS / FAIL / UNKNOWN` preserved, counterexample `3 -> 2`
+- public boundary QA: `SIMLAB_PUBLIC_QA_PASS`
+- final-state tarball: 11 files, about 11.3 kB packed, shasum `6749912bf22f095d69238045b7f3cfa5ab9c3fe2`
+- clean consumer: `SIMLAB_CLEAN_CONSUMER_PASS sha256=1a00d188ee48d1047943df98cf047a07007f88fcac777898c732b0e23c93b1a8`
+
+`RELEASE_RECEIPT.md` is not part of the package `files` list, so recording this final evidence does not alter the final-state tarball bytes.
 
 ## Claim boundary
 
