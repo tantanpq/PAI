@@ -7,7 +7,7 @@ This page tracks public-facing PAI capability families without treating roadmap 
 | Context & Continuity | bounded context packaging, source-aware resume, provider-neutral continuity patterns | **Context Kit 0.1.0 PUBLIC** plus public runbooks/patterns; source/provenance and release evidence pinned | deep personal continuity, proprietary retrieval/routing/adaptation |
 | W_Flow | reusable resumable work-loop specifications and verification-friendly workflow patterns | **W_Flow Core 0.1.0 PUBLIC**; source/provenance, replay benchmark, public QA and clean-consumer evidence pinned | autonomous internal Program compilation/orchestration |
 | Assurance & SimLab | deterministic verification patterns, synthetic labs, failure/recovery reasoning | **SimLab Core 0.1.0 PUBLIC PILOT / PILOT_ONLY**; synthetic runner, public SimPack, PASS/FAIL/UNKNOWN, replay and counterexample evidence pinned | protected R7 evaluators/property intelligence, failure intelligence, advanced repair/assurance engine |
-| Skills & Patterns | small reusable verification and engineering recipes | active public foundation with source resolution, route-policy integrity, release-scope and verification intake assets | private/customer-specific adaptations |
+| Skills & Patterns | small reusable verification and engineering recipes | active public foundation with source resolution, route-policy integrity, release-scope, verification intake and test-environment isolation assets | private/customer-specific adaptations |
 | Packs & Labs | versioned examples, synthetic fixtures and reusable bounded distributions | Open Foundation Starter Pack plus first public SimPack available; broader lab/service maturity remains separately gated | private corpora, customer evidence, sovereign/private execution |
 | PAI Personal | user-owned continuity and productive assistance | not publicly released as a supported product | core product experience, private memory/continuity and adaptation |
 | PAI Assurance | deeper evidence-backed private verification | public methodology/evidence boundary; commercial service maturity still evidence-gated | private reconstruction, customer-specific execution, proprietary assurance intelligence |
@@ -27,8 +27,9 @@ The following material is already useful independently:
 7. **Deterministic Source Resolution** — a skill + contract for resolving durable Program/context sources reproducibly without turning stale chat or cached runtime hints into authority.
 8. **Reachable-Path Policy Integrity** — a skill + checklist for proving that ordinary, retry, recovery, legacy and alternate routes enforce the same protected-effect invariant.
 9. **Verification Intake Checklist + Green Tests case study** — a bounded pattern and real public lesson showing why passing focused tests do not authorize the wrong release composition.
-10. **Open Foundation Starter Pack** — one curated path through the current resume, verification, assurance and synthetic-intake assets.
-11. **PAI Reliability Evidence archive** — a larger public collection of evidence summaries, case studies, patterns, demos, runbooks, skills and workflows accumulated before this monorepo became the primary public PAI surface.
+10. **Test-Environment Isolation** — a case study + checklist for separating tests from mutable live policy while proving protected production bytes stayed unchanged; source evidence includes independent QA, 31/31 focused tests, 167/167 full-suite tests and a 219-entry deterministic tree replay.
+11. **Open Foundation Starter Pack** — one curated path through the current resume, verification, assurance and synthetic-intake assets.
+12. **PAI Reliability Evidence archive** — a larger public collection of evidence summaries, case studies, patterns, demos, runbooks, skills and workflows accumulated before this monorepo became the primary public PAI surface.
 
 Archive: https://github.com/tantanpq/pai-reliability-evidence
 
