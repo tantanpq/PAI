@@ -1,5 +1,5 @@
 schema: pai-public-catalog/v1
-catalog_revision: 4
+catalog_revision: 5
 source_repository: tantanpq/PAI
 assets:
   - asset_id: pai.assurance.community-baseline
@@ -102,7 +102,7 @@ assets:
     asset_class: package
     path: capabilities/context/package.json
     version: 0.1.0
-    maturity: RELEASE_CANDIDATE
-    release_class: HUMAN_GATE
-    provenance: capabilities/context/PROVENANCE.md; recovered source family 1F9AmMNY2wGRLwEj3iMXO_DK0joHq7AeQ
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE_AFTER_IQA
+    provenance: capabilities/context/RELEASE_RECEIPT.md; capabilities/context/PROVENANCE.md; first release merge 829e3740387c7a2911d761d66a72d0e155e53eb3
     license_source: Apache-2.0 repository software scope
