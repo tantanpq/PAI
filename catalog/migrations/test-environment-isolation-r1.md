@@ -1,6 +1,6 @@
 # Migration Receipt — Test-Environment Isolation R1
 
-Status: `CANDIDATE / AUTO_RELEASE_AFTER_IQA`
+Status: `RELEASED / AUTO_RELEASE_AFTER_IQA / POST_MERGE_READBACK_PASS`
 
 Source repository: `tantanpq/pai-reliability-evidence`
 Source commit: `74aaed779ddee33ef6da4968a9fb9ebd8153b3a6`
@@ -38,14 +38,14 @@ The migration changes no executable or protected production code. The case-study
 - no executable software publication or license change;
 - the archive remains the provenance source rather than being silently rewritten.
 
-## Candidate delta contract
+## Release readback
 
-Expected PR delta is exactly five files:
+- Release PR: `#22` (`portfolio: migrate test-environment isolation assets`).
+- Exact PR head: `73f1d4b9feff830e87b714296ea7b412510733e5`.
+- Exact merged composition: five files only: the two assets, this receipt, `catalog/public-assets.yaml` revision 10, and `PORTFOLIO.md`.
+- Merge/main commit: `82549186a3a5e13998029927cf4825d687feb88b`.
+- PR-head `public-integrity`: PASS, GitHub Actions run `34625222091`.
+- Post-merge main `public-integrity`: PASS, GitHub Actions run `34625303302`.
+- Public main readback confirms catalog revision 10 and both asset entries with CC BY 4.0 provenance.
 
-1. the case study;
-2. the checklist;
-3. this migration receipt;
-4. `catalog/public-assets.yaml` revision 10;
-5. `PORTFOLIO.md` synchronization.
-
-Merge requires exact-delta readback and successful `public-integrity` CI on the PR head. Post-merge `main` readback is required before the migration is recorded as released.
+This receipt records the bounded public release only. It does not upgrade the source evidence into a production-readiness, fleet-reliability, ROI, certification, or universal-test-design claim.
