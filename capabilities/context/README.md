@@ -1,6 +1,6 @@
 # PAI Context Kit
 
-**Status:** `0.1.0 RELEASE CANDIDATE`
+**Status:** `PUBLIC 0.1.0`
 
 Context Kit is a small, dependency-free CommonJS package for turning an explicit set of evidence items into a deterministic, bounded context capsule.
 
@@ -26,6 +26,8 @@ Context Kit is not a memory database, retrieval/ranking engine, hosted-chat capt
 ```bash
 npm install ./capabilities/context
 ```
+
+The current public distribution is the GitHub source package in this repository. No npm-registry publication is claimed by this release.
 
 ## Use
 
@@ -54,13 +56,22 @@ console.log(result.capsule);
 
 See `SCHEMA.md` for the input/output contract. Run `npm test`, `npm run benchmark`, and `npm run example`.
 
-## Evidence boundary
+## Release evidence
 
-The recovered compiler and its original 6-test suite are reused byte-identically. The public release candidate adds package metadata, standalone docs, provenance, a synthetic example, a behavior benchmark and the Apache-2.0 license.
+The recovered compiler and its original 6-test suite are reused byte-identically. The public package adds package metadata, standalone docs, provenance, a synthetic example, a behavior benchmark and the Apache-2.0 license.
 
-The internal/source baseline is **6/6 PASS**. The release candidate must still pass CI on its exact PR bytes, including package tests, benchmark replay, `npm pack`, clean-consumer install/use, public-integrity checks and release readback before this status becomes a supported public release.
+Release qualification on PR #15 and post-merge `main` both passed the same GitHub Actions gates:
 
-The benchmark reports fixture-specific byte counts only. They are not a token-savings claim.
+- exact source SHA-256 identity;
+- original tests: **6/6 PASS**;
+- deterministic benchmark: **1,000 replay iterations / 1 unique SHA-256**;
+- `npm pack` succeeds;
+- clean temporary consumer installs and uses the packed package successfully;
+- public catalog/link integrity passes with 13 assets.
+
+The first benchmark fixture incorrectly expected a lower-precedence unknown item to fit inside budget=5; it failed as it should. The fixture was corrected to budget=6 without changing compiler/test source bytes. Negative evidence is retained in PR #15.
+
+The benchmark reports fixture-specific byte counts only. They are not a token-savings claim. See `RELEASE_RECEIPT.md` for the release identity and `PROVENANCE.md` for source lineage.
 
 ## Protected boundary
 

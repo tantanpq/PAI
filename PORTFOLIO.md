@@ -4,7 +4,7 @@ This page tracks public-facing PAI capability families without treating roadmap 
 
 | Capability family | Public value | Current public state | Protected value retained |
 | --- | --- | --- | --- |
-| Context & Continuity | bounded context packaging, source-aware resume, provider-neutral continuity patterns | public runbooks/patterns available; Context Kit license scope selected, exact public-package benchmark/QA pending | deep personal continuity, proprietary retrieval/routing/adaptation |
+| Context & Continuity | bounded context packaging, source-aware resume, provider-neutral continuity patterns | **Context Kit 0.1.0 PUBLIC** plus public runbooks/patterns; source/provenance and release evidence pinned | deep personal continuity, proprietary retrieval/routing/adaptation |
 | W_Flow | reusable resumable work-loop specifications and verification-friendly workflow patterns | public workflow/pattern foundation available; Apache-2.0 software scope selected, exact public-package clean-consumer/IQA pending | autonomous internal Program compilation/orchestration |
 | Assurance & SimLab | deterministic verification patterns, synthetic labs, failure/recovery reasoning | extensive public reliability evidence exists; SimLab Pilot Core remains PILOT_ONLY with license selected and exact public-package verification pending | protected evaluators, failure intelligence, advanced repair/assurance engine |
 | Skills & Patterns | small reusable verification and engineering recipes | active public foundation with source resolution, route-policy integrity, release-scope and verification intake assets | private/customer-specific adaptations |
@@ -14,39 +14,41 @@ This page tracks public-facing PAI capability families without treating roadmap 
 
 ## Available now
 
-Start with [`docs/QUICKSTART.md`](docs/QUICKSTART.md) or the [`Open Foundation Starter Pack`](packs/open-foundation-starter/README.md).
+Start with [`capabilities/context/README.md`](capabilities/context/README.md), [`docs/QUICKSTART.md`](docs/QUICKSTART.md), or the [`Open Foundation Starter Pack`](packs/open-foundation-starter/README.md).
 
 The following material is already useful independently:
 
-1. **Community Assurance Baseline** — a tool-agnostic workflow for locking claims, pinning evidence, separating PASS/LIVE/DONE, testing positive and negative cases, and publishing only the reusable lesson.
-2. **Source-Only Resume Runbook** — a continuity pattern for reconstructing durable context from verified sources while fetching volatile truth just-in-time.
-3. **Release-Scope Integrity Review** — a compact skill for proving that a release contains only the authorized composition delta.
-4. **Deterministic Source Resolution** — a skill + contract for resolving durable Program/context sources reproducibly without turning stale chat or cached runtime hints into authority.
-5. **Reachable-Path Policy Integrity** — a skill + checklist for proving that ordinary, retry, recovery, legacy and alternate routes enforce the same protected-effect invariant.
-6. **Verification Intake Checklist + Green Tests case study** — a bounded pattern and real public lesson showing why passing focused tests do not authorize the wrong release composition.
-7. **Open Foundation Starter Pack** — one curated path through the current resume, verification, assurance and synthetic-intake assets.
-8. **PAI Reliability Evidence archive** — a larger public collection of evidence summaries, case studies, patterns, demos, runbooks, skills and workflows accumulated before this monorepo became the primary public PAI surface.
+1. **Context Kit 0.1.0** — dependency-free deterministic bounded-context compiler with explicit profiles, privacy/budget behavior, provenance, benchmark and clean-consumer evidence.
+2. **Community Assurance Baseline** — a tool-agnostic workflow for locking claims, pinning evidence, separating PASS/LIVE/DONE, testing positive and negative cases, and publishing only the reusable lesson.
+3. **Source-Only Resume Runbook** — a continuity pattern for reconstructing durable context from verified sources while fetching volatile truth just-in-time.
+4. **Release-Scope Integrity Review** — a compact skill for proving that a release contains only the authorized composition delta.
+5. **Deterministic Source Resolution** — a skill + contract for resolving durable Program/context sources reproducibly without turning stale chat or cached runtime hints into authority.
+6. **Reachable-Path Policy Integrity** — a skill + checklist for proving that ordinary, retry, recovery, legacy and alternate routes enforce the same protected-effect invariant.
+7. **Verification Intake Checklist + Green Tests case study** — a bounded pattern and real public lesson showing why passing focused tests do not authorize the wrong release composition.
+8. **Open Foundation Starter Pack** — one curated path through the current resume, verification, assurance and synthetic-intake assets.
+9. **PAI Reliability Evidence archive** — a larger public collection of evidence summaries, case studies, patterns, demos, runbooks, skills and workflows accumulated before this monorepo became the primary public PAI surface.
 
 Archive: https://github.com/tantanpq/pai-reliability-evidence
 
 ## Initial productization frontier
 
-These are active packaging targets, not blanket claims of public product completion. The license strategy is selected; the remaining gate is qualification of the exact public package bytes.
+The license strategy is selected. Context Kit has crossed its first exact-package release boundary; W_Flow and SimLab remain active package-qualification targets.
 
 ### Context Capsule / Context Kit
 
-Current disposition: `LICENSE_SELECTED / PACKAGE_QA_PENDING`.
+Current disposition: `PUBLIC_0.1.0 / FIRST_RELEASE_CANARY_PASS`.
 
-Target public surface:
+Public surface:
 
 - deterministic context compiler;
 - public schema and profiles;
 - privacy/budget boundaries;
 - sample inputs/outputs;
-- provider-neutral examples;
-- benchmark methodology.
+- provider-neutral package use;
+- reproducible behavior benchmark;
+- source provenance and release receipt.
 
-Verified source baseline is 6/6 PASS. Public release still requires exact public-package clean-consumer use, benchmark replay, independent QA and release readback. No token-savings percentage is claimed without a representative reproducible benchmark corpus.
+Release evidence includes byte-identical recovered compiler/test source, 6/6 tests, 1,000 deterministic replay iterations with one unique SHA-256, `npm pack`, clean-consumer install/use, PR qualification and post-merge `main` readback. No npm-registry publication or token-savings percentage is claimed.
 
 ### W_Flow
 
