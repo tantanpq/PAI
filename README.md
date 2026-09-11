@@ -1,8 +1,53 @@
 # PAI
 
-**PAI is a user-owned intelligence and evidence-first engineering project focused on continuity, reusable work, and verifiable outcomes.**
+## Personal Assistant Intelligence
 
-This repository is the public PAI distribution surface. It is intentionally smaller than the complete private PAI system.
+**PAI is a user-owned intelligence project for continuity, useful autonomy, reusable capability, and verifiable outcomes.**
+
+The long-term goal is not another chatbot that starts over every time a conversation changes. PAI is being built toward an assistant that can preserve a user's trajectory, understand current reality, continue meaningful work across time, learn from evidence, and act within explicit authority while keeping important decisions with the user.
+
+> Help people spend less effort remembering, reconstructing, coordinating and rechecking work, and gain more time, capability, useful assets and autonomy.
+
+This repository is the **public Open Foundation** of PAI. It is intentionally smaller than the complete private PAI system.
+
+- [`VISION.md`](VISION.md) — why PAI exists, its principles and long-term product direction.
+- [`FOUNDER.md`](FOUNDER.md) — founder perspective and project intent.
+- [`PORTFOLIO.md`](PORTFOLIO.md) — what is public and usable now.
+- [`ROADMAP.md`](ROADMAP.md) — release-oriented public milestones and evidence gates.
+
+## What PAI is
+
+PAI stands for **Personal Assistant Intelligence**.
+
+A mature PAI should be able to preserve continuity across conversations, tools, devices and changing model providers; keep a grounded picture of goals and decisions; resume long-running objectives; verify results against evidence; learn from qualified outcomes; reuse capabilities; and know when to **act, ask, wait or surface** based on authority and uncertainty.
+
+PAI is not intended to be one permanent model. Models, tools and executors are replaceable components. The durable value is the continuity, evidence, learning, capability and authority structure around them.
+
+## Why PAI exists
+
+Modern AI can generate impressive work, but the surrounding user experience is still fragmented:
+
+- useful context disappears between chats and tools;
+- users repeatedly restate goals and reconstruct old decisions;
+- long-running work becomes tied to one session or provider;
+- generated output is often confused with a verified result;
+- automation can become hard to resume, replay or trust;
+- greater autonomy can arrive without equally clear ownership and effect boundaries.
+
+PAI is exploring a different path: **user-owned continuity + evidence-backed work + bounded autonomy**.
+
+## Product map
+
+| Horizon | Surface | Purpose | Current public state |
+| --- | --- | --- | --- |
+| **Available now** | Context Kit | deterministic bounded context compilation and source-aware resume foundations | **0.1.0 PUBLIC_FOUNDATION** |
+| **Available now** | W_Flow Core | provider-neutral replayable work-loop and state semantics | **0.1.0 PUBLIC_FOUNDATION** |
+| **Available now** | SimLab Core | deterministic synthetic verification and minimized counterexamples | **0.1.0 PUBLIC PILOT / PILOT_ONLY** |
+| **Building toward** | PAI Personal | user-owned continuity and productive assistance across long-running work | **not publicly released as a supported product** |
+| **Building toward** | PAI Assurance | evidence-backed verification for AI-assisted engineering and operations | **public methods exist; broader commercial maturity is evidence-gated** |
+| **Longer horizon** | PAI Work / Group, domain intelligence, business capabilities, richer local execution | extend continuity and useful capability into shared and specialized work | **future / dependency-gated** |
+
+Roadmap presence is not a readiness claim. Future directions remain bounded by evidence, safety, authority and product value.
 
 ## Problems this repository is trying to solve
 
@@ -15,18 +60,19 @@ This repository is the public PAI distribution surface. It is intentionally smal
 | Public releases drift beyond their authorized scope | provenance, release contracts, bounded publication classes and independent integrity checks | private/core/customer/security-sensitive material remains excluded |
 | Teams want reusable AI engineering patterns without surrendering their private implementation | small Skills, workflows, Packs and package surfaces with explicit licenses and protected boundaries | the public foundation is not a source dump of `pai-core-private` |
 
-## What PAI is building
+## Public capability families
 
-PAI is converging around three public capability families:
+PAI is currently converging around three public capability families:
 
-- **Context & Continuity**: deterministic, bounded context packaging and source-aware resume patterns.
-- **W_Flow**: reusable, resumable work-loop specifications and verification-friendly workflows.
-- **Assurance & SimLab**: evidence-first verification patterns, deterministic synthetic test surfaces, minimized counterexamples, and reproducible failure analysis.
+- **Context & Continuity** — deterministic, bounded context packaging and source-aware resume patterns.
+- **W_Flow** — reusable, resumable work-loop specifications and verification-friendly workflows.
+- **Assurance & SimLab** — evidence-first verification patterns, deterministic synthetic test surfaces, minimized counterexamples, and reproducible failure analysis.
 
 The public repository also hosts reusable **Skills, Tools, Packs, Labs, examples, and documentation** when they pass the public release boundary.
 
 ## Start here
 
+- [`VISION.md`](VISION.md) — understand the project thesis before the internals.
 - [`capabilities/context/README.md`](capabilities/context/README.md) — Context Kit 0.1.0, deterministic bounded context compilation.
 - [`capabilities/wflow/README.md`](capabilities/wflow/README.md) — W_Flow Core 0.1.0, provider-neutral replayable work-loop semantics.
 - [`capabilities/simlab/README.md`](capabilities/simlab/README.md) — SimLab Core 0.1.0 public pilot for deterministic synthetic verification.
@@ -107,4 +153,4 @@ This repository is in **public foundation bootstrap with two public foundation p
 
 PAI is not a certification authority, security warranty, uptime guarantee, or claim of zero defects.
 
-Its public engineering goal is more concrete: **make useful AI work resumable, reusable, and easier to verify against actual evidence.**
+Its public engineering goal is more concrete: **make useful AI work resumable, reusable, and easier to verify against actual evidence while keeping the user in control.**
