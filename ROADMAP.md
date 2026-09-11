@@ -1,58 +1,76 @@
 # PAI Public Roadmap
 
-This roadmap is intentionally release-oriented. It describes what must become independently useful and verifiable, not a promise that every internal PAI component will be published.
+This roadmap is intentionally release-oriented. It describes independently useful and verifiable public surfaces, not a promise that every internal PAI component will be published.
 
 ## R0 — Public foundation bootstrap
 
-Status: **IN PROGRESS**
+Status: **COMPLETE**
 
-Acceptance:
+Accepted evidence:
 
-- one canonical public PAI repository;
-- clear Open Foundation vs Protected Core boundary;
-- public release policy;
-- portfolio/capability catalog;
-- at least three immediately reusable public assets with provenance;
-- legacy reliability repository preserved as evidence/archive source.
+- canonical public PAI repository exists;
+- Open Foundation vs Protected Core boundary is explicit;
+- public release and licensing policies are documented;
+- portfolio/capability catalog exists;
+- more than three reusable public assets have provenance;
+- legacy reliability repository is preserved as an evidence/archive source;
+- public integrity CI runs on release PRs and `main`.
 
-## R1 — Context Kit public candidate
+## R1 — Context Kit 0.1.0
 
-Acceptance:
+Status: **COMPLETE — PUBLIC_FOUNDATION**
+
+Acceptance reached:
 
 - deterministic Context Capsule public surface;
-- package manifest and explicit version;
-- public schema/profiles;
-- privacy/context-budget tests;
-- sample inputs/outputs;
-- clean-consumer verification;
-- benchmark methodology without unverified savings claims;
-- approved software license before reusable software release.
+- package manifest/version and Apache-2.0 scope;
+- public schema/profiles and privacy/context-budget behavior;
+- 6/6 exact package tests;
+- 1,000 deterministic replay benchmark / 1 SHA;
+- `npm pack` and clean-consumer verification;
+- provenance and release receipt;
+- no unverified token-savings claim.
 
-## R2 — W_Flow public candidate
+Distribution remains repository-source based; npm-registry publication is not claimed.
 
-Acceptance:
+## R2 — W_Flow Core 0.1.0
+
+Status: **COMPLETE — PUBLIC_FOUNDATION**
+
+Acceptance reached:
 
 - provider-neutral state/transition contract;
-- deterministic harness;
-- reusable loop instance template;
-- replay/idempotency tests;
-- local-blocker and authority-gate examples;
-- clean-consumer verification;
-- approved software license.
+- deterministic harness and reusable loop instance contract;
+- original public core 8/8 tests;
+- 1,000 deterministic replay iterations / 1 digest;
+- `NO_MATERIAL_DELTA`, local-blocker and external authority-gate semantics;
+- independent public QA;
+- wheel build and clean virtualenv verification;
+- Apache-2.0, provenance and release receipt.
 
-## R3 — SimLab Core public candidate
+W_Flow remains a contract/harness, not a scheduler, Claim service or production authority. PyPI publication is not claimed.
 
-Acceptance:
+## R3 — SimLab Core 0.1.0 public pilot
 
-- local deterministic runner;
+Status: **COMPLETE FOR PILOT BOUNDARY — PUBLIC PILOT / PILOT_ONLY**
+
+Acceptance reached:
+
+- deterministic synthetic local runner;
 - scenario/property/result contracts;
-- synthetic fixtures;
-- first public SimPack;
-- reproducible/minimized failure example;
-- explicit unsupported claims;
-- approved software license.
+- first public synthetic SimPack;
+- 6/6 public tests;
+- 1,000 deterministic replays / 1 digest;
+- known-good `PASS`, known-bad mutant `FAIL`, missing evidence `UNKNOWN`;
+- minimized reproducible counterexample `3 -> 2` events;
+- public QA, protected-R7 exclusion checks, `npm pack` and clean-consumer verification;
+- Apache-2.0, provenance and release receipt.
+
+This milestone deliberately does **not** promote SimLab to a general production platform. Formal proof, zero-defect, security-certification and real OS/service/provider claims remain outside the public-pilot evidence boundary.
 
 ## R4 — Portfolio convergence
+
+Status: **IN PROGRESS**
 
 Acceptance:
 
@@ -62,7 +80,11 @@ Acceptance:
 - public case studies connect to the capability/pattern that produced the lesson;
 - website/media surfaces derive from accepted GitHub release identities rather than independent truth.
 
+The three executable surfaces now provide stable anchors for this convergence; completion is not claimed yet.
+
 ## R5 — Assurance design-partner package
+
+Status: **FUTURE / COMMERCIAL-EVIDENCE GATED**
 
 Acceptance:
 
