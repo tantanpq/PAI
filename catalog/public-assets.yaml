@@ -1,5 +1,5 @@
 schema: pai-public-catalog/v1
-catalog_revision: 2
+catalog_revision: 3
 source_repository: tantanpq/PAI
 assets:
   - asset_id: pai.assurance.community-baseline
@@ -25,6 +25,38 @@ assets:
     maturity: PUBLIC_FOUNDATION
     release_class: AUTO_RELEASE_AFTER_IQA
     provenance: tantanpq/pai-reliability-evidence/skills/release-scope-integrity.md
+    license_source: CC-BY-4.0 public source terms
+  - asset_id: pai.context.deterministic-source-resolution
+    asset_class: skill
+    path: skills/deterministic-source-resolution.md
+    version: 0.1.0
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE_AFTER_IQA
+    provenance: tantanpq/pai-reliability-evidence/skills/deterministic-source-resolution.md
+    license_source: CC-BY-4.0 public source terms
+  - asset_id: pai.context.deterministic-source-resolution-contract
+    asset_class: pattern
+    path: patterns/deterministic-source-resolution-contract.md
+    version: 0.1.0
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE_AFTER_IQA
+    provenance: tantanpq/pai-reliability-evidence/patterns/deterministic-source-resolution-contract.md
+    license_source: CC-BY-4.0 public source terms
+  - asset_id: pai.assurance.reachable-path-policy-integrity
+    asset_class: skill
+    path: skills/reachable-path-policy-integrity.md
+    version: 0.1.0
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE_AFTER_IQA
+    provenance: tantanpq/pai-reliability-evidence/skills/reachable-path-policy-integrity.md
+    license_source: CC-BY-4.0 public source terms
+  - asset_id: pai.assurance.reachable-path-policy-integrity-checklist
+    asset_class: pattern
+    path: patterns/reachable-path-policy-integrity-checklist.md
+    version: 0.1.0
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE_AFTER_IQA
+    provenance: tantanpq/pai-reliability-evidence/patterns/reachable-path-policy-integrity-checklist.md
     license_source: CC-BY-4.0 public source terms
   - asset_id: pai.assurance.green-tests-wrong-release
     asset_class: case-study
