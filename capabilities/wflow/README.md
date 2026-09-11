@@ -1,6 +1,6 @@
 # PAI W_Flow Core
 
-**Status:** `0.1.0 RELEASE CANDIDATE`
+**Status:** `PUBLIC 0.1.0`
 
 W_Flow Core is a small provider-neutral contract and deterministic Python harness for resumable, evidence-first work loops.
 
@@ -31,7 +31,7 @@ W_Flow Core is **not** an executor, scheduler, queue, database, agent runtime, c
 python -m pip install ./capabilities/wflow
 ```
 
-The current public distribution is the GitHub source package. No PyPI publication is claimed by this release candidate.
+The current public distribution is the GitHub source package. No PyPI publication is claimed by this release.
 
 ## Use
 
@@ -60,9 +60,9 @@ python benchmark.py
 python public_qa.py
 ```
 
-## Release evidence boundary
+## Release evidence
 
-The public candidate reuses these verified source artifacts byte-identically:
+The public package reuses these verified source artifacts byte-identically:
 
 - `loop_harness.py`;
 - `test_loop_harness.py`;
@@ -70,9 +70,24 @@ The public candidate reuses these verified source artifacts byte-identically:
 - `LOOP_INSTANCE_TEMPLATE.json`;
 - `LOOP_INSTANCE_SEMANTICS.json`.
 
-The recovered source family previously passed **13/13** tests including the original **8/8** core suite, plus independent frozen-byte QA. Public release still requires exact source-hash checks, the original 8/8 suite, public benchmark/QA, wheel build, clean-consumer installation and post-merge readback on the exact package bytes.
+The recovered source family previously passed **13/13** tests including the original **8/8** core suite, plus independent frozen-byte QA.
 
-The public benchmark measures determinism, replay/idempotency, blocker containment, authority gating and zero-successor behavior for unchanged observations. It is not a throughput or cost benchmark.
+The exact PR #17 package and its first post-merge `main` revision passed:
+
+- all five recovered source SHA-256 locks;
+- original **8/8 PASS** core tests;
+- deterministic behavior benchmark: **1,000 iterations / 1 unique output digest**;
+- exact event replay remains a no-op;
+- `NO_MATERIAL_DELTA` emits zero successor work;
+- local blocker remains local;
+- authority grant remains external;
+- public boundary QA PASS;
+- Python wheel build PASS;
+- clean temporary virtualenv install/use PASS, including the packaged JSON contracts.
+
+The public benchmark measures determinism, replay/idempotency, blocker containment, authority gating and zero-successor behavior for unchanged observations. It is not a throughput, cost or autonomous-execution benchmark.
+
+See `PROVENANCE.md` for source lineage and `RELEASE_RECEIPT.md` for public release evidence.
 
 ## Ownership boundary
 
