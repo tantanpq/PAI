@@ -17,6 +17,12 @@ jobs:
         uses: actions/checkout@v4
       - name: Validate public asset catalog and bounded content
         run: python3 scripts/check-public-integrity.py
+      - name: Verify Context Kit recovered source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s  %s\n' 'a5181c6bb42080757caca92a2823e6908028ea477261bd1af5b9cb4e3385c056' 'capabilities/context/context-capsule.js' | sha256sum -c -
+          printf '%s  %s\n' '75f463fbc46ca6661c1fc1a8979e54a3b45b35b228de1e3273e93e87aaf136c4' 'capabilities/context/context-capsule.test.js' | sha256sum -c -
       - name: Test Context Kit exact source bytes
         working-directory: capabilities/context
         run: npm test
