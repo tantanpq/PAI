@@ -1,0 +1,28 @@
+{
+  "name": "pai-simlab-core",
+  "version": "0.1.0",
+  "description": "Deterministic synthetic verification runner with explicit PASS, FAIL and UNKNOWN evidence states.",
+  "main": "simlab-core.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node --test simlab-core.test.js",
+    "benchmark": "node benchmark.js",
+    "qa": "node public_qa.js",
+    "example": "node examples/basic.js"
+  },
+  "files": [
+    "simlab-core.js",
+    "simlab-core.test.js",
+    "benchmark.js",
+    "public_qa.js",
+    "README.md",
+    "SCHEMA.md",
+    "PROVENANCE.md",
+    "simpacks/",
+    "examples/",
+    "LICENSE"
+  ],
+  "engines": { "node": ">=18" },
+  "license": "Apache-2.0",
+  "keywords": ["verification", "simulation", "deterministic", "counterexample", "ai"]
+}

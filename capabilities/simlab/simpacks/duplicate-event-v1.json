@@ -1,0 +1,18 @@
+{
+  "schema": "pai-simpack/v1",
+  "packId": "duplicate-event-output",
+  "version": "0.1.0",
+  "title": "Synthetic duplicate-event output guard",
+  "syntheticOnly": true,
+  "license": "Apache-2.0",
+  "claimScope": "Pure local sequence normalization only",
+  "properties": [
+    { "id": "accepted-ids-is-array", "path": "acceptedIds", "op": "TYPE", "expected": "array", "required": true },
+    { "id": "no-duplicate-output", "path": "duplicateCount", "op": "EQUALS", "expected": 0, "required": true }
+  ],
+  "scenarios": [
+    { "id": "baseline", "seed": "synthetic-001", "synthetic": true, "input": { "sequence": ["evt-a", "evt-b"] } },
+    { "id": "duplicate-event", "seed": "synthetic-002", "synthetic": true, "input": { "sequence": ["evt-a", "evt-a", "evt-b"] } }
+  ],
+  "unsupportedClaims": ["formal proof", "zero defects", "production readiness", "real-service behavior"]
+}

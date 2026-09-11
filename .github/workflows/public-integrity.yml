@@ -11,7 +11,7 @@ permissions:
 jobs:
   public-integrity:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     steps:
       - name: Check out exact revision
         uses: actions/checkout@v4
@@ -44,16 +44,7 @@ jobs:
           npm install "$TARBALL" >/dev/null
           node - <<'NODE'
           const { compile } = require('pai-context-kit');
-          const result = compile({
-            owner: { principalId: 'clean', accountId: 'clean', workspaceId: 'clean' },
-            profile: 'resume',
-            budget: 1,
-            coverage: { observedUserSignals: 1, unobservedHostedChatTurns: 0 },
-            items: [{
-              kind: 'intent', id: 'i1', value: 'clean consumer', privacyClass: 'PUBLIC',
-              provenance: { source: 'synthetic-fixture' }, freshness: '2026-09-11T00:00:00Z'
-            }]
-          });
+          const result = compile({ owner: { principalId: 'clean', accountId: 'clean', workspaceId: 'clean' }, profile: 'resume', budget: 1, coverage: { observedUserSignals: 1, unobservedHostedChatTurns: 0 }, items: [{ kind: 'intent', id: 'i1', value: 'clean consumer', privacyClass: 'PUBLIC', provenance: { source: 'synthetic-fixture' }, freshness: '2026-09-11T00:00:00Z' }] });
           if (result.capsule.items.length !== 1) process.exit(1);
           console.log(`CONTEXT_CLEAN_CONSUMER_PASS sha256=${result.sha256}`);
           NODE
@@ -99,6 +90,36 @@ jobs:
           assert result["decision"] == "NO_MATERIAL_DELTA" and result["duplicate_work"] == 0
           files = [str(p) for p in md.files("pai-wflow-core")]
           for name in ("LOOP_BLUEPRINT_SCHEMA.json", "LOOP_INSTANCE_TEMPLATE.json", "LOOP_INSTANCE_SEMANTICS.json"):
-              assert any(name in path for path in files), name
+              assert any(name in item for item in files), name
           print("WFLOW_CLEAN_CONSUMER_PASS files=%d" % len(files))
           PY
+      - name: Test SimLab Core public pilot
+        working-directory: capabilities/simlab
+        run: npm test
+      - name: Benchmark SimLab deterministic behavior
+        working-directory: capabilities/simlab
+        run: npm run benchmark
+      - name: Independently QA SimLab public boundary
+        working-directory: capabilities/simlab
+        run: npm run qa
+      - name: Pack and verify SimLab as a clean consumer
+        shell: bash
+        run: |
+          set -euo pipefail
+          PACK_DIR="$RUNNER_TEMP/simlab-pack"
+          CONSUMER_DIR="$RUNNER_TEMP/simlab-consumer"
+          mkdir -p "$PACK_DIR" "$CONSUMER_DIR"
+          npm pack ./capabilities/simlab --pack-destination "$PACK_DIR" >/dev/null
+          TARBALL="$(find "$PACK_DIR" -maxdepth 1 -name 'pai-simlab-core-*.tgz' -print -quit)"
+          test -n "$TARBALL"
+          ! tar -tzf "$TARBALL" | grep -Eq 'chief-simlab|verification-property-registry|kernel-contract|CHIEF_USAGE_CONTRACT'
+          cd "$CONSUMER_DIR"
+          npm init -y >/dev/null 2>&1
+          npm install "$TARBALL" >/dev/null
+          node - <<'NODE'
+          const { runSimPack } = require('pai-simlab-core');
+          const pack = { schema: 'pai-simpack/v1', packId: 'clean-consumer', version: '0.1.0', syntheticOnly: true, properties: [{ id: 'ok', path: 'ok', op: 'EQUALS', expected: true, required: true }], scenarios: [{ id: 's1', synthetic: true, input: { value: 1 } }] };
+          const result = runSimPack(pack, ({ value }) => ({ ok: value === 1 }));
+          if (result.result.verdict !== 'PASS' || result.result.productionReady !== false) process.exit(1);
+          console.log(`SIMLAB_CLEAN_CONSUMER_PASS sha256=${result.sha256}`);
+          NODE
