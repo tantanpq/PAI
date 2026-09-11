@@ -1,0 +1,33 @@
+{
+  "name": "pai-context-kit",
+  "version": "0.1.0",
+  "description": "Deterministic, bounded context compilation for resumable AI work.",
+  "main": "context-capsule.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node --test context-capsule.test.js",
+    "benchmark": "node benchmark.js",
+    "example": "node examples/basic.js"
+  },
+  "files": [
+    "context-capsule.js",
+    "context-capsule.test.js",
+    "README.md",
+    "SCHEMA.md",
+    "PROVENANCE.md",
+    "benchmark.js",
+    "examples/",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "ai",
+    "context",
+    "continuity",
+    "deterministic",
+    "resume"
+  ]
+}
