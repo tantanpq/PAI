@@ -27,12 +27,13 @@ The public repository also hosts reusable **Skills, Tools, Packs, Labs, examples
 
 ## Start here
 
-- [`capabilities/context/README.md`](capabilities/context/README.md) — Context Kit 0.1.0, the first executable Open Foundation package.
+- [`capabilities/context/README.md`](capabilities/context/README.md) — Context Kit 0.1.0, deterministic bounded context compilation.
+- [`capabilities/wflow/README.md`](capabilities/wflow/README.md) — W_Flow Core 0.1.0, provider-neutral replayable work-loop semantics.
 - [`docs/QUICKSTART.md`](docs/QUICKSTART.md) — use the current Open Foundation in a few bounded steps.
 - [`PORTFOLIO.md`](PORTFOLIO.md) — current public capability and portfolio map.
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — how public PAI relates to the protected private core.
 - [`docs/PUBLIC_RELEASE_POLICY.md`](docs/PUBLIC_RELEASE_POLICY.md) — what is allowed to become public and how releases are qualified.
-- [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) — current verification baselines and the benchmark gates required for exact public package bytes.
+- [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) — current verification baselines and benchmark gates.
 - [`LICENSE.md`](LICENSE.md) — Apache-2.0 software scope, CC-BY-4.0 public-content scope, trademark and protected-core boundaries.
 - [`workflows/community-assurance-baseline.md`](workflows/community-assurance-baseline.md) — a reusable evidence-first assurance workflow.
 - [`runbooks/source-only-resume.md`](runbooks/source-only-resume.md) — resume durable work without treating chat memory as authority.
@@ -76,7 +77,7 @@ A passing test is not automatically a production claim. A public claim must rema
 
 ## Licensing
 
-The public licensing strategy is now selected:
+The public licensing strategy is:
 
 - **Apache-2.0** for original PAI software intentionally published as reusable software;
 - **CC BY 4.0** for original public non-code material such as documentation, Skills, workflows/W_Flows, patterns and synthetic educational content;
@@ -93,11 +94,13 @@ That repository is treated as a linked evidence/provenance archive while reusabl
 
 ## Current maturity
 
-This repository is in **public foundation bootstrap with its first executable package released**. The goal is not to publish everything PAI has ever built. The goal is to publish a small set of complete, useful, independently understandable capability surfaces and then expand only from verified results.
+This repository is in **public foundation bootstrap with two executable packages released**. The goal is not to publish everything PAI has ever built. The goal is to publish a small set of complete, useful, independently understandable capability surfaces and expand only from verified results.
 
-**Context Kit 0.1.0** is the first public executable Open Foundation package. Its recovered compiler/test source hashes are pinned; PR and post-merge `main` both passed 6/6 tests, a 1,000-replay deterministic benchmark, `npm pack`, clean-consumer installation/use, and public-integrity checks. The current distribution is the source package in this repository; no npm-registry publication is claimed.
+**Context Kit 0.1.0** is a public executable Open Foundation package. Its recovered compiler/test source hashes are pinned; exact PR and public-main revisions passed 6/6 tests, a 1,000-replay deterministic benchmark, `npm pack`, clean-consumer installation/use and public-integrity checks. The distribution is the source package in this repository; no npm-registry publication is claimed.
 
-W_Flow and the bounded SimLab Pilot Core remain at exact-package qualification gates. Their verified internal/source baselines are 13/13 plus independent frozen-byte QA for W_Flow and 36/36 compatibility + 73/73 verification checks with known-bad mutant rejection for SimLab Core. Those baselines remain evidence inputs, not substitutes for exact public-package verification.
+**W_Flow Core 0.1.0** is the second public executable package. Five recovered core artifacts are source-hash pinned; exact PR and first public-main revisions passed the original 8/8 core suite, a 1,000-iteration deterministic replay benchmark, independent public-boundary QA, wheel build and clean virtualenv installation/use. W_Flow declares work-loop semantics only: it is not an executor, scheduler, Claim service or authority system. No PyPI publication is claimed.
+
+The bounded **SimLab Pilot Core** remains the next exact-package frontier. Its verified internal/source evidence includes 36/36 compatibility + 73/73 verification checks, known-bad policy-mutant rejection and independent QA. That evidence is an input to a `PILOT_ONLY` package boundary, not a claim of general production-platform readiness.
 
 ## Claim boundary
 
