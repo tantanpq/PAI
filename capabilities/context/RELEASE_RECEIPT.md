@@ -6,7 +6,8 @@
 - version: `0.1.0`
 - public repository: `tantanpq/PAI`
 - first package merge: PR #15
-- merge commit: `829e3740387c7a2911d761d66a72d0e155e53eb3`
+- first package merge commit: `829e3740387c7a2911d761d66a72d0e155e53eb3`
+- public-state reconciliation: PR #16
 - distribution surface: repository source package under `capabilities/context/`
 - npm registry publication: **not claimed**
 - license: Apache-2.0
@@ -37,6 +38,21 @@ Post-merge `main` workflow on `829e374...`:
 - job: `103319139209`
 - conclusion: `success`
 - the same source-lock, test, benchmark, pack and clean-consumer gates passed on public `main`.
+
+PR #16 final public-state merge-ref qualification:
+
+- run: `34616731101`
+- job: `103320403853`
+- conclusion: `success`
+- exact source identities: both `OK`
+- original suite: `6/6 PASS`
+- benchmark: 1,000 iterations, 1 unique SHA-256
+- final package tarball before receipt-only update: `pai-context-kit-0.1.0.tgz`
+- tarball shasum: `75e2ee1f36d5ec297ff53f980cf2af4823b79a6e`
+- package size: about 10.7 kB; unpacked about 30.6 kB; 9 files
+- clean consumer: `CONTEXT_CLEAN_CONSUMER_PASS sha256=52159f9618474be8e1842464a53229ad972dd6b249af4e2e8aa48a9296bceeea`
+
+`RELEASE_RECEIPT.md` is intentionally excluded from the npm pack file list, so this evidence-only update does not change the qualified package tarball bytes.
 
 ## Claim boundary
 
