@@ -1,5 +1,5 @@
 schema: pai-public-catalog/v1
-catalog_revision: 8
+catalog_revision: 9
 source_repository: tantanpq/PAI
 assets:
   - asset_id: pai.assurance.community-baseline
@@ -119,6 +119,6 @@ assets:
     path: capabilities/simlab/package.json
     version: 0.1.0
     maturity: PILOT_ONLY
-    release_class: HUMAN_GATE
-    provenance: capabilities/simlab/PROVENANCE.md; protected R7 source basis hash-verified before public reduction
+    release_class: AUTO_RELEASE_AFTER_IQA
+    provenance: capabilities/simlab/RELEASE_RECEIPT.md; capabilities/simlab/PROVENANCE.md; first public pilot merge 3ef9d54866b75380fed970cb1aef4cce064c7316
     license_source: Apache-2.0 repository software scope

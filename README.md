@@ -11,7 +11,7 @@ This repository is the public PAI distribution surface. It is intentionally smal
 | AI work loses context between chats, tools and providers | deterministic source resolution, bounded context packaging and source-aware resume patterns | public patterns do not include private Personal memory, proprietary retrieval/ranking or hosted-chat capture claims |
 | Long-running AI work becomes fragile, non-replayable or dependent on one provider | provider-neutral W_Flow contracts, resumable state, replay/idempotency and explicit local-blocker/authority semantics | W_Flow is not PAI's private Program/Claim/Farm control plane |
 | Green tests are mistaken for proof that the right thing shipped | evidence-first assurance, PASS/LIVE/DONE separation, release-scope integrity and reachable-path policy checks | no certification, warranty, formal proof or zero-defect claim |
-| AI-generated tests miss failure modes or produce unreproducible failures | deterministic SimLab scenarios, properties, synthetic fixtures, known-bad mutants and reproducible counterexamples | real OS/service/provider claims still require real canary evidence |
+| AI-generated tests miss failure modes or produce unreproducible failures | deterministic SimLab scenarios, explicit PASS/FAIL/UNKNOWN, known-bad mutants and minimized reproducible counterexamples | public SimLab is synthetic-only; real OS/service/provider claims still require real canary evidence |
 | Public releases drift beyond their authorized scope | provenance, release contracts, bounded publication classes and independent integrity checks | private/core/customer/security-sensitive material remains excluded |
 | Teams want reusable AI engineering patterns without surrendering their private implementation | small Skills, workflows, Packs and package surfaces with explicit licenses and protected boundaries | the public foundation is not a source dump of `pai-core-private` |
 
@@ -21,7 +21,7 @@ PAI is converging around three public capability families:
 
 - **Context & Continuity**: deterministic, bounded context packaging and source-aware resume patterns.
 - **W_Flow**: reusable, resumable work-loop specifications and verification-friendly workflows.
-- **Assurance & SimLab**: evidence-first verification patterns, deterministic test surfaces, synthetic labs, and reproducible failure analysis.
+- **Assurance & SimLab**: evidence-first verification patterns, deterministic synthetic test surfaces, minimized counterexamples, and reproducible failure analysis.
 
 The public repository also hosts reusable **Skills, Tools, Packs, Labs, examples, and documentation** when they pass the public release boundary.
 
@@ -29,6 +29,7 @@ The public repository also hosts reusable **Skills, Tools, Packs, Labs, examples
 
 - [`capabilities/context/README.md`](capabilities/context/README.md) — Context Kit 0.1.0, deterministic bounded context compilation.
 - [`capabilities/wflow/README.md`](capabilities/wflow/README.md) — W_Flow Core 0.1.0, provider-neutral replayable work-loop semantics.
+- [`capabilities/simlab/README.md`](capabilities/simlab/README.md) — SimLab Core 0.1.0 public pilot for deterministic synthetic verification.
 - [`docs/QUICKSTART.md`](docs/QUICKSTART.md) — use the current Open Foundation in a few bounded steps.
 - [`PORTFOLIO.md`](PORTFOLIO.md) — current public capability and portfolio map.
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — how public PAI relates to the protected private core.
@@ -94,13 +95,13 @@ That repository is treated as a linked evidence/provenance archive while reusabl
 
 ## Current maturity
 
-This repository is in **public foundation bootstrap with two executable packages released**. The goal is not to publish everything PAI has ever built. The goal is to publish a small set of complete, useful, independently understandable capability surfaces and expand only from verified results.
+This repository is in **public foundation bootstrap with two public foundation packages and one executable public pilot released**. The goal is not to publish everything PAI has ever built. The goal is to publish a small set of complete, useful, independently understandable capability surfaces and expand only from verified results.
 
 **Context Kit 0.1.0** is a public executable Open Foundation package. Its recovered compiler/test source hashes are pinned; exact PR and public-main revisions passed 6/6 tests, a 1,000-replay deterministic benchmark, `npm pack`, clean-consumer installation/use and public-integrity checks. The distribution is the source package in this repository; no npm-registry publication is claimed.
 
-**W_Flow Core 0.1.0** is the second public executable package. Five recovered core artifacts are source-hash pinned; exact PR and first public-main revisions passed the original 8/8 core suite, a 1,000-iteration deterministic replay benchmark, independent public-boundary QA, wheel build and clean virtualenv installation/use. W_Flow declares work-loop semantics only: it is not an executor, scheduler, Claim service or authority system. No PyPI publication is claimed.
+**W_Flow Core 0.1.0** is the second public executable package. Five recovered core artifacts are source-hash pinned; exact PR and public-main revisions passed the original 8/8 core suite, a 1,000-iteration deterministic replay benchmark, independent public-boundary QA, wheel build and clean virtualenv installation/use. W_Flow declares work-loop semantics only: it is not an executor, scheduler, Claim service or authority system. No PyPI publication is claimed.
 
-The bounded **SimLab Pilot Core** remains the next exact-package frontier. Its verified internal/source evidence includes 36/36 compatibility + 73/73 verification checks, known-bad policy-mutant rejection and independent QA. That evidence is an input to a `PILOT_ONLY` package boundary, not a claim of general production-platform readiness.
+**SimLab Core 0.1.0** is a `PUBLIC PILOT / PILOT_ONLY` executable surface. Exact PR and public-main revisions passed 6/6 public tests, a 1,000-replay deterministic benchmark with one digest, known-good `PASS`, known-bad mutant `FAIL`, missing-evidence `UNKNOWN`, counterexample minimization from 3 events to 2, independent public-boundary QA, `npm pack`, protected-R7 exclusion checks, and clean-consumer use. The public package is synthetic-only and intentionally does not contain protected R7 evaluator/property intelligence. No npm-registry publication is claimed, and no general production-platform maturity is claimed.
 
 ## Claim boundary
 
