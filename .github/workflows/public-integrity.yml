@@ -11,7 +11,7 @@ permissions:
 jobs:
   public-integrity:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - name: Check out exact revision
         uses: actions/checkout@v4
@@ -57,3 +57,48 @@ jobs:
           if (result.capsule.items.length !== 1) process.exit(1);
           console.log(`CONTEXT_CLEAN_CONSUMER_PASS sha256=${result.sha256}`);
           NODE
+      - name: Verify W_Flow recovered source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s  %s\n' '0222569d09287ef4673378307e54c7c2c270adad614b14909a7c8d083ce87704' 'capabilities/wflow/loop_harness.py' | sha256sum -c -
+          printf '%s  %s\n' '4658cb0610b9d32127e82ad4f0cd0e91e902ca79f667902ad3fc14a0c9ba3867' 'capabilities/wflow/test_loop_harness.py' | sha256sum -c -
+          printf '%s  %s\n' 'bfa6106e835fca9753c3f9c981f540b14e6c4780abd9e4912d34c7564e4aa362' 'capabilities/wflow/LOOP_BLUEPRINT_SCHEMA.json' | sha256sum -c -
+          printf '%s  %s\n' '643babc3b48fd9b5bf09081244e186930662d4c119787d8f8ae164c4a8d80263' 'capabilities/wflow/LOOP_INSTANCE_TEMPLATE.json' | sha256sum -c -
+          printf '%s  %s\n' '32533794c59242cba5cc09d6976f650f7573b585d2c99b27ffc01a74795ac058' 'capabilities/wflow/LOOP_INSTANCE_SEMANTICS.json' | sha256sum -c -
+      - name: Test W_Flow exact recovered core
+        working-directory: capabilities/wflow
+        run: python3 -m unittest -v test_loop_harness.py
+      - name: Benchmark W_Flow deterministic behavior
+        working-directory: capabilities/wflow
+        run: python3 benchmark.py
+      - name: Independently QA W_Flow public boundary
+        working-directory: capabilities/wflow
+        run: python3 public_qa.py
+      - name: Build and verify W_Flow as a clean consumer
+        shell: bash
+        run: |
+          set -euo pipefail
+          WHEEL_DIR="$RUNNER_TEMP/wflow-wheel"
+          CONSUMER_DIR="$RUNNER_TEMP/wflow-consumer"
+          mkdir -p "$WHEEL_DIR" "$CONSUMER_DIR"
+          python3 -m pip wheel ./capabilities/wflow --no-deps -w "$WHEEL_DIR"
+          WHEEL="$(find "$WHEEL_DIR" -maxdepth 1 -name 'pai_wflow_core-0.1.0-*.whl' -print -quit)"
+          test -n "$WHEEL"
+          python3 -m venv "$CONSUMER_DIR/venv"
+          PY="$CONSUMER_DIR/venv/bin/python"
+          "$PY" -m pip install "$WHEEL" --no-deps >/dev/null
+          "$PY" - <<'PY'
+          import importlib.metadata as md
+          from loop_harness import evaluate, transition
+          instance = {"state": "SEED", "lifecycle": "CANDIDATE"}
+          instance = transition(instance, "foundation_ready", "e1")
+          instance = transition(instance, "canary_ready", "e2")
+          assert instance["state"] == "ACTIVE_CANARY"
+          result = evaluate({"signal": 1}, {"signal": 1}, False)
+          assert result["decision"] == "NO_MATERIAL_DELTA" and result["duplicate_work"] == 0
+          files = [str(p) for p in md.files("pai-wflow-core")]
+          for name in ("LOOP_BLUEPRINT_SCHEMA.json", "LOOP_INSTANCE_TEMPLATE.json", "LOOP_INSTANCE_SEMANTICS.json"):
+              assert any(name in path for path in files), name
+          print("WFLOW_CLEAN_CONSUMER_PASS files=%d" % len(files))
+          PY

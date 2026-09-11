@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pai-wflow-core"
+version = "0.1.0"
+description = "Provider-neutral deterministic semantics for resumable evidence-first work loops."
+readme = "README.md"
+requires-python = ">=3.9"
+license = {file = "LICENSE"}
+authors = [{name = "PAI"}]
+keywords = ["ai", "workflow", "replay", "idempotency", "verification"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: Apache Software License"
+]
+
+[tool.setuptools]
+py-modules = ["loop_harness"]
+include-package-data = true
+
+[tool.setuptools.data-files]
+"share/pai-wflow-core" = [
+  "LOOP_BLUEPRINT_SCHEMA.json",
+  "LOOP_INSTANCE_TEMPLATE.json",
+  "LOOP_INSTANCE_SEMANTICS.json"
+]

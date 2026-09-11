@@ -1,37 +1,85 @@
-# W_Flow
+# PAI W_Flow Core
 
-**Status:** `PACKAGE_CANDIDATE`
+**Status:** `0.1.0 RELEASE CANDIDATE`
 
-W_Flow is PAI's public direction for reusable, resumable work loops whose state transitions and evidence can be inspected instead of hidden inside a long prompt or provider-specific automation.
+W_Flow Core is a small provider-neutral contract and deterministic Python harness for resumable, evidence-first work loops.
 
-## Problem
+It targets a recurring failure mode in long-running AI work: starting is easy, but replay, resume, stopping, blocker isolation and authority boundaries are often hidden inside prompts or provider-specific automation.
 
-Many AI workflows are easy to start and hard to resume, replay, verify, or terminate cleanly. A retry can duplicate work, a local blocker can stall unrelated work, and an empty queue can be mistaken for completion.
+## What it provides
 
-W_Flow aims to make those semantics explicit.
+- explicit states and valid transitions;
+- deterministic transition/evaluation harness;
+- exact event-id replay as a no-op;
+- `NO_MATERIAL_DELTA` suppression instead of fabricating successor work;
+- local blocker containment semantics;
+- explicit authority-gate semantics with no authority granted by the package itself;
+- distinct state vs lifecycle: `CANDIDATE`, `DONE`, and `LIVE` are not interchangeable;
+- reusable blueprint schema, instance template and provider-neutral semantics.
 
-## Intended public surface
+The core loop pattern is:
 
-- provider-neutral loop/state contract;
-- deterministic transition harness;
-- reusable loop instance template;
-- seed and growth semantics;
-- explicit `NO_MATERIAL_DELTA` termination;
-- replay/idempotency checks;
-- local-blocker containment;
-- authority-gate examples;
-- versioned package after license and clean-consumer gates.
+`SIGNAL -> SELECT -> MISSION -> PRODUCE/BUILD -> SELF_TEST -> INDEPENDENT_QA -> CANARY/DISTRIBUTE -> METRICS -> LEARN -> NEXT_CYCLE`
 
-## Available now
+## What it does not do
 
-The [`Community Assurance Baseline`](../../workflows/community-assurance-baseline.md) is an example of a reusable bounded workflow already available in the Open Foundation.
+W_Flow Core is **not** an executor, scheduler, queue, database, agent runtime, claim service or authority system. It does not implement PAI's private Program/Claim/Farm machinery, automatically grant public/money/legal/credential effects, or create work merely to keep a machine busy.
 
-## What remains protected
+## Install from a local checkout
 
-The public W_Flow package will not include private PAI Program compilation, Governor/RSM/Claim/Farm internals, private autonomous routing, proprietary customer workflows, credentials, or private operational state.
+```bash
+python -m pip install ./capabilities/wflow
+```
 
-## Release gate
+The current public distribution is the GitHub source package. No PyPI publication is claimed by this release candidate.
 
-The internal W_Flow Loop Builder has verified replay/state-machine/portfolio evidence, but the public package still needs generic naming, standalone packaging, explicit software licensing, clean-consumer verification and independent QA.
+## Use
 
-Track packaging in [issue #2](https://github.com/tantanpq/PAI/issues/2).
+```python
+from loop_harness import evaluate, transition
+
+instance = {"state": "SEED", "lifecycle": "CANDIDATE"}
+instance = transition(instance, "foundation_ready", "event-1")
+instance = transition(instance, "canary_ready", "event-2")
+
+result = evaluate(
+    previous_observation={"signal": 1},
+    current_observation={"signal": 1},
+    material_delta=False,
+)
+
+assert result["decision"] == "NO_MATERIAL_DELTA"
+assert result["duplicate_work"] == 0
+```
+
+Run:
+
+```bash
+python -m unittest -v test_loop_harness.py
+python benchmark.py
+python public_qa.py
+```
+
+## Release evidence boundary
+
+The public candidate reuses these verified source artifacts byte-identically:
+
+- `loop_harness.py`;
+- `test_loop_harness.py`;
+- `LOOP_BLUEPRINT_SCHEMA.json`;
+- `LOOP_INSTANCE_TEMPLATE.json`;
+- `LOOP_INSTANCE_SEMANTICS.json`.
+
+The recovered source family previously passed **13/13** tests including the original **8/8** core suite, plus independent frozen-byte QA. Public release still requires exact source-hash checks, the original 8/8 suite, public benchmark/QA, wheel build, clean-consumer installation and post-merge readback on the exact package bytes.
+
+The public benchmark measures determinism, replay/idempotency, blocker containment, authority gating and zero-successor behavior for unchanged observations. It is not a throughput or cost benchmark.
+
+## Ownership boundary
+
+The blueprint contains exactly one logical `ownership.owner` and exact `mutable_scope` declaration. W_Flow can test that contract, but enforcing exclusive writers in a real system remains the responsibility of that system's existing authority/coordination layer. The package does not invent one.
+
+## Protected boundary
+
+Not included: private Program compilation, Governor/RSM/Claim/Farm internals, private autonomous routing, Notebook/portfolio projections, customer/private work data, credentials or private operational state.
+
+License: Apache-2.0. PAI trademarks and Protected Core remain reserved/excluded.

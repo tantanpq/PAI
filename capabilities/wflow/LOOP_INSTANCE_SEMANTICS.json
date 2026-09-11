@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.0.0",
+  "provider_neutral":true,
+  "template":"LOOP_INSTANCE_TEMPLATE.json",
+  "seed":{"state":"SEED","rule":"instantiate only from an accepted bounded mission owned by its domain/program"},
+  "growth":{"rule":"increase complexity only when accepted prior results justify it","cycle_count_is_value":false},
+  "no_material_delta":{"condition":"same canonical observation and no useful material change","decision":"NO_MATERIAL_DELTA","state":"WAIT_SIGNAL","successor_work":0},
+  "local_blocker":{"decision":"BLOCKED_LOCAL","containment":"instance exact mutable scope only","may_block_other_instances":false,"resume_event":"local_blocker_cleared"},
+  "authority_gate":{"decision":"AUTHORITY_GATE","effects":["PUBLIC","MONEY","LEGAL","CREDENTIAL","TRUST_ROOT","DESTRUCTIVE","PRODUCTION_AUTHORITY"],"explicit_external_grant_required":true,"grant_is_not_implemented_here":true},
+  "dedup":{"event_key":"event_id","mission_key":"observation_digest+mission","same_key_effect":"exact no-op"},
+  "effect_ceiling":"NONE",
+  "live_effect":"NONE"
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "loop_id": "replace-with-loop-id",
+  "goal_value": {"goal": "Replace with bounded goal", "value_hypothesis": "Replace with testable value", "success_evidence": ["immutable result evidence"]},
+  "signal_inputs": [{"name": "bounded_signal", "source": "local accepted evidence", "observation_digest": "0000000000000000000000000000000000000000000000000000000000000000"}],
+  "mission_selection": {"policy": "highest useful eligible mission", "eligibility": ["accepted program and exact scope", "useful eligible work exists"], "dedup_key": "observation_digest+mission"},
+  "ownership": {"owner": "replace-with-domain-or-program-owner", "mutable_scope": "replace-with-exact-scope"},
+  "cycle_budget": {"max_work_items": 1, "max_attempts": 1},
+  "produce_build_contract": {"inputs": ["accepted mission"], "outputs": ["bounded artifact"], "acceptance": ["artifact satisfies frozen contract"]},
+  "self_test": {"inputs": ["bounded artifact"], "outputs": ["test evidence"], "acceptance": ["deterministic tests pass"]},
+  "independent_qa": {"inputs": ["frozen artifact bytes", "test evidence"], "outputs": ["independent QA verdict"], "acceptance": ["QA passes frozen bytes"], "independent_owner": "replace-with-distinct-qa-owner"},
+  "canary_distribution": {"mode": "NONE", "acceptance": ["explicit authority required before effects"], "live_effect": "NONE"},
+  "metrics": [{"name": "useful_verified_outcome", "measure": "accepted outcome count", "target": ">=1"}, {"name": "learning_delta", "measure": "material lessons and regressions", "target": "material or NO_MATERIAL_DELTA"}],
+  "learning": {"lesson_candidates": [], "negative_knowledge": [], "evaluation_delta": "", "regression_delta": "", "reuse_candidates": [], "promotion": "CANDIDATE_ONLY"},
+  "next_cycle": {"requires_new_observation": true, "requires_material_delta": true, "maturity_rule": "increase complexity only when accepted prior results justify it"},
+  "stop_semantics": {"no_material_delta": "WAIT_SIGNAL", "local_blocker": "BLOCKED_LOCAL", "authority_required": "AUTHORITY_GATE", "retire": "RETIRED"},
+  "state": "SEED",
+  "lifecycle": "CANDIDATE",
+  "authority_gates": ["PUBLIC", "MONEY", "LEGAL", "CREDENTIAL", "TRUST_ROOT", "DESTRUCTIVE", "PRODUCTION_AUTHORITY"]
+}

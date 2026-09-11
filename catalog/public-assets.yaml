@@ -1,5 +1,5 @@
 schema: pai-public-catalog/v1
-catalog_revision: 5
+catalog_revision: 6
 source_repository: tantanpq/PAI
 assets:
   - asset_id: pai.assurance.community-baseline
@@ -105,4 +105,12 @@ assets:
     maturity: PUBLIC_FOUNDATION
     release_class: AUTO_RELEASE_AFTER_IQA
     provenance: capabilities/context/RELEASE_RECEIPT.md; capabilities/context/PROVENANCE.md; first release merge 829e3740387c7a2911d761d66a72d0e155e53eb3
+    license_source: Apache-2.0 repository software scope
+  - asset_id: pai.wflow.core
+    asset_class: package
+    path: capabilities/wflow/pyproject.toml
+    version: 0.1.0
+    maturity: RELEASE_CANDIDATE
+    release_class: AUTO_RELEASE_AFTER_IQA
+    provenance: capabilities/wflow/PROVENANCE.md; recovered source family 13Xg7kVFez0mTqUMc26eZOeO0EQUBUa53
     license_source: Apache-2.0 repository software scope
