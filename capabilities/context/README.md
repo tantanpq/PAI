@@ -1,43 +1,69 @@
-# Context Kit
+# PAI Context Kit
 
-**Status:** `PACKAGE_CANDIDATE`
+**Status:** `0.1.0 RELEASE CANDIDATE`
 
-Context Kit is the public-facing direction for PAI's bounded context and continuity primitives.
+Context Kit is a small, dependency-free CommonJS package for turning an explicit set of evidence items into a deterministic, bounded context capsule.
 
-## Problem
+It targets a common failure mode in long-running AI work: either carrying too much stale context forever, or losing the few source-backed facts and constraints needed to resume safely.
 
-Long-running AI work often fails in two opposite ways: too much stale context is carried forever, or a fresh session loses the few facts and source references actually needed to continue safely.
+## What it does
 
-Context Kit aims to make the handoff explicit and deterministic.
+- deterministic ordering and SHA-256 identity for identical evidence;
+- three declared profiles: Resume Capsule, Continuity Passport, Work Context;
+- explicit precedence, deduplication and item-budget behavior;
+- PUBLIC / PERSONAL / SECRET redaction boundaries;
+- fail-closed rejection of malformed or credential-like input;
+- structured `CONTEXT_MISS` when selected evidence explicitly contains unknowns;
+- source/provenance fields remain visible instead of being collapsed into model confidence;
+- pure projection: compilation does not persist or mutate a memory store.
 
-## Intended public surface
+## What it does not do
 
-- deterministic Context Capsule compiler;
-- provider-neutral context profiles/schema;
-- precedence and deduplication rules;
-- privacy/redaction and context-budget boundaries;
-- stable source/pointer references;
-- sample inputs/outputs;
-- benchmark methodology;
-- CLI/SDK packaging after license and clean-consumer gates.
+Context Kit is not a memory database, retrieval/ranking engine, hosted-chat capture service, truth authority, agent scheduler, or claim that every relevant fact fits into a bounded context. It does not claim token savings without a representative corpus and tokenizer/model assumptions.
 
-## Available now
+## Install from a local checkout
 
-Use the [`Source-Only Resume Runbook`](../../runbooks/source-only-resume.md) for the durable-source/JIT-runtime pattern that underpins this capability family.
+```bash
+npm install ./capabilities/context
+```
 
-## What remains protected
+## Use
 
-The public package will not export private Personal continuity data, deep PAI Mind/Chief implementation, proprietary retrieval/ranking/routing/adaptation intelligence, private failure/evaluation corpora, credentials, or authority internals.
+```js
+const { compile } = require('pai-context-kit');
 
-## Release gate
+const result = compile({
+  owner: { principalId: 'person-a', accountId: 'account-a', workspaceId: 'workspace-a' },
+  profile: 'resume',
+  budget: 3,
+  coverage: { observedUserSignals: 1, unobservedHostedChatTurns: 0 },
+  items: [
+    {
+      kind: 'intent',
+      id: 'intent-1',
+      value: 'resume the verified work',
+      privacyClass: 'PUBLIC',
+      provenance: { source: 'accepted-evidence' },
+      freshness: '2026-09-11T00:00:00Z'
+    }
+  ]
+});
 
-The internal deterministic Context Capsule implementation has verification evidence, but a reusable public software release still requires:
+console.log(result.capsule);
+```
 
-- sanitized package boundary;
-- explicit software license;
-- public manifest/version;
-- clean-consumer verification;
-- independent QA;
-- benchmark results that do not overclaim token savings.
+See `SCHEMA.md` for the input/output contract. Run `npm test`, `npm run benchmark`, and `npm run example`.
 
-Track packaging in [issue #1](https://github.com/tantanpq/PAI/issues/1).
+## Evidence boundary
+
+The recovered compiler and its original 6-test suite are reused byte-identically. The public release candidate adds package metadata, standalone docs, provenance, a synthetic example, a behavior benchmark and the Apache-2.0 license.
+
+The internal/source baseline is **6/6 PASS**. The release candidate must still pass CI on its exact PR bytes, including package tests, benchmark replay, `npm pack`, clean-consumer install/use, public-integrity checks and release readback before this status becomes a supported public release.
+
+The benchmark reports fixture-specific byte counts only. They are not a token-savings claim.
+
+## Protected boundary
+
+This package does not include private Personal continuity data, deep PAI Mind/Chief implementation, proprietary retrieval/ranking/routing/adaptation intelligence, private evaluation/failure corpora, credentials, host topology or authority internals.
+
+License: Apache-2.0. PAI trademarks and Protected Core remain reserved/excluded.

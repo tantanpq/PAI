@@ -1,5 +1,5 @@
 schema: pai-public-catalog/v1
-catalog_revision: 3
+catalog_revision: 4
 source_repository: tantanpq/PAI
 assets:
   - asset_id: pai.assurance.community-baseline
@@ -81,7 +81,7 @@ assets:
     maturity: PUBLIC_FOUNDATION
     release_class: AUTO_RELEASE
     provenance: tantanpq/PAI public-foundation bootstrap
-    license_source: pending repository content-license scope
+    license_source: CC-BY-4.0 repository public-content scope
   - asset_id: pai.assurance.synthetic-intake
     asset_class: example
     path: examples/assurance-intake.yaml
@@ -89,7 +89,7 @@ assets:
     maturity: PUBLIC_FOUNDATION
     release_class: AUTO_RELEASE
     provenance: synthetic PAI public example
-    license_source: pending repository content-license scope
+    license_source: CC-BY-4.0 repository public-content scope
   - asset_id: pai.foundation.open-starter
     asset_class: pack
     path: packs/open-foundation-starter/README.md
@@ -97,4 +97,12 @@ assets:
     maturity: PUBLIC_FOUNDATION
     release_class: AUTO_RELEASE
     provenance: curated from current public PAI assets
-    license_source: mixed: inherited CC-BY-4.0 sources plus pending repository content-license scope
+    license_source: mixed: inherited CC-BY-4.0 sources plus CC-BY-4.0 repository public-content scope
+  - asset_id: pai.context.context-kit
+    asset_class: package
+    path: capabilities/context/package.json
+    version: 0.1.0
+    maturity: RELEASE_CANDIDATE
+    release_class: HUMAN_GATE
+    provenance: capabilities/context/PROVENANCE.md; recovered source family 1F9AmMNY2wGRLwEj3iMXO_DK0joHq7AeQ
+    license_source: Apache-2.0 repository software scope
