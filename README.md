@@ -22,6 +22,8 @@ The public repository also hosts reusable **Skills, Tools, Packs, Labs, examples
 - [`docs/PUBLIC_RELEASE_POLICY.md`](docs/PUBLIC_RELEASE_POLICY.md) — what is allowed to become public and how releases are qualified.
 - [`workflows/community-assurance-baseline.md`](workflows/community-assurance-baseline.md) — a reusable evidence-first assurance workflow.
 - [`runbooks/source-only-resume.md`](runbooks/source-only-resume.md) — resume durable work without treating chat memory as authority.
+- [`skills/deterministic-source-resolution.md`](skills/deterministic-source-resolution.md) — resolve durable sources without promoting stale hints into truth.
+- [`skills/reachable-path-policy-integrity.md`](skills/reachable-path-policy-integrity.md) — verify that every route to a protected effect enforces the same invariant.
 - [`skills/release-scope-integrity.md`](skills/release-scope-integrity.md) — verify that a release contains only the change it was supposed to contain.
 
 ## Public repository layout
@@ -62,13 +64,13 @@ A passing test is not automatically a production claim. A public claim must rema
 
 Earlier public reliability work remains available at [`tantanpq/pai-reliability-evidence`](https://github.com/tantanpq/pai-reliability-evidence).
 
-That repository is being treated as a verified evidence/archive source while reusable material is progressively curated into this repository. It is not being discarded or silently rewritten.
+That repository is treated as a linked evidence/provenance archive while reusable material is progressively curated into this repository. Existing evidence and failure history are preserved rather than silently rewritten.
 
 ## Current maturity
 
-This repository is in **public foundation bootstrap**. The first goal is not to publish everything PAI has ever built. The goal is to publish a small set of complete, useful, independently understandable capability surfaces and then expand only from verified results.
+This repository is in **public foundation bootstrap**. The goal is not to publish everything PAI has ever built. The goal is to publish a small set of complete, useful, independently understandable capability surfaces and then expand only from verified results.
 
-Initial productization targets include Context Capsule/Context Kit, W_Flow, SimLab Core, assurance patterns, and selected public Skills/Packs. Their public package status will be reported individually rather than implied by their presence in the roadmap.
+Context Kit, W_Flow, and the bounded SimLab Pilot Core have reached the internal technical disposition `READY_FOR_LICENSE`; that is not a public software release. Their executable package publication remains gated on an explicit software/content license decision and release qualification against the exact public package bytes.
 
 ## Claim boundary
 
