@@ -1,5 +1,5 @@
 schema: pai-public-catalog/v1
-catalog_revision: 9
+catalog_revision: 10
 source_repository: tantanpq/PAI
 assets:
   - asset_id: pai.assurance.community-baseline
@@ -73,6 +73,22 @@ assets:
     maturity: PUBLIC_FOUNDATION
     release_class: AUTO_RELEASE_AFTER_IQA
     provenance: tantanpq/pai-reliability-evidence/patterns/verification-intake-checklist.md
+    license_source: CC-BY-4.0 public source terms
+  - asset_id: pai.assurance.test-environment-isolation-case
+    asset_class: case-study
+    path: case-studies/why-live-policy-does-not-belong-in-tests.md
+    version: 0.1.0
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE_AFTER_IQA
+    provenance: tantanpq/pai-reliability-evidence/case-studies/why-live-policy-does-not-belong-in-tests.md; evidence/2026-09-02-test-environment-isolation.md
+    license_source: CC-BY-4.0 public source terms
+  - asset_id: pai.assurance.test-environment-isolation-checklist
+    asset_class: pattern
+    path: patterns/test-environment-isolation-checklist.md
+    version: 0.1.0
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE_AFTER_IQA
+    provenance: tantanpq/pai-reliability-evidence/patterns/test-environment-isolation-checklist.md; evidence/2026-09-02-test-environment-isolation.md
     license_source: CC-BY-4.0 public source terms
   - asset_id: pai.foundation.quickstart
     asset_class: runbook
