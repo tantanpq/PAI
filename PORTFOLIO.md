@@ -6,34 +6,35 @@ This page tracks public-facing PAI capability families without treating roadmap 
 | --- | --- | --- | --- |
 | Context & Continuity | bounded context packaging, source-aware resume, provider-neutral continuity patterns | **Context Kit 0.1.0 PUBLIC** plus public runbooks/patterns; source/provenance and release evidence pinned | deep personal continuity, proprietary retrieval/routing/adaptation |
 | W_Flow | reusable resumable work-loop specifications and verification-friendly workflow patterns | **W_Flow Core 0.1.0 PUBLIC**; source/provenance, replay benchmark, public QA and clean-consumer evidence pinned | autonomous internal Program compilation/orchestration |
-| Assurance & SimLab | deterministic verification patterns, synthetic labs, failure/recovery reasoning | extensive public reliability evidence exists; SimLab Pilot Core remains `PILOT_ONLY / PACKAGE_QA_PENDING` | protected evaluators, failure intelligence, advanced repair/assurance engine |
+| Assurance & SimLab | deterministic verification patterns, synthetic labs, failure/recovery reasoning | **SimLab Core 0.1.0 PUBLIC PILOT / PILOT_ONLY**; synthetic runner, public SimPack, PASS/FAIL/UNKNOWN, replay and counterexample evidence pinned | protected R7 evaluators/property intelligence, failure intelligence, advanced repair/assurance engine |
 | Skills & Patterns | small reusable verification and engineering recipes | active public foundation with source resolution, route-policy integrity, release-scope and verification intake assets | private/customer-specific adaptations |
-| Packs & Labs | versioned examples, synthetic fixtures and reusable bounded distributions | Open Foundation Starter Pack available; executable/lab expansion requires exact package qualification | private corpora, customer evidence, sovereign/private execution |
+| Packs & Labs | versioned examples, synthetic fixtures and reusable bounded distributions | Open Foundation Starter Pack plus first public SimPack available; broader lab/service maturity remains separately gated | private corpora, customer evidence, sovereign/private execution |
 | PAI Personal | user-owned continuity and productive assistance | not publicly released as a supported product | core product experience, private memory/continuity and adaptation |
-| PAI Assurance | deeper evidence-backed private verification | public methodology/evidence boundary; commercial maturity still evidence-gated | private reconstruction, customer-specific execution, proprietary assurance intelligence |
+| PAI Assurance | deeper evidence-backed private verification | public methodology/evidence boundary; commercial service maturity still evidence-gated | private reconstruction, customer-specific execution, proprietary assurance intelligence |
 
 ## Available now
 
-Start with [`capabilities/context/README.md`](capabilities/context/README.md), [`capabilities/wflow/README.md`](capabilities/wflow/README.md), [`docs/QUICKSTART.md`](docs/QUICKSTART.md), or the [`Open Foundation Starter Pack`](packs/open-foundation-starter/README.md).
+Start with [`capabilities/context/README.md`](capabilities/context/README.md), [`capabilities/wflow/README.md`](capabilities/wflow/README.md), [`capabilities/simlab/README.md`](capabilities/simlab/README.md), [`docs/QUICKSTART.md`](docs/QUICKSTART.md), or the [`Open Foundation Starter Pack`](packs/open-foundation-starter/README.md).
 
 The following material is already useful independently:
 
 1. **Context Kit 0.1.0** — dependency-free deterministic bounded-context compiler with explicit profiles, privacy/budget behavior, provenance, benchmark and clean-consumer evidence.
 2. **W_Flow Core 0.1.0** — provider-neutral deterministic loop/state semantics with exact replay, `NO_MATERIAL_DELTA`, local-blocker containment and external authority gates.
-3. **Community Assurance Baseline** — a tool-agnostic workflow for locking claims, pinning evidence, separating PASS/LIVE/DONE, testing positive and negative cases, and publishing only the reusable lesson.
-4. **Source-Only Resume Runbook** — a continuity pattern for reconstructing durable context from verified sources while fetching volatile truth just-in-time.
-5. **Release-Scope Integrity Review** — a compact skill for proving that a release contains only the authorized composition delta.
-6. **Deterministic Source Resolution** — a skill + contract for resolving durable Program/context sources reproducibly without turning stale chat or cached runtime hints into authority.
-7. **Reachable-Path Policy Integrity** — a skill + checklist for proving that ordinary, retry, recovery, legacy and alternate routes enforce the same protected-effect invariant.
-8. **Verification Intake Checklist + Green Tests case study** — a bounded pattern and real public lesson showing why passing focused tests do not authorize the wrong release composition.
-9. **Open Foundation Starter Pack** — one curated path through the current resume, verification, assurance and synthetic-intake assets.
-10. **PAI Reliability Evidence archive** — a larger public collection of evidence summaries, case studies, patterns, demos, runbooks, skills and workflows accumulated before this monorepo became the primary public PAI surface.
+3. **SimLab Core 0.1.0 public pilot** — synthetic-only deterministic verification with explicit `PASS / FAIL / UNKNOWN`, known-bad mutant rejection, replay identity, minimized counterexamples and a bundled SimPack.
+4. **Community Assurance Baseline** — a tool-agnostic workflow for locking claims, pinning evidence, separating PASS/LIVE/DONE, testing positive and negative cases, and publishing only the reusable lesson.
+5. **Source-Only Resume Runbook** — a continuity pattern for reconstructing durable context from verified sources while fetching volatile truth just-in-time.
+6. **Release-Scope Integrity Review** — a compact skill for proving that a release contains only the authorized composition delta.
+7. **Deterministic Source Resolution** — a skill + contract for resolving durable Program/context sources reproducibly without turning stale chat or cached runtime hints into authority.
+8. **Reachable-Path Policy Integrity** — a skill + checklist for proving that ordinary, retry, recovery, legacy and alternate routes enforce the same protected-effect invariant.
+9. **Verification Intake Checklist + Green Tests case study** — a bounded pattern and real public lesson showing why passing focused tests do not authorize the wrong release composition.
+10. **Open Foundation Starter Pack** — one curated path through the current resume, verification, assurance and synthetic-intake assets.
+11. **PAI Reliability Evidence archive** — a larger public collection of evidence summaries, case studies, patterns, demos, runbooks, skills and workflows accumulated before this monorepo became the primary public PAI surface.
 
 Archive: https://github.com/tantanpq/pai-reliability-evidence
 
 ## Initial productization frontier
 
-The license strategy is selected. Context Kit and W_Flow Core have crossed bounded exact-package release boundaries; SimLab remains the active executable package frontier.
+The license strategy is selected. Context Kit and W_Flow Core are public foundation packages. SimLab Core has crossed its first bounded public-package boundary but deliberately remains a `PILOT_ONLY` capability rather than a general production platform.
 
 ### Context Capsule / Context Kit
 
@@ -60,17 +61,22 @@ Release evidence includes five byte-identical recovered source artifacts, origin
 
 ### SimLab Core
 
-Current disposition: `LICENSE_SELECTED / PILOT_ONLY / PACKAGE_QA_PENDING`.
+Current disposition: `PUBLIC_PILOT_0.1.0 / PILOT_ONLY / PACKAGE_CANARY_PASS`.
 
-Target public surface:
+Public surface:
 
-- deterministic local verification runner;
-- scenario/property/result contracts;
-- synthetic fixtures;
-- minimized failure/counterexample examples;
-- first public SimPack.
+- dependency-free deterministic synthetic verification runner;
+- public SimPack contract and first synthetic SimPack;
+- explicit `PASS / FAIL / UNKNOWN` semantics;
+- bounded property checks;
+- deterministic replay identity;
+- known-good and known-bad fixtures;
+- deterministic sequence counterexample minimization;
+- standalone benchmark, public QA and clean-consumer evidence.
 
-Current source evidence includes 36/36 compatibility checks and 73/73 R7 verification checks with known-bad policy-mutant rejection, cross-host independent QA and 8/8 application fixtures. The qualification remains for a bounded pilot core only. It does not imply a general production platform, formal proof, universal production readiness or zero defects. Exact public-package clean-consumer verification and IQA remain required.
+Release evidence includes exact PR #19 and post-merge public-main qualification: 6/6 package tests, 1,000 deterministic replay iterations with one unique digest, known-good `PASS`, known-bad mutant `FAIL`, missing evidence `UNKNOWN`, failing sequence minimized from 3 events to 2, public QA, tarball protected-name inspection and clean temporary consumer install/use. The public package is a sanitized implementation and does not distribute protected R7 runner/property/evaluator internals.
+
+This remains **synthetic-only** and `PILOT_ONLY`. It does not imply a general production platform, formal proof, universal production readiness, security certification or zero defects. Real OS/service/network/provider claims still require bounded real canary evidence. No npm-registry publication is claimed.
 
 See [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) for release benchmark gates and [`LICENSE.md`](LICENSE.md) for licensing scopes.
 
