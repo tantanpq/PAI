@@ -1,40 +1,56 @@
-# SimLab Core
+# PAI SimLab Core
 
-**Status:** `PACKAGE_CANDIDATE`
+**Status:** `0.1.0 PILOT RELEASE CANDIDATE`
 
-SimLab Core is the public-facing direction for deterministic verification, synthetic scenarios, property checks, counterexamples and reproducible evidence.
+SimLab Core is a small, dependency-free deterministic verification runner for **synthetic** scenarios. It exists because an AI saying “the fix looks right” is not evidence that the candidate actually satisfies a property.
 
-## Problem
+## Problems it addresses
 
-AI systems can generate plausible explanations of why a change should work. That is not the same thing as proving what the candidate actually does.
+- a generated repair sounds plausible but has no reproducible test evidence;
+- a missing observation is accidentally treated as success instead of `UNKNOWN`;
+- a known-bad mutant survives because the evaluator is too weak;
+- a failing scenario produces a large log instead of a small reproducible counterexample;
+- repeated verification cannot prove it is replaying the same semantics.
 
-SimLab separates hypothesis generation from deterministic judgment and preserves `PASS`, `FAIL` and `UNKNOWN` as distinct evidence states.
+## What the pilot provides
 
-## Intended public surface
+- explicit `PASS`, `FAIL`, and `UNKNOWN` evidence states;
+- deterministic replay identity for frozen synthetic inputs;
+- bounded `EQUALS`, `TYPE`, and `INCLUDES` property checks;
+- known-good and known-bad synthetic fixtures;
+- a simple deterministic sequence counterexample shrinker;
+- one bundled public SimPack;
+- no runtime, writer, or promotion authority.
 
-- local deterministic runner;
-- scenario/property/result contracts;
-- synthetic fixtures;
-- positive and known-bad cases;
-- reproducible/minimized failure examples;
-- public SimPacks;
-- claim-boundary and unsupported-claim reporting;
-- CLI/SDK packaging after license and clean-consumer gates.
+## Install from a local checkout
 
-## Available now
+```bash
+npm install ./capabilities/simlab
+```
 
-- [`Release-Scope Integrity Review`](../../skills/release-scope-integrity.md)
-- [`Verification Intake Checklist`](../../patterns/verification-intake-checklist.md)
-- [`Green Tests, Wrong Release`](../../case-studies/green-tests-wrong-release.md)
+The current distribution target is the GitHub source package. No npm-registry publication is claimed.
 
-These demonstrate the evidence discipline around the future runner without publishing protected evaluator internals.
+## Use
 
-## What remains protected
+```js
+const { runSimPack } = require('pai-simlab-core');
 
-Advanced evaluators, protected evaluation corpora, deep accumulated failure intelligence, proprietary repair selection, customer-specific evidence and private/sovereign runner internals remain outside the public package.
+const pack = {
+  schema: 'pai-simpack/v1', packId: 'example', version: '0.1.0', syntheticOnly: true,
+  properties: [{ id: 'ok', path: 'ok', op: 'EQUALS', expected: true, required: true }],
+  scenarios: [{ id: 's1', synthetic: true, input: { value: 1 } }]
+};
 
-## Claim boundary
+const result = runSimPack(pack, ({ value }) => ({ ok: value === 1 }));
+console.log(result.result.verdict); // PASS
+```
 
-A future SimLab Core release will not imply formal proof, universal production readiness, security certification or zero defects. Claims about real services, operating systems or providers require bounded real canary evidence.
+Run `npm test`, `npm run benchmark`, `npm run qa`, or `npm run example` from this directory. See `SCHEMA.md` for the public contract and `PROVENANCE.md` for the evidence boundary.
 
-Track packaging in [issue #3](https://github.com/tantanpq/PAI/issues/3).
+## What it does not do
+
+This pilot is not the protected PAI SimLab R7 runner, an autonomous repair engine, a production scheduler, a formal prover, a security certification system, or evidence that real services behave like synthetic fixtures. Advanced evaluators, private failure corpora, property intelligence and repair selection remain protected.
+
+Real operating-system, service, network, provider or production claims still require bounded real canary evidence outside this package.
+
+License: Apache-2.0. PAI trademarks and Protected Core remain reserved/excluded.
