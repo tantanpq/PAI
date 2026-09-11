@@ -4,6 +4,17 @@
 
 This repository is the public PAI distribution surface. It is intentionally smaller than the complete private PAI system.
 
+## Problems this repository is trying to solve
+
+| Problem | Public PAI response | Boundary |
+| --- | --- | --- |
+| AI work loses context between chats, tools and providers | deterministic source resolution, bounded context packaging and source-aware resume patterns | public patterns do not include private Personal memory, proprietary retrieval/ranking or hosted-chat capture claims |
+| Long-running AI work becomes fragile, non-replayable or dependent on one provider | provider-neutral W_Flow contracts, resumable state, replay/idempotency and explicit local-blocker/authority semantics | W_Flow is not PAI's private Program/Claim/Farm control plane |
+| Green tests are mistaken for proof that the right thing shipped | evidence-first assurance, PASS/LIVE/DONE separation, release-scope integrity and reachable-path policy checks | no certification, warranty, formal proof or zero-defect claim |
+| AI-generated tests miss failure modes or produce unreproducible failures | deterministic SimLab scenarios, properties, synthetic fixtures, known-bad mutants and reproducible counterexamples | real OS/service/provider claims still require real canary evidence |
+| Public releases drift beyond their authorized scope | provenance, release contracts, bounded publication classes and independent integrity checks | private/core/customer/security-sensitive material remains excluded |
+| Teams want reusable AI engineering patterns without surrendering their private implementation | small Skills, workflows, Packs and package surfaces with explicit licenses and protected boundaries | the public foundation is not a source dump of `pai-core-private` |
+
 ## What PAI is building
 
 PAI is converging around three public capability families:
@@ -20,6 +31,8 @@ The public repository also hosts reusable **Skills, Tools, Packs, Labs, examples
 - [`PORTFOLIO.md`](PORTFOLIO.md) — current public capability and portfolio map.
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — how public PAI relates to the protected private core.
 - [`docs/PUBLIC_RELEASE_POLICY.md`](docs/PUBLIC_RELEASE_POLICY.md) — what is allowed to become public and how releases are qualified.
+- [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) — current verification baselines and the benchmark gates required for exact public package bytes.
+- [`LICENSE.md`](LICENSE.md) — Apache-2.0 software scope, CC-BY-4.0 public-content scope, trademark and protected-core boundaries.
 - [`workflows/community-assurance-baseline.md`](workflows/community-assurance-baseline.md) — a reusable evidence-first assurance workflow.
 - [`runbooks/source-only-resume.md`](runbooks/source-only-resume.md) — resume durable work without treating chat memory as authority.
 - [`skills/deterministic-source-resolution.md`](skills/deterministic-source-resolution.md) — resolve durable sources without promoting stale hints into truth.
@@ -60,6 +73,17 @@ PAI keeps these states distinct:
 
 A passing test is not automatically a production claim. A public claim must remain narrower than or equal to the evidence behind it.
 
+## Licensing
+
+The public licensing strategy is now selected:
+
+- **Apache-2.0** for original PAI software intentionally published as reusable software;
+- **CC BY 4.0** for original public non-code material such as documentation, Skills, workflows/W_Flows, patterns and synthetic educational content;
+- **trademarks reserved**;
+- third-party/migrated assets keep their exact upstream terms.
+
+See [`LICENSE.md`](LICENSE.md) for scope and exclusions. A future change to this licensing strategy remains a founder/legal gate.
+
 ## Reliability evidence archive
 
 Earlier public reliability work remains available at [`tantanpq/pai-reliability-evidence`](https://github.com/tantanpq/pai-reliability-evidence).
@@ -70,7 +94,9 @@ That repository is treated as a linked evidence/provenance archive while reusabl
 
 This repository is in **public foundation bootstrap**. The goal is not to publish everything PAI has ever built. The goal is to publish a small set of complete, useful, independently understandable capability surfaces and then expand only from verified results.
 
-Context Kit, W_Flow, and the bounded SimLab Pilot Core have reached the internal technical disposition `READY_FOR_LICENSE`; that is not a public software release. Their executable package publication remains gated on an explicit software/content license decision and release qualification against the exact public package bytes.
+The initial software-license gate has been resolved. Context Kit, W_Flow and the bounded SimLab Pilot Core still require qualification of the **exact public package bytes** through clean-consumer checks, the benchmark gates in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md), independent QA and release readback before they are represented as supported public software releases.
+
+Verified internal/source baselines are currently 6/6 for Context Kit, 13/13 plus independent frozen-byte QA for W_Flow, and 36/36 compatibility + 73/73 verification checks with known-bad mutant rejection for SimLab Core. Those baselines are evidence inputs, not substitutes for exact public-package verification.
 
 ## Claim boundary
 
