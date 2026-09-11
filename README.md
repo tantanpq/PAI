@@ -27,6 +27,7 @@ The public repository also hosts reusable **Skills, Tools, Packs, Labs, examples
 
 ## Start here
 
+- [`capabilities/context/README.md`](capabilities/context/README.md) — Context Kit 0.1.0, the first executable Open Foundation package.
 - [`docs/QUICKSTART.md`](docs/QUICKSTART.md) — use the current Open Foundation in a few bounded steps.
 - [`PORTFOLIO.md`](PORTFOLIO.md) — current public capability and portfolio map.
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — how public PAI relates to the protected private core.
@@ -92,11 +93,11 @@ That repository is treated as a linked evidence/provenance archive while reusabl
 
 ## Current maturity
 
-This repository is in **public foundation bootstrap**. The goal is not to publish everything PAI has ever built. The goal is to publish a small set of complete, useful, independently understandable capability surfaces and then expand only from verified results.
+This repository is in **public foundation bootstrap with its first executable package released**. The goal is not to publish everything PAI has ever built. The goal is to publish a small set of complete, useful, independently understandable capability surfaces and then expand only from verified results.
 
-The initial software-license gate has been resolved. Context Kit, W_Flow and the bounded SimLab Pilot Core still require qualification of the **exact public package bytes** through clean-consumer checks, the benchmark gates in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md), independent QA and release readback before they are represented as supported public software releases.
+**Context Kit 0.1.0** is the first public executable Open Foundation package. Its recovered compiler/test source hashes are pinned; PR and post-merge `main` both passed 6/6 tests, a 1,000-replay deterministic benchmark, `npm pack`, clean-consumer installation/use, and public-integrity checks. The current distribution is the source package in this repository; no npm-registry publication is claimed.
 
-Verified internal/source baselines are currently 6/6 for Context Kit, 13/13 plus independent frozen-byte QA for W_Flow, and 36/36 compatibility + 73/73 verification checks with known-bad mutant rejection for SimLab Core. Those baselines are evidence inputs, not substitutes for exact public-package verification.
+W_Flow and the bounded SimLab Pilot Core remain at exact-package qualification gates. Their verified internal/source baselines are 13/13 plus independent frozen-byte QA for W_Flow and 36/36 compatibility + 73/73 verification checks with known-bad mutant rejection for SimLab Core. Those baselines remain evidence inputs, not substitutes for exact public-package verification.
 
 ## Claim boundary
 
