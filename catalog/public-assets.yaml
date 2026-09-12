@@ -1,5 +1,5 @@
 schema: pai-public-catalog/v1
-catalog_revision: 10
+catalog_revision: 11
 source_repository: tantanpq/PAI
 assets:
   - asset_id: pai.assurance.community-baseline
@@ -89,6 +89,14 @@ assets:
     maturity: PUBLIC_FOUNDATION
     release_class: AUTO_RELEASE_AFTER_IQA
     provenance: tantanpq/pai-reliability-evidence/patterns/test-environment-isolation-checklist.md; evidence/2026-09-02-test-environment-isolation.md
+    license_source: CC-BY-4.0 public source terms
+  - asset_id: pai.assurance.security-evidence-before-software-admission
+    asset_class: demo
+    path: demos/security-evidence-before-software-admission.md
+    version: 0.1.0
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE
+    provenance: tantanpq/pai-reliability-evidence@524ab22b3ef648ddb23912da4c5b78b648d66b51/demos/security-evidence-before-software-admission.md; source blob 6d0cc37d6dacda14f3a410a1a891465414c8f55e
     license_source: CC-BY-4.0 public source terms
   - asset_id: pai.foundation.quickstart
     asset_class: runbook
