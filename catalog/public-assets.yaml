@@ -1,5 +1,5 @@
 schema: pai-public-catalog/v1
-catalog_revision: 13
+catalog_revision: 14
 source_repository: tantanpq/PAI
 assets:
   - asset_id: pai.assurance.community-baseline
@@ -113,6 +113,14 @@ assets:
     maturity: PUBLIC_FOUNDATION
     release_class: AUTO_RELEASE
     provenance: tantanpq/pai-reliability-evidence@524ab22b3ef648ddb23912da4c5b78b648d66b51/demos/failure-signal-is-not-failure-cause.md; source blob 246171a3cb66ea6b8f761245a9a6a358b0796928
+    license_source: CC-BY-4.0 public source terms
+  - asset_id: pai.assurance.incident-recurrence-without-retry-theater
+    asset_class: demo
+    path: demos/incident-recurrence-without-retry-theater.md
+    version: 0.1.0
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE
+    provenance: tantanpq/pai-reliability-evidence@524ab22b3ef648ddb23912da4c5b78b648d66b51/demos/incident-recurrence-without-retry-theater.md; source blob c77833993739b0e3faa8822d2c2a21341e648de0
     license_source: CC-BY-4.0 public source terms
   - asset_id: pai.foundation.quickstart
     asset_class: runbook
