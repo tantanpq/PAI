@@ -1,5 +1,5 @@
 schema: pai-public-catalog/v1
-catalog_revision: 12
+catalog_revision: 13
 source_repository: tantanpq/PAI
 assets:
   - asset_id: pai.assurance.community-baseline
@@ -105,6 +105,14 @@ assets:
     maturity: PUBLIC_FOUNDATION
     release_class: AUTO_RELEASE
     provenance: tantanpq/pai-reliability-evidence@524ab22b3ef648ddb23912da4c5b78b648d66b51/demos/empty-ready-set-is-not-done.md; source blob e15624dc12735c0aa26d01a098177582fc504059
+    license_source: CC-BY-4.0 public source terms
+  - asset_id: pai.assurance.failure-signal-is-not-failure-cause
+    asset_class: demo
+    path: demos/failure-signal-is-not-failure-cause.md
+    version: 0.1.0
+    maturity: PUBLIC_FOUNDATION
+    release_class: AUTO_RELEASE
+    provenance: tantanpq/pai-reliability-evidence@524ab22b3ef648ddb23912da4c5b78b648d66b51/demos/failure-signal-is-not-failure-cause.md; source blob 246171a3cb66ea6b8f761245a9a6a358b0796928
     license_source: CC-BY-4.0 public source terms
   - asset_id: pai.foundation.quickstart
     asset_class: runbook
