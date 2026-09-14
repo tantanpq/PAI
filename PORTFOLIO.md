@@ -104,7 +104,8 @@ Bounded dispositions for the strongest already-curated public surfaces. This is 
 | Verification Intake + Green Tests case study | `MIGRATE` (done) | Pattern + case study in this monorepo. |
 | Test-Environment Isolation | `MIGRATE` (done) | Case study + checklist; evidence tree retained with provenance. |
 | Open Foundation Starter Pack | `MIGRATE` (done) | Curated pack under `packs/open-foundation-starter/`. |
-| Remaining `pai-reliability-evidence` corpus | `LINK_ARCHIVE` | Keep https://github.com/tantanpq/pai-reliability-evidence as provenance/history until a later explicit archive/redirect decision. |
+| `a-canary-pass-is-not-a-stable-owner.md` case study | `MIGRATE` (done) | Copied from pai-reliability-evidence with provenance retained; see `case-studies/a-canary-pass-is-not-a-stable-owner.md`. |
+| Remaining pai-reliability-evidence corpus | `LINK_ARCHIVE` | Keep https://github.com/tantanpq/pai-reliability-evidence as provenance/history until a later explicit archive/redirect decision. |
 | Protected Core / private runtime / customer evidence | `REJECT_PUBLIC` | Remains excluded from public migration. |
 
 Further individual legacy filenames still only in the archive stay `KEEP_LEGACY` or receive a later per-asset disposition; this table closes the primary-entrypoint curation already reflected in Available now.
