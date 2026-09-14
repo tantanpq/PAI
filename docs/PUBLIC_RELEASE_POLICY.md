@@ -114,3 +114,7 @@ The founder license gate is resolved for the current Open Foundation strategy:
 This selection removes the license-choice blocker. It does **not** turn an internal/source PASS into a public package release. Exact public package bytes must still pass clean-consumer verification, the benchmark gates in `docs/BENCHMARKS.md`, independent QA where required, and public readback.
 
 Changing this license strategy remains a `HUMAN_GATE` legal/founder decision.
+
+## Loop evidence
+
+Consecutive bounded cycle receipts for issue #5 live under [docs/receipts/PUBLIC_RELEASE_LOOP_R1.md](receipts/PUBLIC_RELEASE_LOOP_R1.md).

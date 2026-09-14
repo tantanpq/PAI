@@ -1,0 +1,22 @@
+# Release receipt — Public Release Loop cycle 2
+
+RELEASE_ID: PAI-PUBLIC-RELEASE-LOOP-CYCLE2-20260914
+ASSET_ID: PORTFOLIO.md
+VERSION_OR_REVISION: main after PR #33
+RELEASE_CLASS: AUTO_RELEASE
+SOURCE_PROVENANCE: Existing Available now list; issue #4 acceptance vocabulary
+PUBLIC_COMMIT_OR_TAG: 3467896393cac5c3c44f60544916ed3c86faa25e
+DECLARED_DELTA: Add Legacy archive dispositions table (MIGRATE/LINK_ARCHIVE/REJECT_PUBLIC)
+OBSERVED_DELTA: PORTFOLIO.md only
+TEST_STATUS: N/A docs-only
+INDEPENDENT_QA: not required for this AUTO_RELEASE docs PATCH
+PRIVACY_CHECK: PASS
+SECRET_CHECK: PASS
+RIGHTS_CHECK: PASS
+MOAT_CHECK: PASS
+CLAIM_BOUNDARY: Does not claim full #4 closure for every archive filename
+UNSUPPORTED_CLAIMS: none
+PUBLIC_READBACK: GitHub contents API on main showed disposition section
+SUPERSEDES: none
+ROLLBACK_OR_REVOKE: revert PR #33 commit
+TERMINAL_STATUS: PUBLISHED_VERIFIED
