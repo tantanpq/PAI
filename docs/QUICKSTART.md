@@ -36,12 +36,12 @@ The basic loop is:
 
 ```text
 LOCK CLAIM
-→ PIN INPUT/STATE
-→ SEPARATE PASS / LIVE / DONE
-→ SELECT DECISIVE POSITIVE + NEGATIVE CHECKS
-→ RUN AND PRESERVE TERMINAL EVIDENCE
-→ ADD INDEPENDENT REVIEW WHEN MATERIAL
-→ PUBLISH ONLY THE BOUNDED LESSON
+â†’ PIN INPUT/STATE
+â†’ SEPARATE PASS / LIVE / DONE
+â†’ SELECT DECISIVE POSITIVE + NEGATIVE CHECKS
+â†’ RUN AND PRESERVE TERMINAL EVIDENCE
+â†’ ADD INDEPENDENT REVIEW WHEN MATERIAL
+â†’ PUBLISH ONLY THE BOUNDED LESSON
 ```
 
 Use only systems you own or are authorized to evaluate.
@@ -53,4 +53,10 @@ Use only systems you own or are authorized to evaluate.
 - Deterministic verification: [`capabilities/simlab/`](../capabilities/simlab/)
 - Portfolio/maturity map: [`../PORTFOLIO.md`](../PORTFOLIO.md)
 
-The three software capability families are currently `PACKAGE_CANDIDATE`, not generally released software. Their code releases remain gated on packaging, clean-consumer verification, independent QA, and an explicit software-license decision.
+The three software capability families are already published in this repository as GitHub source packages (see each capability README and [`LICENSE.md`](../LICENSE.md)):
+
+- Context Kit — `PUBLIC 0.1.0` (Apache-2.0 software scope)
+- W_Flow Core — `PUBLIC 0.1.0` (Apache-2.0 software scope)
+- SimLab Core — `PUBLIC PILOT / PILOT_ONLY 0.1.0` (Apache-2.0 software scope)
+
+No npm or PyPI registry publication is claimed. Trademarks and Protected Core remain reserved/excluded. A change to the licensing strategy remains a founder/legal `HUMAN_GATE`.
