@@ -87,6 +87,28 @@ See [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md) for release benchmark gates and [
 
 The archive remains linked rather than silently deleted so existing evidence references continue to resolve.
 
+## Legacy archive dispositions (issue #4)
+
+Bounded dispositions for the strongest already-curated public surfaces. This is not a bulk copy of `pai-reliability-evidence`; archive links remain valid.
+
+| Public surface in this repo | Disposition | Notes |
+| --- | --- | --- |
+| Context Kit 0.1.0 | `MIGRATE` (done) | Primary package lives under `capabilities/context/`; provenance/receipt pinned there. |
+| W_Flow Core 0.1.0 | `MIGRATE` (done) | Primary package lives under `capabilities/wflow/`. |
+| SimLab Core 0.1.0 public pilot | `MIGRATE` (done) | Primary pilot package lives under `capabilities/simlab/`; remains `PILOT_ONLY`. |
+| Community Assurance Baseline | `MIGRATE` (done) | Workflow + example intake in this monorepo. |
+| Source-Only Resume Runbook | `MIGRATE` (done) | Public runbook path in this monorepo. |
+| Release-Scope Integrity Review | `MIGRATE` (done) | Public skill in this monorepo. |
+| Deterministic Source Resolution | `MIGRATE` (done) | Public skill + contract in this monorepo. |
+| Reachable-Path Policy Integrity | `MIGRATE` (done) | Public skill + checklist in this monorepo. |
+| Verification Intake + Green Tests case study | `MIGRATE` (done) | Pattern + case study in this monorepo. |
+| Test-Environment Isolation | `MIGRATE` (done) | Case study + checklist; evidence tree retained with provenance. |
+| Open Foundation Starter Pack | `MIGRATE` (done) | Curated pack under `packs/open-foundation-starter/`. |
+| Remaining `pai-reliability-evidence` corpus | `LINK_ARCHIVE` | Keep https://github.com/tantanpq/pai-reliability-evidence as provenance/history until a later explicit archive/redirect decision. |
+| Protected Core / private runtime / customer evidence | `REJECT_PUBLIC` | Remains excluded from public migration. |
+
+Further individual legacy filenames still only in the archive stay `KEEP_LEGACY` or receive a later per-asset disposition; this table closes the primary-entrypoint curation already reflected in Available now.
+
 ## What success looks like
 
 PAI public portfolio quality is measured by stronger evidence than repository size:
