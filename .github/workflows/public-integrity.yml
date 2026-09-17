@@ -26,6 +26,32 @@ jobs:
       - name: Test Context Kit exact source bytes
         working-directory: capabilities/context
         run: npm test
+      - name: Test and independently QA Context Economy
+        working-directory: capabilities/context-economy
+        run: |
+          npm test
+          npm run benchmark
+          npm run qa
+      - name: Pack and verify Context Economy as a clean consumer
+        shell: bash
+        run: |
+          set -euo pipefail
+          PACK_DIR="$RUNNER_TEMP/context-economy-pack"
+          CONSUMER_DIR="$RUNNER_TEMP/context-economy-consumer"
+          mkdir -p "$PACK_DIR" "$CONSUMER_DIR"
+          npm pack ./capabilities/context-economy --pack-destination "$PACK_DIR" >/dev/null
+          TARBALL="$(find "$PACK_DIR" -maxdepth 1 -name 'pai-context-economy-*.tgz' -print -quit)"
+          test -n "$TARBALL"
+          cd "$CONSUMER_DIR"
+          npm init -y >/dev/null 2>&1
+          npm install "$TARBALL" >/dev/null
+          node - <<'NODE'
+          const { compactHealth, sharedHealthParity } = require('pai-context-economy');
+          const full = { status: 'OPEN', revision: 1, fullRef: 'sha256:fixture' };
+          const compact = compactHealth(full);
+          if (!sharedHealthParity(full, compact)) process.exit(1);
+          console.log(`CONTEXT_ECONOMY_CLEAN_CONSUMER_PASS schema=${compact.schema}`);
+          NODE
       - name: Benchmark Context Kit deterministic behavior
         working-directory: capabilities/context
         run: npm run benchmark
