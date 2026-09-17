@@ -1,0 +1,21 @@
+{
+  "name": "pai-context-economy",
+  "version": "0.1.0",
+  "description": "Deterministic context budgeting, compact read models, bounded tool-result envelopes, capability projections, and repository-map selection.",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node --test test.js",
+    "benchmark": "node benchmark.js",
+    "qa": "node public-qa.js"
+  },
+  "files": [
+    "index.js",
+    "README.md",
+    "PROVENANCE.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "Apache-2.0"
+}
