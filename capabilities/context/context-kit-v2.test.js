@@ -35,6 +35,14 @@ test('stable identity rejects a stale running attempt after terminal retry', () 
   assert.equal(projection.state, 'DONE');
   assert.equal(projection.source, 'STABLE_ID_FALLBACK');
   assert.equal(projection.staleCachedAttemptRejected, true);
+
+  const resumed = convergeLifecycleProjection({ stableId: 'TASK-1', cachedAttemptId: 'attempt-resumed', attempts: [
+    { stableId: 'TASK-1', attemptId: 'attempt-done', state: 'DONE', updatedAt: '2026-09-18T19:12:00Z' },
+    { stableId: 'TASK-1', attemptId: 'attempt-resumed', state: 'RUNNING', updatedAt: '2026-09-18T19:20:00Z' }
+  ] });
+  assert.equal(resumed.state, 'RUNNING');
+  assert.equal(resumed.source, 'CACHED_EXACT_ATTEMPT');
+  assert.equal(resumed.staleCachedAttemptRejected, false);
 });
 
 const continuityInput = () => ({

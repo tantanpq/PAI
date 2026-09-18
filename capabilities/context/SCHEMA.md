@@ -47,7 +47,7 @@ Malformed or credential-like inputs fail closed with `ContextCapsuleError` code 
 
 `resolveExactArtifact()` accepts one stable identity, expected SHA-256, primary ref, optional archive ref, and at most two exact candidate values. It never searches history. A matching artifact is returned only after hash verification and byte-budget enforcement; otherwise it returns `CONTEXT_MISS` or throws `EXACT_ARTIFACT_HASH_DRIFT`.
 
-`convergeLifecycleProjection()` rejects a stale cached attempt when a terminal attempt exists for the same stable identity. Ranking does not create authority; callers supply the governed attempt projection.
+`convergeLifecycleProjection()` selects the newest timestamped governed attempt for the same stable identity. This rejects a stale cached running attempt when a newer terminal attempt exists without allowing an older terminal attempt to mask a legitimate newer retry. Ranking does not create authority; callers supply the governed attempt projection.
 
 ## Continuity Carrier
 

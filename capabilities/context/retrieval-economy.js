@@ -3,7 +3,6 @@
 const crypto = require('node:crypto');
 
 const BODY_FIELDS = Object.freeze(['body', 'content', 'fullContent', 'raw', 'text']);
-const TERMINAL = new Set(['DONE', 'NOT_DONE', 'BLOCKED', 'CANCELLED', 'SUPERSEDED']);
 const text = value => typeof value === 'string' && value.length > 0;
 const sha256 = value => crypto.createHash('sha256').update(value).digest('hex');
 const bytes = value => Buffer.byteLength(JSON.stringify(value), 'utf8');
@@ -74,9 +73,9 @@ function resolveExactArtifact({ stableId, expectedHash, primaryRef, archiveRef, 
 
 function convergeLifecycleProjection({ stableId, cachedAttemptId = null, attempts } = {}) {
   if (!text(stableId) || !Array.isArray(attempts) || attempts.length > 32) fail('LIFECYCLE_PROJECTION_INVALID');
-  const rows = attempts.filter(row => row && row.stableId === stableId && text(row.attemptId) && text(row.state) && text(row.updatedAt))
-    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt) || a.attemptId.localeCompare(b.attemptId));
-  const selected = rows.find(row => TERMINAL.has(row.state)) || rows[0] || null;
+  const rows = attempts.filter(row => row && row.stableId === stableId && text(row.attemptId) && text(row.state) && text(row.updatedAt) && Number.isFinite(Date.parse(row.updatedAt)))
+    .sort((a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt) || a.attemptId.localeCompare(b.attemptId));
+  const selected = rows[0] || null;
   if (!selected) return Object.freeze({ schema: 'lifecycle-projection/v1', status: 'CONTEXT_MISS', stableId, attemptId: null, state: null, miss: { code: 'CONTEXT_MISS', reason: 'STABLE_ID_NOT_FOUND' } });
   return Object.freeze({ schema: 'lifecycle-projection/v1', status: 'READY', stableId, attemptId: selected.attemptId, state: selected.state, updatedAt: selected.updatedAt, source: selected.attemptId === cachedAttemptId ? 'CACHED_EXACT_ATTEMPT' : 'STABLE_ID_FALLBACK', staleCachedAttemptRejected: Boolean(cachedAttemptId && selected.attemptId !== cachedAttemptId) });
 }
