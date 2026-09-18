@@ -1,6 +1,6 @@
 # Context Kit provenance
 
-Public package version: `0.1.0`.
+Tagged public package version: `0.1.0`. Current compatible release candidate: `0.2.0`.
 
 Recovered source family: Google Drive folder `1F9AmMNY2wGRLwEj3iMXO_DK0joHq7AeQ`.
 
@@ -11,5 +11,18 @@ Recovered source family: Google Drive folder `1F9AmMNY2wGRLwEj3iMXO_DK0joHq7AeQ`
 | source-family `README.md` | `1i99wsbkrehMC8VpXabuXPeWYI4Nt0o85` | source reference retained | replaced by standalone public package documentation |
 
 The compiler and original test file are reused rather than rewritten. Public-only additions are package metadata, schema documentation, benchmark harness, example and Apache-2.0 license text.
+
+## 0.2 candidate lineage
+
+The 0.2 candidate adopts public-safe patterns from the completed PAI Context Economy and Hosted E2E Closure work:
+
+- metadata-only broad discovery followed by one exact JIT fetch;
+- bounded tool/source payloads and explicit `CONTEXT_MISS`;
+- stable identity fallback when a cached execution attempt becomes stale;
+- exact primary/archive artifact lookup with SHA-256 verification;
+- protected continuity fields plus bounded working context and cold raw history;
+- two-axis benchmarking: economy and continuity quality.
+
+The broader campaign measured p95 visible context from 17,700 to 3,825 tokens (78.39%) on its frozen workload with zero acceptance regression and no false-success increase. This is lineage evidence, not a universal Context Kit performance claim.
 
 Protected Personal continuity data, private Mind/Chief implementation, proprietary retrieval/ranking/routing/adaptation logic, private evaluation corpora, credentials, host topology and authority internals are not part of this package.

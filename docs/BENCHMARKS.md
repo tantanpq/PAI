@@ -10,7 +10,7 @@ These results were rerun against exact public package/release revisions. They ar
 
 | Capability | Current public state | Exact public-package evidence | What it does **not** prove |
 | --- | --- | --- | --- |
-| Context Kit 0.1.0 | `PUBLIC_FOUNDATION` | **6/6 PASS**; 1,000 deterministic replays / 1 SHA; `npm pack`; clean-consumer install/use; source identities pinned | universal token savings; hosted-chat capture completeness; memory/truth authority |
+| Context Kit 0.2.0 candidate | `RELEASE_CANDIDATE` | original **6/6 PASS** plus **6/6** Retrieval Economy/Continuity Carrier tests; 1,000 deterministic replays / 1 SHA; two-axis benchmark; `npm pack`; clean-consumer install/use | universal token savings; hosted-chat capture completeness; memory/truth authority |
 | W_Flow Core 0.1.0 | `PUBLIC_FOUNDATION` | original public core **8/8 PASS**; 1,000 deterministic iterations / 1 digest; public QA PASS; wheel build; clean virtualenv install/use; five recovered source identities pinned | autonomous execution; scheduler/Claim authority; runtime-exclusive writer enforcement; every provider integration |
 | SimLab Core 0.1.0 | `PUBLIC PILOT / PILOT_ONLY` | **6/6 PASS**; 1,000 deterministic replays / 1 digest; known-good `PASS`; known-bad mutant `FAIL`; missing evidence `UNKNOWN`; counterexample `3 -> 2`; public QA; `npm pack`; clean consumer; protected-R7 exclusion check | formal proof; zero defects; security certification; real OS/service/provider behavior; general production-platform readiness |
 
@@ -22,7 +22,7 @@ These baselines explain the lineage behind the public reductions. They remain ev
 
 | Capability | Source/internal baseline | What it supports |
 | --- | ---: | --- |
-| Context Kit / Context Capsule | **6/6 PASS** | deterministic output; precedence/dedup; privacy and item-budget behavior; profile separation; malformed/credential-like input rejection; enrichment-failure isolation; no durable-adapter mutation |
+| Context Kit / Context Capsule | **12/12 PASS candidate** | original capsule behavior plus metadata-only discovery, exact archive/hash recovery, stale-state rejection, protected continuity, deterministic successor checkpoints and bounded overflow failure |
 | W_Flow | **13/13 PASS** plus independent frozen-byte QA | schema/transitions; deterministic replay; one-writer declaration; local-blocker containment; authority separation; protected-surface/no-live-effect boundary |
 | SimLab protected basis | **36/36 compatibility + 73/73 verification checks**, known-bad policy-mutant rejection and independent QA | bounded verification-membrane design/evidence basis; deterministic scenario/property/result semantics; explicit failure detection |
 

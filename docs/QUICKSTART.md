@@ -55,7 +55,7 @@ Use only systems you own or are authorized to evaluate.
 
 The three software capability families are already published in this repository as GitHub source packages (see each capability README and [`LICENSE.md`](../LICENSE.md)):
 
-- Context Kit — `PUBLIC 0.1.0` (Apache-2.0 software scope)
+- Context Kit — `0.2.0 RELEASE CANDIDATE / 0.1.0 TAGGED` (Apache-2.0 software scope)
 - W_Flow Core — `PUBLIC 0.1.0` (Apache-2.0 software scope)
 - SimLab Core — `PUBLIC PILOT / PILOT_ONLY 0.1.0` (Apache-2.0 software scope)
 

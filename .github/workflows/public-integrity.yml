@@ -25,7 +25,9 @@ jobs:
           printf '%s  %s\n' '75f463fbc46ca6661c1fc1a8979e54a3b45b35b228de1e3273e93e87aaf136c4' 'capabilities/context/context-capsule.test.js' | sha256sum -c -
       - name: Test Context Kit exact source bytes
         working-directory: capabilities/context
-        run: npm test
+        run: |
+          npm test
+          npm run qa
       - name: Test and independently QA Context Economy
         working-directory: capabilities/context-economy
         run: |
@@ -69,10 +71,13 @@ jobs:
           npm init -y >/dev/null 2>&1
           npm install "$TARBALL" >/dev/null
           node - <<'NODE'
-          const { compile } = require('pai-context-kit');
+          const { compile, planRetrieval, buildContinuityCarrier } = require('pai-context-kit');
           const result = compile({ owner: { principalId: 'clean', accountId: 'clean', workspaceId: 'clean' }, profile: 'resume', budget: 1, coverage: { observedUserSignals: 1, unobservedHostedChatTurns: 0 }, items: [{ kind: 'intent', id: 'i1', value: 'clean consumer', privacyClass: 'PUBLIC', provenance: { source: 'synthetic-fixture' }, freshness: '2026-09-11T00:00:00Z' }] });
           if (result.capsule.items.length !== 1) process.exit(1);
-          console.log(`CONTEXT_CLEAN_CONSUMER_PASS sha256=${result.sha256}`);
+          const plan = planRetrieval({ query: 'context', candidates: [{ id: 'context', ref: 'context.md' }] });
+          const carrier = buildContinuityCarrier({ objective: 'clean consumer', nextOutcome: 'pass', constraints: [], acceptedDecisions: [], openLoops: [], programRefs: [], evidenceRefs: [], terminalResult: null, workingSet: [], budget: { totalBytes: 1024, outputReserveBytes: 128, maxWorkingItems: 0 } });
+          if (plan.discovery.bodyCount !== 0 || carrier.status !== 'READY') process.exit(1);
+          console.log(`CONTEXT_CLEAN_CONSUMER_PASS sha256=${result.sha256} retrieval=${plan.status} continuity=${carrier.status}`);
           NODE
       - name: Verify W_Flow recovered source identity
         shell: bash

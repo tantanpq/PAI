@@ -40,7 +40,7 @@ PAI is exploring a different path: **user-owned continuity + evidence-backed wor
 
 | Horizon | Surface | Purpose | Current public state |
 | --- | --- | --- | --- |
-| **Available now** | Context Kit | deterministic bounded context compilation and source-aware resume foundations | **0.1.0 PUBLIC_FOUNDATION** |
+| **Available now** | Context Kit | bounded context capsules, metadata-first exact-JIT retrieval and protected continuity carriers | **0.2.0 RELEASE CANDIDATE / 0.1.0 TAGGED** |
 | **Available now** | W_Flow Core | provider-neutral replayable work-loop and state semantics | **0.1.0 PUBLIC_FOUNDATION** |
 | **Available now** | SimLab Core | deterministic synthetic verification and minimized counterexamples | **0.1.0 PUBLIC PILOT / PILOT_ONLY** |
 | **Building toward** | PAI Personal | user-owned continuity and productive assistance across long-running work | **not publicly released as a supported product** |
@@ -73,7 +73,7 @@ The public repository also hosts reusable **Skills, Tools, Packs, Labs, examples
 ## Start here
 
 - [`VISION.md`](VISION.md) — understand the project thesis before the internals.
-- [`capabilities/context/README.md`](capabilities/context/README.md) — Context Kit 0.1.0, deterministic bounded context compilation.
+- [`capabilities/context/README.md`](capabilities/context/README.md) — Context Kit 0.2.0 candidate, deterministic capsules, Retrieval Economy and Continuity Carrier.
 - [`capabilities/wflow/README.md`](capabilities/wflow/README.md) — W_Flow Core 0.1.0, provider-neutral replayable work-loop semantics.
 - [`capabilities/simlab/README.md`](capabilities/simlab/README.md) — SimLab Core 0.1.0 public pilot for deterministic synthetic verification.
 - [`docs/QUICKSTART.md`](docs/QUICKSTART.md) — use the current Open Foundation in a few bounded steps.
@@ -143,7 +143,7 @@ That repository is treated as a linked evidence/provenance archive while reusabl
 
 This repository is in **public foundation bootstrap with two public foundation packages and one executable public pilot released**. The goal is not to publish everything PAI has ever built. The goal is to publish a small set of complete, useful, independently understandable capability surfaces and expand only from verified results.
 
-**Context Kit 0.1.0** is a public executable Open Foundation package. Its recovered compiler/test source hashes are pinned; exact PR and public-main revisions passed 6/6 tests, a 1,000-replay deterministic benchmark, `npm pack`, clean-consumer installation/use and public-integrity checks. The distribution is the source package in this repository; no npm-registry publication is claimed.
+**Context Kit 0.1.0** remains the tagged public executable Open Foundation release. The compatible **0.2.0 release candidate** keeps its source-locked compiler API and adds metadata-first exact-JIT retrieval, exact archive/hash recovery, stable-ID lifecycle convergence, protected continuity carriers, and a two-axis economy/continuity benchmark. The distribution is the source package in this repository; no npm-registry publication is claimed.
 
 **W_Flow Core 0.1.0** is the second public executable package. Five recovered core artifacts are source-hash pinned; exact PR and public-main revisions passed the original 8/8 core suite, a 1,000-iteration deterministic replay benchmark, independent public-boundary QA, wheel build and clean virtualenv installation/use. W_Flow declares work-loop semantics only: it is not an executor, scheduler, Claim service or authority system. No PyPI publication is claimed.
 

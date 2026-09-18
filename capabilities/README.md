@@ -17,7 +17,7 @@ Presence in this repository does not automatically imply `SUPPORTED_PRODUCT`.
 
 **Goal:** make useful context portable, bounded and reconstructable without treating chat memory as operational authority.
 
-Current public state: **Context Kit 0.1.0 — `PUBLIC_FOUNDATION`**.
+Current public state: **Context Kit 0.2.0 — `RELEASE_CANDIDATE`**; 0.1.0 remains the tagged `PUBLIC_FOUNDATION` release.
 
 Released surface:
 
@@ -27,6 +27,10 @@ Released surface:
 - deterministic precedence/dedup and structured `CONTEXT_MISS`;
 - sample usage, benchmark, provenance and release receipt;
 - clean-consumer package verification.
+- metadata-only discovery followed by exact JIT fetch;
+- exact primary/archive lookup with hash verification;
+- protected continuity and deterministic successor checkpoints;
+- separate economy and continuity-quality benchmark evidence.
 
 Protected boundary:
 
