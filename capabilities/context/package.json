@@ -1,17 +1,23 @@
 {
   "name": "pai-context-kit",
-  "version": "0.1.0",
-  "description": "Deterministic, bounded context compilation for resumable AI work.",
-  "main": "context-capsule.js",
+  "version": "0.2.0",
+  "description": "Deterministic context capsules, metadata-first exact-JIT retrieval, and protected continuity carriers.",
+  "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "test": "node --test context-capsule.test.js",
+    "test": "node --test context-capsule.test.js context-kit-v2.test.js",
     "benchmark": "node benchmark.js",
+    "qa": "node public-qa.js",
     "example": "node examples/basic.js"
   },
   "files": [
     "context-capsule.js",
     "context-capsule.test.js",
+    "context-kit-v2.test.js",
+    "retrieval-economy.js",
+    "continuity-carrier.js",
+    "index.js",
+    "public-qa.js",
     "README.md",
     "SCHEMA.md",
     "PROVENANCE.md",

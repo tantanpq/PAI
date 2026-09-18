@@ -34,7 +34,7 @@ Powerful models matter, but they are not the whole system. Continuity, evidence,
 
 The public PAI repository currently includes three executable capability surfaces:
 
-- **Context Kit 0.1.0** for deterministic bounded context compilation;
+- **Context Kit 0.2.0 candidate / 0.1.0 tagged** for deterministic bounded context, Retrieval Economy and protected continuity;
 - **W_Flow Core 0.1.0** for replayable provider-neutral work-loop semantics;
 - **SimLab Core 0.1.0 public pilot** for deterministic synthetic verification.
 

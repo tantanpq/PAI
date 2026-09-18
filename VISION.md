@@ -70,7 +70,7 @@ PAI is being developed in layers. Presence on this page is not a claim of produc
 
 ### Available now — Open Foundation
 
-- **Context Kit 0.1.0** — deterministic bounded context compilation and source-aware resume foundations.
+- **Context Kit 0.2.0 candidate / 0.1.0 tagged** — deterministic bounded capsules, metadata-first exact-JIT retrieval and protected continuity carriers.
 - **W_Flow Core 0.1.0** — provider-neutral, replayable work-loop and state semantics.
 - **SimLab Core 0.1.0 public pilot** — deterministic synthetic verification with explicit `PASS / FAIL / UNKNOWN`, replay identity and minimized counterexamples.
 - Public Skills, workflows, runbooks, patterns, case studies and release-integrity methods.

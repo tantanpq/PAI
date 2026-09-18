@@ -157,10 +157,10 @@ assets:
   - asset_id: pai.context.context-kit
     asset_class: package
     path: capabilities/context/package.json
-    version: 0.1.0
+    version: 0.2.0
     maturity: PUBLIC_FOUNDATION
     release_class: AUTO_RELEASE_AFTER_IQA
-    provenance: capabilities/context/RELEASE_RECEIPT.md; capabilities/context/PROVENANCE.md; first release merge 829e3740387c7a2911d761d66a72d0e155e53eb3
+    provenance: capabilities/context/RELEASE_RECEIPT.md; capabilities/context/RELEASE_CANDIDATE_0.2.0.md; capabilities/context/PROVENANCE.md; first release merge 829e3740387c7a2911d761d66a72d0e155e53eb3
     license_source: Apache-2.0 repository software scope
   - asset_id: pai.context.economy
     asset_class: package

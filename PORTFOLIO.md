@@ -4,7 +4,7 @@ This page tracks public-facing PAI capability families without treating roadmap 
 
 | Capability family | Public value | Current public state | Protected value retained |
 | --- | --- | --- | --- |
-| Context & Continuity | bounded context packaging, source-aware resume, provider-neutral continuity patterns | **Context Kit 0.1.0 PUBLIC** plus public runbooks/patterns; source/provenance and release evidence pinned | deep personal continuity, proprietary retrieval/routing/adaptation |
+| Context & Continuity | bounded context packaging, metadata-first exact-JIT retrieval, source-aware resume and provider-neutral continuity patterns | **Context Kit 0.2.0 RELEASE CANDIDATE / 0.1.0 TAGGED** plus public runbooks/patterns | deep personal continuity, proprietary retrieval/routing/adaptation |
 | W_Flow | reusable resumable work-loop specifications and verification-friendly workflow patterns | **W_Flow Core 0.1.0 PUBLIC**; source/provenance, replay benchmark, public QA and clean-consumer evidence pinned | autonomous internal Program compilation/orchestration |
 | Assurance & SimLab | deterministic verification patterns, synthetic labs, failure/recovery reasoning | **SimLab Core 0.1.0 PUBLIC PILOT / PILOT_ONLY**; synthetic runner, public SimPack, PASS/FAIL/UNKNOWN, replay and counterexample evidence pinned | protected R7 evaluators/property intelligence, failure intelligence, advanced repair/assurance engine |
 | Skills & Patterns | small reusable verification and engineering recipes | active public foundation with source resolution, route-policy integrity, release-scope, verification intake and test-environment isolation assets | private/customer-specific adaptations |
@@ -18,7 +18,7 @@ Start with [`capabilities/context/README.md`](capabilities/context/README.md), [
 
 The following material is already useful independently:
 
-1. **Context Kit 0.1.0** — dependency-free deterministic bounded-context compiler with explicit profiles, privacy/budget behavior, provenance, benchmark and clean-consumer evidence.
+1. **Context Kit 0.2.0 candidate** — compatible deterministic capsule core plus Retrieval Economy, Continuity Carrier, two-axis benchmark and clean-consumer evidence; 0.1.0 remains tagged.
 2. **W_Flow Core 0.1.0** — provider-neutral deterministic loop/state semantics with exact replay, `NO_MATERIAL_DELTA`, local-blocker containment and external authority gates.
 3. **SimLab Core 0.1.0 public pilot** — synthetic-only deterministic verification with explicit `PASS / FAIL / UNKNOWN`, known-bad mutant rejection, replay identity, minimized counterexamples and a bundled SimPack.
 4. **Community Assurance Baseline** — a tool-agnostic workflow for locking claims, pinning evidence, separating PASS/LIVE/DONE, testing positive and negative cases, and publishing only the reusable lesson.
