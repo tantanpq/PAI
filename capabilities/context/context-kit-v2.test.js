@@ -27,6 +27,23 @@ test('exact artifact lookup uses a bounded archive pointer and verifies hash', (
   assert.throws(() => resolveExactArtifact({ stableId: 'TASK-1', expectedHash: hash, primaryRef: 'items/task.md', archiveRef: 'archive/items/task.md', available: [{ stableId: 'TASK-1', ref: 'archive/items/task.md', content: 'drift' }] }), { code: 'EXACT_ARTIFACT_HASH_DRIFT' });
 });
 
+test('over-budget exact source fails closed without hydrating the body', () => {
+  const content = 'bounded-source '.repeat(512);
+  const hash = sha256(Buffer.from(content));
+  const result = resolveExactArtifact({
+    stableId: 'TASK-LARGE',
+    expectedHash: hash,
+    primaryRef: 'items/large.md',
+    available: [{ stableId: 'TASK-LARGE', ref: 'items/large.md', content }],
+    maxBytes: 1024
+  });
+  assert.equal(result.status, 'CONTEXT_MISS');
+  assert.equal(result.content, null);
+  assert.equal(result.hash, hash);
+  assert.equal(result.miss.reason, 'EXACT_SOURCE_EXCEEDS_BUDGET');
+  assert.ok(result.contentBytes > result.maxBytes);
+});
+
 test('stable identity rejects a stale running attempt after terminal retry', () => {
   const projection = convergeLifecycleProjection({ stableId: 'TASK-1', cachedAttemptId: 'attempt-old', attempts: [
     { stableId: 'TASK-1', attemptId: 'attempt-old', state: 'RUNNING', updatedAt: '2026-09-18T19:00:00Z' },
@@ -63,6 +80,15 @@ test('protected continuity survives budget pressure while working history stays 
   assert.equal(carrier.protectedState.terminalResult.hash, 'b'.repeat(64));
   assert.equal(carrier.archivePolicy.rawHistory, 'COLD_NOT_PRELOADED');
   assert.throws(() => buildContinuityCarrier({ ...continuityInput(), rawHistory: ['whole transcript'] }), { code: 'RAW_HISTORY_NOT_ACCEPTED' });
+});
+
+test('identical exact evidence refs are deduplicated before protected-budget accounting', () => {
+  const input = continuityInput();
+  input.evidenceRefs = [input.evidenceRefs[0], { ...input.evidenceRefs[0] }];
+  const carrier = buildContinuityCarrier(input);
+  assert.equal(carrier.status, 'READY');
+  assert.equal(carrier.protectedState.evidenceRefs.length, 1);
+  assert.equal(carrier.protectedState.evidenceRefs[0].id, 'result-1');
 });
 
 test('successor checkpoint excludes the working transcript deterministically', () => {
