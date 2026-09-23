@@ -36,6 +36,8 @@ The 0.2 candidate now makes five public-safe rules explicit:
 
 These are package-level context rules, not claims that Context Kit owns a model transcript, executor, terminal, memory database or private PAI runtime.
 
+See [Bounded Context Economy](../../docs/patterns/bounded-context-economy.md) for the portable decision flow, quality gates and explicit stop rule.
+
 ## What it does not do
 
 Context Kit is not a memory database, hosted-chat capture service, truth authority, agent scheduler, or broad semantic search service. Its retrieval planner ranks only caller-supplied metadata and never decides truth. It does not claim token savings without a representative corpus and tokenizer/model assumptions.
