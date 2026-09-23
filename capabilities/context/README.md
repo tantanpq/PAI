@@ -24,6 +24,20 @@ Version 0.2 adds two public-safe layers without changing the authority boundary:
 
 The core principle is: **continuity is protected state plus exact evidence refs plus a bounded recent working set plus JIT retrieval—not the whole transcript.**
 
+## Context Economy invariants
+
+The 0.2 candidate now makes five public-safe rules explicit:
+
+1. **VERIFY != HYDRATE** — verifying identity, hash, provenance or freshness does not authorize loading the source body.
+2. **Metadata first, one exact JIT source** — broad discovery carries pointers only; body hydration occurs only for the selected exact source and only within its declared byte budget.
+3. **One semantic object, one active representation** — identical exact evidence refs are deduplicated before protected-budget accounting. Integrations that externalize a heavy source should inline it or carry a ref/hash, not both.
+4. **Protected semantics beat smaller payloads** — objective, constraints, accepted decisions, open loops, evidence refs, terminal result and next outcome must survive budget pressure or fail closed with `CONTEXT_MISS`.
+5. **Stop when there is no material delta** — once hard budgets, protected-field coverage and duplicate count pass, smaller byte counts alone are not a reason to keep changing the context system.
+
+These are package-level context rules, not claims that Context Kit owns a model transcript, executor, terminal, memory database or private PAI runtime.
+
+See [Bounded Context Economy](../../docs/patterns/bounded-context-economy.md) for the portable decision flow, quality gates and explicit stop rule.
+
 ## What it does not do
 
 Context Kit is not a memory database, hosted-chat capture service, truth authority, agent scheduler, or broad semantic search service. Its retrieval planner ranks only caller-supplied metadata and never decides truth. It does not claim token savings without a representative corpus and tokenizer/model assumptions.
@@ -89,7 +103,7 @@ See `SCHEMA.md` for the input/output contract. Run `npm test`, `npm run benchmar
 
 ## Release evidence
 
-The 0.1 compiler and its original 6-test suite remain intact. The 0.2 candidate adds six independent tests for metadata-only discovery, exact archive lookup and hash verification, stable-ID lifecycle convergence, protected continuity under budget pressure, deterministic successor checkpoints, and bounded protected-overflow failure.
+The 0.1 compiler and its original 6-test suite remain intact. The 0.2 candidate adds eight independent tests for metadata-only discovery, exact archive lookup and hash verification, over-budget no-hydration behavior, stable-ID lifecycle convergence, protected continuity under budget pressure, duplicate exact-ref elimination, deterministic successor checkpoints, and bounded protected-overflow failure.
 
 Release qualification on PR #15 and post-merge `main` both passed the same GitHub Actions gates:
 

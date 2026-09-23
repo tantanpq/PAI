@@ -25,4 +25,14 @@ The 0.2 candidate adopts public-safe patterns from the completed PAI Context Eco
 
 The broader campaign measured p95 visible context from 17,700 to 3,825 tokens (78.39%) on its frozen workload with zero acceptance regression and no false-success increase. This is lineage evidence, not a universal Context Kit performance claim.
 
+A later protected qualification cycle strengthened the public-safe lessons without publishing private runtime details:
+
+- `VERIFY != HYDRATE`: identity/provenance verification stays metadata-only until one exact source is explicitly selected;
+- exact sources that exceed the visible budget fail closed without returning their body;
+- identical exact evidence refs are deduplicated before protected-budget accounting;
+- protected semantic coverage is measured separately from byte reduction;
+- optimization stops at `NO_MATERIAL_DELTA` once hard budgets, semantic coverage and duplicate-count gates pass.
+
+The protected qualification also reinforced an assurance lesson: helper-level tests are not substitutes for reachable-path tests. Public Context Kit keeps this lesson at the contract/benchmark layer and does not publish private executor, host-control, routing or failure-corpus internals.
+
 Protected Personal continuity data, private Mind/Chief implementation, proprietary retrieval/ranking/routing/adaptation logic, private evaluation corpora, credentials, host topology and authority internals are not part of this package.

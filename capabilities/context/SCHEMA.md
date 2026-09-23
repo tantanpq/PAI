@@ -41,6 +41,18 @@ A selected `unknown` item produces `contextMiss = { code: 'CONTEXT_MISS', unknow
 
 Malformed or credential-like inputs fail closed with `ContextCapsuleError` code `MALFORMED_INPUT`.
 
+## Context Economy invariants
+
+The public contract distinguishes verification from hydration:
+
+- pointer/hash/provenance verification is metadata work and does not imply source-body loading;
+- broad discovery must expose zero raw bodies;
+- an exact source that exceeds `maxBytes` returns `CONTEXT_MISS` with `content: null` rather than leaking a partial or oversized body;
+- identical exact evidence refs are deduplicated before protected continuity budget accounting;
+- protected continuity fields are never traded away for a smaller payload; overflow fails closed;
+- storage/executor integrations should preserve a single semantic source representation (inline **or** ref/hash, not both), but Context Kit itself does not own external storage;
+- once hard budgets, protected-field coverage and duplicate count pass, `NO_MATERIAL_DELTA` is the stop condition for optimization-only work.
+
 ## Retrieval Economy
 
 `planRetrieval()` accepts a query plus bounded caller-supplied metadata candidates. Candidate bodies (`body`, `content`, `fullContent`, `raw`, `text`) are rejected with `BROAD_DISCOVERY_BODY_FORBIDDEN`. Output contains metadata pointers and, on a hit, exactly one `EXACT_JIT_FETCH` instruction.

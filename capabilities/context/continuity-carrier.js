@@ -9,9 +9,16 @@ function fail(code) { const error = new Error(code); error.code = code; throw er
 function strings(value, field) { if (!Array.isArray(value) || value.some(item => !text(item))) fail(`CONTINUITY_${field}_INVALID`); return [...value]; }
 function refs(value) {
   if (!Array.isArray(value)) fail('CONTINUITY_REFS_INVALID');
-  return value.map(item => {
+  const normalized = value.map(item => {
     if (!item || typeof item !== 'object' || !text(item.id) || !text(item.ref) || !/^[a-f0-9]{64}$/.test(item.hash || '')) fail('CONTINUITY_REF_INVALID');
     return { id: item.id, ref: item.ref, hash: item.hash, kind: text(item.kind) ? item.kind : 'evidence' };
+  });
+  const seen = new Set();
+  return normalized.filter(item => {
+    const key = `${item.kind}\u0000${item.id}\u0000${item.ref}\u0000${item.hash}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
   }).sort((a, b) => a.kind.localeCompare(b.kind) || a.id.localeCompare(b.id) || a.ref.localeCompare(b.ref));
 }
 

@@ -42,7 +42,12 @@ Required package benchmark:
 4. protected context fields survive budget pressure or return structured `CONTEXT_MISS`;
 5. clean-consumer run succeeds outside private PAI paths/runtime;
 6. input size, output size and retained protected-field coverage are reported separately;
-7. no token-savings percentage is claimed without a representative corpus and reproducible tokenizer/model assumptions.
+7. no token-savings percentage is claimed without a representative corpus and reproducible tokenizer/model assumptions;
+8. broad discovery hydrates zero source bodies and one exact source is selected JIT;
+9. an exact source over its byte budget returns `CONTEXT_MISS` without body hydration;
+10. duplicate exact evidence refs are eliminated before protected-budget accounting;
+11. protected-field coverage and duplicate semantic object count are reported separately from byte reduction;
+12. once hard budgets and semantic-quality gates pass, `NO_MATERIAL_DELTA` ends optimization-only work.
 
 ### W_Flow Core
 
