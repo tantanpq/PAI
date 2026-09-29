@@ -33,6 +33,12 @@ const PROFILE_CONTRACTS = Object.freeze({
 
 function fail(code) { const error = new Error(code); error.code = code; throw error; }
 function object(value) { return value && typeof value === 'object' && !Array.isArray(value); }
+function deepFreeze(value) {
+  if (!value || typeof value !== 'object' || Object.isFrozen(value)) return value;
+  Object.freeze(value);
+  for (const child of Object.values(value)) deepFreeze(child);
+  return value;
+}
 function text(value) { return typeof value === 'string' && value.trim().length > 0; }
 function strings(value, code) {
   if (value == null) return [];
@@ -283,11 +289,19 @@ function compileContextPlan(input = {}) {
     invariants: ['VERIFY_NE_HYDRATE', 'POINTER_FIRST', 'PROTECTED_SEMANTICS', 'EXACT_MISSING_CONE_ONLY', 'OUTCOME_LINKABLE', 'CACHE_PLAN_NE_CONTEXT_TRUTH']
   };
   const contextPlanId = sha256(planBase);
-  return Object.freeze({ ...planBase, contextPlanId });
+  return deepFreeze({ ...planBase, contextPlanId });
+}
+
+function assertPlanIntegrity(plan) {
+  if (!object(plan) || plan.schema !== 'context-compiler-plan/v1' || !text(plan.contextPlanId)) fail('CONTEXT_PLAN_INTEGRITY_INVALID');
+  const { contextPlanId, ...planBase } = plan;
+  if (sha256(planBase) !== contextPlanId) fail('CONTEXT_PLAN_INTEGRITY_MISMATCH');
+  return true;
 }
 
 function recordContextOutcome({ plan, result } = {}) {
-  if (!object(plan) || plan.schema !== 'context-compiler-plan/v1' || !text(plan.contextPlanId) || !object(result)) fail('CONTEXT_EPISODE_INPUT_INVALID');
+  if (!object(plan) || !object(result)) fail('CONTEXT_EPISODE_INPUT_INVALID');
+  assertPlanIntegrity(plan);
   for (const field of BODY_FIELDS) if (Object.hasOwn(result, field)) fail('RAW_OUTCOME_BODY_FORBIDDEN');
   const allowed = new Set([
     'resultId', 'disposition', 'accepted', 'verificationRef',
@@ -343,7 +357,7 @@ function recordContextOutcome({ plan, result } = {}) {
     metrics,
     rawContentStored: false
   };
-  return Object.freeze({ ...episodeBase, episodeId: sha256(episodeBase) });
+  return deepFreeze({ ...episodeBase, episodeId: sha256(episodeBase) });
 }
 
-module.exports = { PROFILE_CONTRACTS, RESOLUTION, VOLATILITY, compileContextPlan, recordContextOutcome };
+module.exports = { PROFILE_CONTRACTS, RESOLUTION, VOLATILITY, compileContextPlan, recordContextOutcome, assertPlanIntegrity };
