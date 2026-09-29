@@ -9,11 +9,11 @@ Context Kit 0.3 is additive: the `compile()` Context Capsule v1 API, Retrieval E
 - `profile`: one built-in profile, or `strategy` with explicit id/version/role contract;
 - `task.objective`: required;
 - optional task identity/class/project/checkpoint refs;
-- protected `constraints`, `acceptedDecisions`, `acceptance`, `authority`, `effectClass`, `privacyClass`, `scopes`, and `outputContract`;
+- protected `constraints`, `acceptedDecisions`, `acceptance`, `authority`, `effectClass`, `privacyClass`, `scopes`, `outputContract`, truth/source status, negations, contradictions and supersession refs;
 - a metadata-only `sourceMap`;
 - bounded `maxSelectedSources`, `maxMetadataBytes`, and `maxHydrationBytes`.
 
-Source descriptors require `id`, `ref` and one or more `roles`. Optional fields include hash, size, maxBytes, tags, priority, freshness, authorityClass, truthClass, availability, resolution and `volatility = STABLE | SESSION | LIVE`.
+Source descriptors require `id`, `ref` and one or more `roles`. Optional fields include hash, size, maxBytes, tags, priority, freshness, authorityClass, truthClass, availability, resolution and `volatility = STABLE | SESSION | LIVE`. Built-in/custom strategies admit non-required sources only when at least one role is declared in that strategy; caller-marked `required: true` sources remain protected task-specific requirements. Conflicting hash/authority/truth metadata for the same ref fails closed.
 
 Source-body fields such as `body`, `content`, `raw`, `text`, `messages`, `transcript` or `prompt` are forbidden in discovery input.
 
@@ -37,7 +37,7 @@ A required role with no available source returns `CONTEXT_MISS`. It does not tri
 
 - `repo-engineering`: requires `REPOSITORY_BASELINE`.
 - `product-build`: requires `PRODUCT_SPEC` and `REPOSITORY_BASELINE`; product spec defaults to exact JIT.
-- `runtime-repair`: requires exact-JIT `RUNTIME_READBACK`.
+- `runtime-repair`: requires `DESIRED_STATE` plus exact-JIT `RUNTIME_READBACK`; repair context must know both intended and observed state.
 - `independent-qa`: requires exact-JIT `FROZEN_SUBJECT` and `TEST_CONTRACT`.
 - `native-domain`: requires exact-JIT `NATIVE_OBJECT`.
 
@@ -51,7 +51,8 @@ Profiles express context requirements only. They do not grant authority or execu
 - disposition: `ACCEPTED | REJECTED | NEEDS_REVISION | UNKNOWN`;
 - optional accepted boolean and verificationRef;
 - observable correction/restatement/context-miss counts;
-- observable latency, input/output tokens and cost.
+- optional acceptance-contract/baseline/provider/model/tokenizer identity and false-success label;
+- observable latency, input/output tokens, input/output/hydrated bytes, tool-call count and cost.
 
 Output schema: `context-episode/v1`.
 
