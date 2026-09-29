@@ -14,7 +14,43 @@
       "types": "./index.d.ts",
       "require": "./context-compiler.js",
       "default": "./context-compiler.js"
-    }
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "require": "./index.js",
+      "default": "./index.js"
+    },
+    "./context-capsule": {
+      "types": "./index.d.ts",
+      "require": "./context-capsule.js",
+      "default": "./context-capsule.js"
+    },
+    "./context-capsule.js": {
+      "types": "./index.d.ts",
+      "require": "./context-capsule.js",
+      "default": "./context-capsule.js"
+    },
+    "./retrieval-economy": {
+      "types": "./index.d.ts",
+      "require": "./retrieval-economy.js",
+      "default": "./retrieval-economy.js"
+    },
+    "./retrieval-economy.js": {
+      "types": "./index.d.ts",
+      "require": "./retrieval-economy.js",
+      "default": "./retrieval-economy.js"
+    },
+    "./continuity-carrier": {
+      "types": "./index.d.ts",
+      "require": "./continuity-carrier.js",
+      "default": "./continuity-carrier.js"
+    },
+    "./continuity-carrier.js": {
+      "types": "./index.d.ts",
+      "require": "./continuity-carrier.js",
+      "default": "./continuity-carrier.js"
+    },
+    "./package.json": "./package.json"
   },
   "type": "commonjs",
   "scripts": {
