@@ -1,6 +1,6 @@
 # Context Kit provenance
 
-Tagged public package version: `0.1.0`. Current compatible release candidate: `0.2.0`.
+Tagged public package version: `0.1.0`. Current compatible release candidate: `0.3.0-rc.1`.
 
 Recovered source family: Google Drive folder `1F9AmMNY2wGRLwEj3iMXO_DK0joHq7AeQ`.
 
@@ -36,3 +36,18 @@ A later protected qualification cycle strengthened the public-safe lessons witho
 The protected qualification also reinforced an assurance lesson: helper-level tests are not substitutes for reachable-path tests. Public Context Kit keeps this lesson at the contract/benchmark layer and does not publish private executor, host-control, routing or failure-corpus internals.
 
 Protected Personal continuity data, private Mind/Chief implementation, proprietary retrieval/ranking/routing/adaptation logic, private evaluation corpora, credentials, host topology and authority internals are not part of this package.
+
+
+## 0.3 commercial compiler lineage
+
+The 0.3 candidate is an additive public productization layer over the recovered Context Capsule and qualified 0.2 retrieval/continuity work. New code in this repository defines:
+- versioned context profiles and custom strategy contracts;
+- metadata-only Source Maps with exact missing-cone requests;
+- deterministic task/context-plan identity;
+- outcome-linked, raw-content-free Context Episodes;
+- provider-neutral stable-prefix cache planning from hash-bound stable refs;
+- public TypeScript declarations and commercial qualification/claim boundaries.
+
+The compiler source is newly authored public-safe code derived from the already-qualified PAI Context Economy design constraints; it is not a byte-identical recovery claim. It deliberately excludes private strategy-learning data, user continuity data, Chief/TaskBox/Claim/Farm internals, credentials, topology and private failure/evaluation corpora.
+
+The commercial optimization target is token/context cost per verified useful outcome. Stable-prefix cache candidates are advisory only; actual provider cache hits, pricing and savings require provider-observed metrics.
