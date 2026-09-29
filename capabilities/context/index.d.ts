@@ -71,19 +71,19 @@ export interface ContextPlanInput {
 }
 
 export interface ContextPlan {
-  schema: 'context-compiler-plan/v1';
-  status: 'READY' | 'CONTEXT_MISS';
-  contextPlanId: string;
-  taskFingerprint: string;
-  strategy: { id: string; version: string; profile: string | null };
-  selectedSources: Array<Record<string, unknown>>;
-  omissions: Array<Record<string, unknown>>;
-  expansionRequests: Array<Record<string, unknown>>;
-  missing: Array<Record<string, unknown>>;
-  budgetDecision: Record<string, number>;
-  cachePlan: Record<string, unknown>;
-  protectedState: Record<string, unknown>;
-  invariants: string[];
+  readonly schema: 'context-compiler-plan/v1';
+  readonly status: 'READY' | 'CONTEXT_MISS';
+  readonly contextPlanId: string;
+  readonly taskFingerprint: string;
+  readonly strategy: Readonly<{ id: string; version: string; profile: string | null }>;
+  readonly selectedSources: ReadonlyArray<Readonly<Record<string, unknown>>>;
+  readonly omissions: ReadonlyArray<Readonly<Record<string, unknown>>>;
+  readonly expansionRequests: ReadonlyArray<Readonly<Record<string, unknown>>>;
+  readonly missing: ReadonlyArray<Readonly<Record<string, unknown>>>;
+  readonly budgetDecision: Readonly<Record<string, number>>;
+  readonly cachePlan: Readonly<Record<string, unknown>>;
+  readonly protectedState: Readonly<Record<string, unknown>>;
+  readonly invariants: ReadonlyArray<string>;
 }
 
 export function compileContextPlan(input: ContextPlanInput): ContextPlan;
