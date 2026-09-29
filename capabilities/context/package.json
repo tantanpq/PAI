@@ -1,11 +1,24 @@
 {
   "name": "pai-context-kit",
-  "version": "0.2.0",
-  "description": "Deterministic context capsules, metadata-first exact-JIT retrieval, and protected continuity carriers.",
+  "version": "0.3.0-rc.1",
+  "description": "Deterministic context compiler, bounded capsules, exact-JIT retrieval, protected continuity, and outcome-linked context episodes.",
   "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./index.js",
+      "default": "./index.js"
+    },
+    "./compiler": {
+      "types": "./index.d.ts",
+      "require": "./context-compiler.js",
+      "default": "./context-compiler.js"
+    }
+  },
   "type": "commonjs",
   "scripts": {
-    "test": "node --test context-capsule.test.js context-kit-v2.test.js",
+    "test": "node --test context-capsule.test.js context-kit-v2.test.js context-compiler.test.js",
     "benchmark": "node benchmark.js",
     "qa": "node public-qa.js",
     "example": "node examples/basic.js"
@@ -14,13 +27,19 @@
     "context-capsule.js",
     "context-capsule.test.js",
     "context-kit-v2.test.js",
+    "context-compiler.js",
+    "context-compiler.test.js",
     "retrieval-economy.js",
     "continuity-carrier.js",
     "index.js",
+    "index.d.ts",
     "public-qa.js",
     "README.md",
     "SCHEMA.md",
+    "COMMERCIAL_CONTRACT.md",
     "PROVENANCE.md",
+    "RELEASE_CANDIDATE_0.2.0.md",
+    "RELEASE_CANDIDATE_0.3.0.md",
     "benchmark.js",
     "examples/",
     "LICENSE"
@@ -32,8 +51,11 @@
   "keywords": [
     "ai",
     "context",
+    "context-compiler",
     "continuity",
     "deterministic",
+    "retrieval",
+    "token-economy",
     "resume"
   ]
 }
