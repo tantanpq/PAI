@@ -1,0 +1,36 @@
+# Context Compiler 0.3.0-rc.1 release candidate
+
+## Scope
+
+This candidate keeps the Context Kit 0.1/0.2 APIs and adds a commercial orchestration contract rather than another context subsystem.
+
+New public API:
+- `compileContextPlan()`: versioned task/profile/source-map compilation with deterministic identity, explicit omissions, exact missing-cone semantics and JIT expansion requests.
+- `recordContextOutcome()`: bounded Context Episode linking one strategy/plan to a verified Result and observable metrics without retaining raw prompts/source bodies.
+- five built-in portable profiles plus custom versioned strategies.
+
+## Required qualification
+
+- all prior Context Capsule / Context Kit 0.2 tests remain green;
+- Context Compiler commercial suite passes;
+- source bodies are rejected from discovery metadata;
+- required source roles fail closed as `CONTEXT_MISS`;
+- equivalent source ordering yields identical plan identity;
+- runtime/product/QA profiles request exact JIT refs without hydrating them;
+- Context Episode rejects raw prompt/transcript/message bodies;
+- benchmark reports compiler-plan identity and outcome-link fields separately from byte reduction;
+- `npm pack` and clean-consumer use exercise the new API;
+- public-boundary QA scans compiler/tests/contracts;
+- exact PR workflow passes before promotion.
+
+## Compatibility
+
+No existing 0.1/0.2 export is removed. The new compiler API is additive. The prior `compile()`, Retrieval Economy and Continuity Carrier contracts remain available.
+
+## Claim boundary
+
+This release candidate does not claim automatic source discovery, agent authority, memory ownership, universal token savings, hosted service availability, billing, enterprise security certification, or learned/adaptive routing. Adapters and source authorization remain caller-owned.
+
+## Rollback
+
+Revert the candidate commits or continue using the previous tagged Context Kit release. No external state migration is required because the package is a pure projection library.
