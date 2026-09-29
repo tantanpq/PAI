@@ -76,6 +76,18 @@ The portable compiler is intentionally generic. PAI-specific advantage belongs a
 
 No third parallel Context package should be created merely to rename this capability.
 
+## Distribution and plugin boundary
+
+The compiler library is the product core. Distribution wrappers must remain replaceable.
+
+- **Package/SDK:** the default portable surface for applications, agents and server code.
+- **Skill:** a thin workflow layer may teach an agent when to select a context profile, how to react to `CONTEXT_MISS`, and how to interpret a Context Episode. The Skill must point to the compiler contract rather than copy it.
+- **MCP server:** add only when live source adapters, authentication, centrally managed policy, or hosted compilation/telemetry materially require server-backed tools. The server owns transport/authentication/tool schemas, not source truth or agent authority.
+- **Plugin:** may package the Skill, MCP server, or both. Plugin packaging must not change compiler semantics, silently widen source access, or turn optional telemetry into a truth store.
+- **Provider independence:** OpenAI/ChatGPT/Codex, Claude, IDE agents and custom runtimes are adapters/consumers. Provider-specific prompt caching or tool metadata stays outside the canonical compiler plan.
+
+A minimal future MCP surface SHOULD prefer bounded tools such as `compile_context_plan` and `record_context_outcome`. Exact source retrieval remains owned by caller/native adapters unless a separately authorized integration explicitly provides it. Raw source bodies are not required for broad discovery or Context Episode telemetry.
+
 ## Standalone repository extraction gate
 
 Keep Context Compiler inside the PAI Open Foundation monorepo while its portable contract is still changing materially. Extract it to a standalone repository only when all of the following are true:
