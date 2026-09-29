@@ -61,6 +61,7 @@ A stable release requires:
 - representative compact-vs-baseline comparison with the same acceptance contract;
 - no increase in false-success or accepted-result regression on the declared benchmark;
 - backwards compatibility or an explicit semver migration note;
+- an explicit supported-runtime floor and CI on the declared LTS runtime family;
 - independent exact-candidate review;
 - rollback/revoke path.
 
