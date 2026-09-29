@@ -72,13 +72,21 @@ jobs:
           npm install "$TARBALL" >/dev/null
           node - <<'NODE'
           const { compile, planRetrieval, buildContinuityCarrier, compileContextPlan, recordContextOutcome } = require('pai-context-kit');
+          const compilerSubpath = require('pai-context-kit/compiler');
           const result = compile({ owner: { principalId: 'clean', accountId: 'clean', workspaceId: 'clean' }, profile: 'resume', budget: 1, coverage: { observedUserSignals: 1, unobservedHostedChatTurns: 0 }, items: [{ kind: 'intent', id: 'i1', value: 'clean consumer', privacyClass: 'PUBLIC', provenance: { source: 'synthetic-fixture' }, freshness: '2026-09-11T00:00:00Z' }] });
           if (result.capsule.items.length !== 1) process.exit(1);
           const retrieval = planRetrieval({ query: 'context', candidates: [{ id: 'context', ref: 'context.md' }] });
           const carrier = buildContinuityCarrier({ objective: 'clean consumer', nextOutcome: 'pass', constraints: [], acceptedDecisions: [], openLoops: [], programRefs: [], evidenceRefs: [], terminalResult: null, workingSet: [], budget: { totalBytes: 1024, outputReserveBytes: 128, maxWorkingItems: 0 } });
           const plan = compileContextPlan({ profile: 'repo-engineering', task: { objective: 'clean consumer context compiler' }, sourceMap: [{ id: 'repo', ref: 'git:main', roles: ['REPOSITORY_BASELINE'] }] });
           const episode = recordContextOutcome({ plan, result: { resultId: 'clean-result', disposition: 'ACCEPTED', accepted: true } });
-          if (retrieval.discovery.bodyCount !== 0 || carrier.status !== 'READY' || plan.status !== 'READY' || episode.rawContentStored !== false) process.exit(1);
+          if (
+            retrieval.discovery.bodyCount !== 0 ||
+            carrier.status !== 'READY' ||
+            plan.status !== 'READY' ||
+            episode.rawContentStored !== false ||
+            typeof compilerSubpath.compileContextPlan !== 'function' ||
+            typeof compilerSubpath.recordContextOutcome !== 'function'
+          ) process.exit(1);
           console.log(`CONTEXT_CLEAN_CONSUMER_PASS sha256=${result.sha256} retrieval=${retrieval.status} continuity=${carrier.status} compiler=${plan.status}`);
           NODE
       - name: Verify W_Flow recovered source identity
