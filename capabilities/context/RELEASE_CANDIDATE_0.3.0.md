@@ -16,6 +16,7 @@ New public API:
 - source bodies are rejected from discovery metadata;
 - required source roles fail closed as `CONTEXT_MISS`;
 - equivalent source ordering yields identical plan identity;
+- compiled plans are deeply immutable and Context Episode creation rejects post-compile plan tampering;
 - out-of-profile optional roles are excluded and required source-count overflow fails closed;
 - conflicting same-ref authority/truth/hash metadata fails closed;
 - truth/source status, negation/contradiction and supersession remain protected task semantics;
