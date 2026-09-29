@@ -67,13 +67,21 @@ test('source bodies are rejected from discovery input', () => {
 });
 
 test('same semantic source ref merges roles deterministically and conflicting hashes fail', () => {
-  const plan = compileContextPlan({
+  const input = {
     strategy: { id: 'custom', version: '1.0.0', requiredRoles: ['A','B'], exactRoles: [], optionalRoles: [] },
     task: { objective: 'merge source roles' },
-    sourceMap: [source('one', 'ref:1', ['A']), source('two', 'ref:1', ['B'])]
-  });
+    sourceMap: [
+      source('two', 'ref:1', ['B'], { name: 'Zulu alias' }),
+      source('one', 'ref:1', ['A'], { name: 'Alpha alias' })
+    ]
+  };
+  const plan = compileContextPlan(input);
+  const reversed = compileContextPlan({ ...input, sourceMap: [...input.sourceMap].reverse() });
   assert.equal(plan.status, 'READY');
   assert.deepEqual(plan.selectedSources[0].roles, ['A','B']);
+  assert.equal(plan.selectedSources[0].id, 'one');
+  assert.equal(plan.selectedSources[0].name, 'Alpha alias');
+  assert.equal(plan.contextPlanId, reversed.contextPlanId);
   assert.throws(() => compileContextPlan({ strategy: { id: 'custom', version: '1.0.0', requiredRoles: ['A'] }, task: { objective: 'x' }, sourceMap: [source('one','ref:1',['A']), { ...source('two','ref:1',['A']), hash: 'b'.repeat(64) }] }), { code: 'SOURCE_METADATA_CONFLICT' });
   assert.throws(() => compileContextPlan({
     strategy: { id: 'custom', version: '1.0.0', requiredRoles: ['A'] },
@@ -157,6 +165,14 @@ test('context episode links strategy to accepted result without raw content', ()
   assert.equal(episode.metrics.hydratedBytes, 256);
   assert.equal(episode.metrics.toolCallCount, 2);
   assert.equal(episode.rawContentStored, false);
+  const unmeasured = recordContextOutcome({
+    plan,
+    result: { resultId: 'result-unmeasured', disposition: 'UNKNOWN' }
+  });
+  assert.equal(unmeasured.metrics.correctionCount, null);
+  assert.equal(unmeasured.metrics.restatementCount, null);
+  assert.equal(unmeasured.metrics.contextMissCount, null);
+  assert.equal(unmeasured.metrics.toolCallCount, null);
   assert.match(episode.episodeId, /^[a-f0-9]{64}$/);
   assert.throws(() => recordContextOutcome({ plan, result: { resultId: 'bad', disposition: 'ACCEPTED', prompt: 'raw secret' } }), { code: 'RAW_OUTCOME_BODY_FORBIDDEN' });
   assert.throws(() => recordContextOutcome({ plan, result: { resultId: 'bad-2', disposition: 'REJECTED', accepted: true } }), { code: 'CONTEXT_EPISODE_RESULT_INVALID' });
