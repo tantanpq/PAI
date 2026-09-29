@@ -52,7 +52,7 @@ See [COMMERCIAL_CONTRACT.md](COMMERCIAL_CONTRACT.md).
 npm install ./capabilities/context
 ```
 
-No npm-registry publication is claimed by this candidate.
+No npm-registry publication is claimed by this candidate. Runtime floor is Node.js 22+; exact CI qualifies the package on Node 22 LTS and Node 24 LTS.
 
 ## Commercial compiler example
 
