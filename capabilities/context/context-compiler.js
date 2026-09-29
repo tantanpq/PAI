@@ -34,11 +34,12 @@ const PROFILE_CONTRACTS = Object.freeze({
 function fail(code) { const error = new Error(code); error.code = code; throw error; }
 function object(value) { return value && typeof value === 'object' && !Array.isArray(value); }
 function deepFreeze(value) {
-  if (!value || typeof value !== 'object' || Object.isFrozen(value)) return value;
-  Object.freeze(value);
+  if (!value || typeof value !== 'object') return value;
   for (const child of Object.values(value)) deepFreeze(child);
+  if (!Object.isFrozen(value)) Object.freeze(value);
   return value;
 }
+deepFreeze(PROFILE_CONTRACTS);
 function text(value) { return typeof value === 'string' && value.trim().length > 0; }
 function strings(value, code) {
   if (value == null) return [];
@@ -150,10 +151,16 @@ function compileContextPlan(input = {}) {
   if (!object(input) || !object(input.task) || !text(input.task.objective)) fail('CONTEXT_PLAN_INPUT_INVALID');
   assertNoBodies(input.task, 'RAW_TASK_BODY_FORBIDDEN');
   const strategy = strategyFor(input);
-  const budget = object(input.budget) ? input.budget : {};
-  const maxSelectedSources = Number.isSafeInteger(budget.maxSelectedSources) && budget.maxSelectedSources > 0 ? budget.maxSelectedSources : strategy.maxSelectedSources;
-  const maxMetadataBytes = Number.isSafeInteger(budget.maxMetadataBytes) && budget.maxMetadataBytes >= 512 ? budget.maxMetadataBytes : 8192;
-  const maxHydrationBytes = Number.isSafeInteger(budget.maxHydrationBytes) && budget.maxHydrationBytes >= 0 ? budget.maxHydrationBytes : 32768;
+  if (input.budget != null && !object(input.budget)) fail('CONTEXT_BUDGET_INVALID');
+  const budget = input.budget || {};
+  const boundedBudget = (value, fallback, predicate) => {
+    if (value == null) return fallback;
+    if (!Number.isSafeInteger(value) || !predicate(value)) fail('CONTEXT_BUDGET_INVALID');
+    return value;
+  };
+  const maxSelectedSources = boundedBudget(budget.maxSelectedSources, strategy.maxSelectedSources, value => value > 0);
+  const maxMetadataBytes = boundedBudget(budget.maxMetadataBytes, 8192, value => value >= 512);
+  const maxHydrationBytes = boundedBudget(budget.maxHydrationBytes, 32768, value => value >= 0);
   const sources = mergeSources(input.sourceMap || []);
   const query = text(input.query) ? input.query.trim() : input.task.objective.trim();
   const terms = [...new Set(query.toLowerCase().split(/\W+/).filter(Boolean))].sort();
@@ -224,8 +231,10 @@ function compileContextPlan(input = {}) {
 
   const missingSelectedRequired = omissions.filter(item => item.required).map(item => item.id).sort();
   const exactSelected = selected.filter(source => source.resolution === RESOLUTION.EXACT_JIT);
-  const defaultExactMaxBytes = exactSelected.length ? Math.floor(maxHydrationBytes / exactSelected.length) : 0;
-  const exactRequests = exactSelected.map(source => ({
+  const exactUnhashed = exactSelected.filter(source => !source.hash);
+  const exactFetchable = exactSelected.filter(source => source.hash);
+  const defaultExactMaxBytes = exactFetchable.length ? Math.floor(maxHydrationBytes / exactFetchable.length) : 0;
+  const exactRequests = exactFetchable.map(source => ({
     action: 'EXACT_JIT_FETCH', id: source.id, ref: source.ref, expectedHash: source.hash,
     maxBytes: source.maxBytes || defaultExactMaxBytes
   }));
@@ -258,6 +267,7 @@ function compileContextPlan(input = {}) {
   const missReasons = [];
   if (missingRoles.length) missReasons.push({ code: 'MISSING_REQUIRED_SOURCE_ROLE', roles: missingRoles });
   if (missingSelectedRequired.length) missReasons.push({ code: 'REQUIRED_SOURCE_NOT_SELECTED', sourceIds: missingSelectedRequired });
+  if (exactUnhashed.length) missReasons.push({ code: 'EXACT_SOURCE_HASH_REQUIRED', sourceIds: exactUnhashed.map(source => source.id).sort() });
   if (exactRequests.some(request => request.maxBytes < 1)) missReasons.push({ code: 'HYDRATION_BUDGET_EXCEEDED', requestedBytes: exactBudget, maxHydrationBytes });
   else if (exactBudget > maxHydrationBytes && exactRequests.length) missReasons.push({ code: 'HYDRATION_BUDGET_EXCEEDED', requestedBytes: exactBudget, maxHydrationBytes });
 
