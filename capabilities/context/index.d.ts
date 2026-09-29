@@ -87,6 +87,7 @@ export interface ContextPlan {
 }
 
 export function compileContextPlan(input: ContextPlanInput): ContextPlan;
+export function assertPlanIntegrity(plan: ContextPlan): true;
 export interface ContextOutcomeInput {
   resultId: string;
   disposition: 'ACCEPTED' | 'REJECTED' | 'NEEDS_REVISION' | 'UNKNOWN';
