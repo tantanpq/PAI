@@ -13,7 +13,7 @@ Context Kit 0.3 is additive: the `compile()` Context Capsule v1 API, Retrieval E
 - a metadata-only `sourceMap`;
 - bounded `maxSelectedSources`, `maxMetadataBytes`, and `maxHydrationBytes`.
 
-Source descriptors require `id`, `ref` and one or more `roles`. Optional fields include hash, size, maxBytes, tags, priority, freshness, authorityClass, truthClass, availability and resolution.
+Source descriptors require `id`, `ref` and one or more `roles`. Optional fields include hash, size, maxBytes, tags, priority, freshness, authorityClass, truthClass, availability, resolution and `volatility = STABLE | SESSION | LIVE`.
 
 Source-body fields such as `body`, `content`, `raw`, `text`, `messages`, `transcript` or `prompt` are forbidden in discovery input.
 
@@ -28,6 +28,7 @@ It contains:
 - exact `EXACT_JIT_FETCH` requests;
 - structured missing-role/ref/budget reasons;
 - budget decision;
+- provider-neutral `cachePlan` with hash-bound stable-prefix candidates and dynamic refs;
 - stable invariants.
 
 A required role with no available source returns `CONTEXT_MISS`. It does not trigger a broad history/source-body reload.
@@ -89,3 +90,4 @@ Raw history is rejected; protected overflow returns `CONTEXT_MISS`.
 - Missing context expands the exact missing cone.
 - Outcome metrics are observed or null, never invented.
 - Core performs no network, filesystem, persistence, scheduling or authority action.
+- Context reduction and provider caching are distinct; cachePlan is advisory and never proves a cache hit.
