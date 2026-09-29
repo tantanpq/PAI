@@ -11,9 +11,9 @@ Context Kit 0.3 is additive: the `compile()` Context Capsule v1 API, Retrieval E
 - optional task identity/class/project/checkpoint refs;
 - protected `constraints`, `acceptedDecisions`, `acceptance`, `authority`, `effectClass`, `privacyClass`, `scopes`, `outputContract`, truth/source status, negations, contradictions and supersession refs;
 - a metadata-only `sourceMap`;
-- bounded `maxSelectedSources`, `maxMetadataBytes`, and `maxHydrationBytes`.
+- bounded `maxSelectedSources`, `maxMetadataBytes`, and `maxHydrationBytes`; omitted values use profile/default ceilings, while explicitly invalid values fail closed instead of widening to a default.
 
-Source descriptors require `id`, `ref` and one or more `roles`. Optional fields include hash, size, maxBytes, tags, priority, freshness, authorityClass, truthClass, availability, resolution and `volatility = STABLE | SESSION | LIVE`. Built-in/custom strategies admit non-required sources only when at least one role is declared in that strategy; caller-marked `required: true` sources remain protected task-specific requirements. Conflicting hash/authority/truth metadata for the same ref fails closed.
+Source descriptors require `id`, `ref` and one or more `roles`. Optional fields include hash, size, maxBytes, tags, priority, freshness, authorityClass, truthClass, availability, resolution and `volatility = STABLE | SESSION | LIVE`. A hash is mandatory whenever the selected strategy resolves that source as `EXACT_JIT`; otherwise the plan returns `CONTEXT_MISS / EXACT_SOURCE_HASH_REQUIRED` and emits no unusable fetch request. Built-in/custom strategies admit non-required sources only when at least one role is declared in that strategy; caller-marked `required: true` sources remain protected task-specific requirements. Conflicting hash/authority/truth metadata for the same ref fails closed.
 
 Source-body fields such as `body`, `content`, `raw`, `text`, `messages`, `transcript` or `prompt` are forbidden in discovery input.
 
