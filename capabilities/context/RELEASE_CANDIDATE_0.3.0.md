@@ -14,6 +14,9 @@ New public API:
 - all prior Context Capsule / Context Kit 0.2 tests remain green;
 - Context Compiler commercial suite passes;
 - source bodies are rejected from discovery metadata;
+- exported built-in profile contracts are deeply immutable;
+- explicit invalid context ceilings fail closed rather than widening;
+- exact-JIT sources without a verifiable expected hash return a structured miss and no fetch request;
 - required source roles fail closed as `CONTEXT_MISS`;
 - equivalent source ordering yields identical plan identity;
 - compiled plans are deeply immutable and Context Episode creation rejects post-compile plan tampering;
