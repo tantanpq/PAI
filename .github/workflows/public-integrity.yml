@@ -77,6 +77,10 @@ jobs:
           node - <<'NODE'
           const { compile, planRetrieval, buildContinuityCarrier, compileContextPlan, recordContextOutcome } = require('pai-context-kit');
           const compilerSubpath = require('pai-context-kit/compiler');
+          const legacyCapsuleSubpath = require('pai-context-kit/context-capsule');
+          const legacyRetrievalSubpath = require('pai-context-kit/retrieval-economy');
+          const legacyContinuitySubpath = require('pai-context-kit/continuity-carrier');
+          const packageMetadata = require('pai-context-kit/package.json');
           const result = compile({ owner: { principalId: 'clean', accountId: 'clean', workspaceId: 'clean' }, profile: 'resume', budget: 1, coverage: { observedUserSignals: 1, unobservedHostedChatTurns: 0 }, items: [{ kind: 'intent', id: 'i1', value: 'clean consumer', privacyClass: 'PUBLIC', provenance: { source: 'synthetic-fixture' }, freshness: '2026-09-11T00:00:00Z' }] });
           if (result.capsule.items.length !== 1) process.exit(1);
           const retrieval = planRetrieval({ query: 'context', candidates: [{ id: 'context', ref: 'context.md' }] });
@@ -89,7 +93,11 @@ jobs:
             plan.status !== 'READY' ||
             episode.rawContentStored !== false ||
             typeof compilerSubpath.compileContextPlan !== 'function' ||
-            typeof compilerSubpath.recordContextOutcome !== 'function'
+            typeof compilerSubpath.recordContextOutcome !== 'function' ||
+            typeof legacyCapsuleSubpath.compile !== 'function' ||
+            typeof legacyRetrievalSubpath.planRetrieval !== 'function' ||
+            typeof legacyContinuitySubpath.buildContinuityCarrier !== 'function' ||
+            packageMetadata.version !== '0.3.0-rc.1'
           ) process.exit(1);
           console.log(`CONTEXT_CLEAN_CONSUMER_PASS sha256=${result.sha256} retrieval=${retrieval.status} continuity=${carrier.status} compiler=${plan.status}`);
           NODE
