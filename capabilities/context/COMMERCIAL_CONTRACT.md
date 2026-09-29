@@ -75,6 +75,20 @@ The portable compiler is intentionally generic. PAI-specific advantage belongs a
 
 No third parallel Context package should be created merely to rename this capability.
 
+## Standalone repository extraction gate
+
+Keep Context Compiler inside the PAI Open Foundation monorepo while its portable contract is still changing materially. Extract it to a standalone repository only when all of the following are true:
+
+- one supported product-facing API (`pai-context-kit` / Context Compiler) is stable and the older Context Economy surface is clearly compatibility/provenance, not a competing front door;
+- exact package CI, clean-consumer use and independent exact-candidate QA pass on the same frozen bytes;
+- at least one representative baseline-vs-compiled evaluation proves useful economy with the same acceptance contract and no false-success/accepted-result regression;
+- public/private/protected-core boundaries are reproducible from the package itself;
+- adapter boundaries are stable enough that GitHub/filesystem/MCP/Drive-style integrations do not require core forks;
+- semver, migration, rollback/revoke, provenance and license contracts are explicit;
+- a standalone repository materially improves distribution, integration or independent reuse instead of merely duplicating the monorepo.
+
+Use `WFLOW_REPO_BUILDER_R1` for that extraction/productization boundary. The standalone repo must preserve source/result provenance back to the accepted monorepo release and must not silently absorb PAI-specific authority, personal continuity or private strategy-learning state.
+
 ## Context reduction and provider caching
 
 Context selection/compaction and provider prompt caching are related but distinct optimizations.
