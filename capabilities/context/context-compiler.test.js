@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { PROFILE_CONTRACTS, VOLATILITY, compileContextPlan, recordContextOutcome } = require('./context-compiler');
+const { PROFILE_CONTRACTS, VOLATILITY, compileContextPlan, recordContextOutcome, assertPlanIntegrity } = require('./context-compiler');
 
 const hash = 'a'.repeat(64);
 const source = (id, ref, roles, extra = {}) => ({ id, ref, roles, hash, ...extra });
@@ -120,6 +120,26 @@ test('plan identity is deterministic across source ordering', () => {
   assert.equal(a.protectedState.truthState, 'CANDIDATE');
   assert.equal(a.protectedState.sourceStatus, 'EXACT_HEAD');
   assert.deepEqual(a.protectedState.supersessionRefs, ['pr:older-head']);
+});
+
+test('compiled plan is deeply immutable and outcome recording rejects tampered plan identity', () => {
+  const plan = compileContextPlan({
+    profile: 'repo-engineering',
+    task: { objective: 'bind exact plan identity' },
+    acceptance: ['identity preserved'],
+    sourceMap: [source('repo', 'git:main', ['REPOSITORY_BASELINE'], { volatility: VOLATILITY.STABLE })]
+  });
+  assert.equal(assertPlanIntegrity(plan), true);
+  assert.equal(Object.isFrozen(plan), true);
+  assert.equal(Object.isFrozen(plan.selectedSources), true);
+  assert.equal(Object.isFrozen(plan.selectedSources[0]), true);
+  assert.throws(() => { plan.selectedSources.push(source('late', 'git:late', ['SPEC'])); }, TypeError);
+  const tampered = structuredClone(plan);
+  tampered.protectedState.objective = 'tampered objective';
+  assert.throws(
+    () => recordContextOutcome({ plan: tampered, result: { resultId: 'tampered', disposition: 'UNKNOWN' } }),
+    { code: 'CONTEXT_PLAN_INTEGRITY_MISMATCH' }
+  );
 });
 
 test('context episode links strategy to accepted result without raw content', () => {
