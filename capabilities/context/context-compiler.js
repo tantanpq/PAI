@@ -18,8 +18,8 @@ const PROFILE_CONTRACTS = Object.freeze({
     exactRoles: ['PRODUCT_SPEC'], optionalRoles: ['RESULT', 'EVIDENCE', 'DEPENDENCY', 'ASSET'], maxSelectedSources: 10
   }),
   'runtime-repair': Object.freeze({
-    id: 'runtime-repair', version: '1.0.0', requiredRoles: ['RUNTIME_READBACK'],
-    exactRoles: ['RUNTIME_READBACK'], optionalRoles: ['DESIRED_STATE', 'REPOSITORY_BASELINE', 'RESULT', 'EVIDENCE'], maxSelectedSources: 8
+    id: 'runtime-repair', version: '1.0.0', requiredRoles: ['DESIRED_STATE', 'RUNTIME_READBACK'],
+    exactRoles: ['RUNTIME_READBACK'], optionalRoles: ['REPOSITORY_BASELINE', 'RESULT', 'EVIDENCE'], maxSelectedSources: 8
   }),
   'independent-qa': Object.freeze({
     id: 'independent-qa', version: '1.0.0', requiredRoles: ['FROZEN_SUBJECT', 'TEST_CONTRACT'],
@@ -102,19 +102,29 @@ function mergeSources(sourceMap = []) {
     if (!byRef.has(key)) { byRef.set(key, source); continue; }
     const prior = byRef.get(key);
     if (prior.hash && source.hash && prior.hash !== source.hash) fail('SOURCE_METADATA_CONFLICT');
+    for (const field of ['authorityClass', 'truthClass']) {
+      if (prior[field] && source[field] && prior[field] !== source[field]) fail('SOURCE_METADATA_CONFLICT');
+    }
+    if (prior.hash && source.hash && prior.hash === source.hash && prior.sizeBytes != null && source.sizeBytes != null && prior.sizeBytes !== source.sizeBytes) {
+      fail('SOURCE_METADATA_CONFLICT');
+    }
+    const freshness = [prior.freshness, source.freshness].filter(Boolean).sort().at(-1) || null;
+    const maxBytes = prior.maxBytes != null && source.maxBytes != null
+      ? Math.min(prior.maxBytes, source.maxBytes)
+      : (prior.maxBytes ?? source.maxBytes);
     byRef.set(key, {
       ...prior,
       roles: [...new Set([...prior.roles, ...source.roles])].sort(),
       tags: [...new Set([...prior.tags, ...source.tags])].sort(),
       required: prior.required || source.required,
       priority: Math.max(prior.priority, source.priority),
-      available: prior.available && source.available,
+      available: prior.available || source.available,
       hash: prior.hash || source.hash,
       sizeBytes: prior.sizeBytes ?? source.sizeBytes,
-      maxBytes: prior.maxBytes ?? source.maxBytes,
+      maxBytes,
       authorityClass: prior.authorityClass || source.authorityClass,
       truthClass: prior.truthClass || source.truthClass,
-      freshness: prior.freshness || source.freshness,
+      freshness,
       volatility: VOLATILITY_RANK[prior.volatility] >= VOLATILITY_RANK[source.volatility] ? prior.volatility : source.volatility,
       resolution: prior.resolution === RESOLUTION.EXACT_JIT || source.resolution === RESOLUTION.EXACT_JIT ? RESOLUTION.EXACT_JIT : RESOLUTION.POINTER_ONLY
     });
@@ -142,6 +152,8 @@ function compileContextPlan(input = {}) {
 
   const requiredRoles = new Set(strategy.requiredRoles);
   const exactRoles = new Set(strategy.exactRoles);
+  const optionalRoles = new Set(strategy.optionalRoles);
+  const allowedRoles = new Set([...requiredRoles, ...exactRoles, ...optionalRoles]);
   const selected = [];
   const omissions = [];
   const missingRoles = [];
@@ -154,9 +166,11 @@ function compileContextPlan(input = {}) {
   const ranked = sources.map(source => {
     const requiredByRole = source.roles.some(role => requiredRoles.has(role));
     const exactByRole = source.roles.some(role => exactRoles.has(role));
+    const allowedByRole = source.roles.some(role => allowedRoles.has(role));
     return {
       ...source,
       required: source.required || requiredByRole,
+      allowedByRole,
       resolution: source.resolution === RESOLUTION.EXACT_JIT || exactByRole ? RESOLUTION.EXACT_JIT : RESOLUTION.POINTER_ONLY,
       relevance: relevance(source, terms)
     };
@@ -168,12 +182,21 @@ function compileContextPlan(input = {}) {
       omissions.push({ id: source.id, ref: source.ref, reason: 'SOURCE_UNAVAILABLE', required: source.required });
       continue;
     }
+    if (!source.required && !source.allowedByRole) {
+      omissions.push({ id: source.id, ref: source.ref, reason: 'ROLE_NOT_ALLOWED_BY_STRATEGY', required: false });
+      continue;
+    }
     if (!source.required && source.relevance <= 0) {
       omissions.push({ id: source.id, ref: source.ref, reason: 'NOT_RELEVANT_TO_CURRENT_OBJECTIVE', required: false });
       continue;
     }
-    if (selected.length >= maxSelectedSources && !source.required) {
-      omissions.push({ id: source.id, ref: source.ref, reason: 'SOURCE_LIMIT_EXCEEDED', required: false });
+    if (selected.length >= maxSelectedSources) {
+      omissions.push({
+        id: source.id,
+        ref: source.ref,
+        reason: source.required ? 'REQUIRED_SOURCE_LIMIT_EXCEEDED' : 'SOURCE_LIMIT_EXCEEDED',
+        required: source.required
+      });
       continue;
     }
     const projected = {
@@ -216,7 +239,12 @@ function compileContextPlan(input = {}) {
       write: strings(input.scopes.write, 'WRITE_SCOPE_INVALID'),
       effect: text(input.scopes.effect) ? input.scopes.effect.trim() : 'NONE'
     } : { read: [], write: [], effect: 'NONE' },
-    outputContract: text(input.outputContract) ? input.outputContract.trim() : null
+    outputContract: text(input.outputContract) ? input.outputContract.trim() : null,
+    truthState: text(input.truthState) ? input.truthState.trim() : null,
+    sourceStatus: text(input.sourceStatus) ? input.sourceStatus.trim() : null,
+    negations: strings(input.negations, 'NEGATIONS_INVALID'),
+    contradictions: strings(input.contradictions, 'CONTRADICTIONS_INVALID'),
+    supersessionRefs: strings(input.supersessionRefs, 'SUPERSESSION_REFS_INVALID')
   };
   const taskFingerprint = sha256({ strategy: { id: strategy.id, version: strategy.version }, protectedState });
   const missReasons = [];
@@ -261,25 +289,43 @@ function compileContextPlan(input = {}) {
 function recordContextOutcome({ plan, result } = {}) {
   if (!object(plan) || plan.schema !== 'context-compiler-plan/v1' || !text(plan.contextPlanId) || !object(result)) fail('CONTEXT_EPISODE_INPUT_INVALID');
   for (const field of BODY_FIELDS) if (Object.hasOwn(result, field)) fail('RAW_OUTCOME_BODY_FORBIDDEN');
-  const allowed = new Set(['resultId', 'disposition', 'accepted', 'verificationRef', 'correctionCount', 'restatementCount', 'contextMissCount', 'latencyMs', 'inputTokens', 'outputTokens', 'costUsd']);
+  const allowed = new Set([
+    'resultId', 'disposition', 'accepted', 'verificationRef',
+    'acceptanceContractRef', 'baselinePlanId', 'provider', 'model', 'tokenizer', 'falseSuccess',
+    'correctionCount', 'restatementCount', 'contextMissCount', 'toolCallCount',
+    'latencyMs', 'inputTokens', 'outputTokens', 'inputBytes', 'outputBytes', 'hydratedBytes', 'costUsd'
+  ]);
   if (Object.keys(result).some(key => !allowed.has(key))) fail('CONTEXT_EPISODE_FIELD_INVALID');
   if (!text(result.resultId) || !OUTCOME_DISPOSITIONS.has(result.disposition)) fail('CONTEXT_EPISODE_RESULT_INVALID');
   if (result.accepted != null && typeof result.accepted !== 'boolean') fail('CONTEXT_EPISODE_RESULT_INVALID');
   if (result.accepted === true && result.disposition !== 'ACCEPTED') fail('CONTEXT_EPISODE_RESULT_INVALID');
   if (result.accepted === false && result.disposition === 'ACCEPTED') fail('CONTEXT_EPISODE_RESULT_INVALID');
+  if (result.falseSuccess != null && typeof result.falseSuccess !== 'boolean') fail('CONTEXT_EPISODE_RESULT_INVALID');
   const metric = (value, field) => value == null ? null : (Number.isFinite(value) && value >= 0 ? Number(value) : fail(`CONTEXT_EPISODE_${field}_INVALID`));
   const count = (value, field) => value == null ? 0 : (Number.isSafeInteger(value) && value >= 0 ? value : fail(`CONTEXT_EPISODE_${field}_INVALID`));
   const outcome = {
     resultId: result.resultId.trim(), disposition: result.disposition, accepted: result.accepted ?? null,
     verificationRef: text(result.verificationRef) ? result.verificationRef.trim() : null
   };
+  const evaluation = {
+    acceptanceContractRef: text(result.acceptanceContractRef) ? result.acceptanceContractRef.trim() : null,
+    baselinePlanId: text(result.baselinePlanId) ? result.baselinePlanId.trim() : null,
+    provider: text(result.provider) ? result.provider.trim() : null,
+    model: text(result.model) ? result.model.trim() : null,
+    tokenizer: text(result.tokenizer) ? result.tokenizer.trim() : null,
+    falseSuccess: result.falseSuccess ?? null
+  };
   const metrics = {
     correctionCount: count(result.correctionCount, 'CORRECTION_COUNT'),
     restatementCount: count(result.restatementCount, 'RESTATEMENT_COUNT'),
     contextMissCount: count(result.contextMissCount, 'CONTEXT_MISS_COUNT'),
+    toolCallCount: count(result.toolCallCount, 'TOOL_CALL_COUNT'),
     latencyMs: metric(result.latencyMs, 'LATENCY_MS'),
     inputTokens: metric(result.inputTokens, 'INPUT_TOKENS'),
     outputTokens: metric(result.outputTokens, 'OUTPUT_TOKENS'),
+    inputBytes: metric(result.inputBytes, 'INPUT_BYTES'),
+    outputBytes: metric(result.outputBytes, 'OUTPUT_BYTES'),
+    hydratedBytes: metric(result.hydratedBytes, 'HYDRATED_BYTES'),
     costUsd: metric(result.costUsd, 'COST_USD')
   };
   const selectedSources = plan.selectedSources.map(source => ({ id: source.id, ref: source.ref, hash: source.hash, roles: source.roles, resolution: source.resolution }));
@@ -293,6 +339,7 @@ function recordContextOutcome({ plan, result } = {}) {
     missingCodes: [...new Set(plan.missing.map(item => item.code))].sort(),
     budgetDecision: plan.budgetDecision,
     outcome,
+    evaluation,
     metrics,
     rawContentStored: false
   };
