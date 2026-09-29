@@ -1,53 +1,63 @@
 # PAI public benchmark policy and current release evidence
 
-PAI benchmarks the claims it actually makes. The public benchmark surface is therefore about **determinism, replay, bounded context, failure detection, clean-consumer portability and release integrity**, not decorative throughput numbers.
+PAI benchmarks the claims it actually makes. The public benchmark surface is therefore about **determinism, replay, bounded context, protected semantic coverage, outcome linkage, failure detection, clean-consumer portability and release integrity**, not decorative throughput numbers.
 
-A fast wrong answer is still wrong. A green test on the wrong release composition is still not a release.
+A fast wrong answer is still wrong. A smaller context packet that drops authority, provenance or acceptance is also wrong.
 
 ## Current public release evidence
 
-These results were rerun against exact public package/release revisions. They are narrower than product or commercial claims.
-
 | Capability | Current public state | Exact public-package evidence | What it does **not** prove |
 | --- | --- | --- | --- |
-| Context Kit 0.2.0 candidate | `RELEASE_CANDIDATE` | original **6/6 PASS** plus **6/6** Retrieval Economy/Continuity Carrier tests; 1,000 deterministic replays / 1 SHA; two-axis benchmark; `npm pack`; clean-consumer install/use | universal token savings; hosted-chat capture completeness; memory/truth authority |
+| Context Compiler / Context Kit 0.3.0-rc.1 | `COMMERCIAL CONTRACT CANDIDATE` | original **6/6** capsule suite + **8/8** Context Kit v2 suite + **8/8** commercial compiler suite; deterministic replay/plan identity; metadata-only discovery; protected coverage; outcome-linked Context Episode; `npm pack`; clean consumer | universal token savings; automatic source authority; hosted service SLA; adaptive/learned routing; enterprise security certification |
 | W_Flow Core 0.1.0 | `PUBLIC_FOUNDATION` | original public core **8/8 PASS**; 1,000 deterministic iterations / 1 digest; public QA PASS; wheel build; clean virtualenv install/use; five recovered source identities pinned | autonomous execution; scheduler/Claim authority; runtime-exclusive writer enforcement; every provider integration |
 | SimLab Core 0.1.0 | `PUBLIC PILOT / PILOT_ONLY` | **6/6 PASS**; 1,000 deterministic replays / 1 digest; known-good `PASS`; known-bad mutant `FAIL`; missing evidence `UNKNOWN`; counterexample `3 -> 2`; public QA; `npm pack`; clean consumer; protected-R7 exclusion check | formal proof; zero defects; security certification; real OS/service/provider behavior; general production-platform readiness |
 
-Release receipts are stored with each executable surface under `capabilities/*/RELEASE_RECEIPT.md`. The public distribution currently lives in this GitHub repository; npm/PyPI registry publication is not claimed.
+Release receipts are stored with each executable surface. The public distribution currently lives in this GitHub repository; npm/PyPI registry publication is not claimed.
 
-## Verified source/internal baselines
+## Context Compiler benchmark contract
 
-These baselines explain the lineage behind the public reductions. They remain evidence inputs, not substitutes for exact public-package verification.
+A commercial context benchmark must evaluate **economy and useful outcome together**.
 
-| Capability | Source/internal baseline | What it supports |
-| --- | ---: | --- |
-| Context Kit / Context Capsule | **12/12 PASS candidate** | original capsule behavior plus metadata-only discovery, exact archive/hash recovery, stale-state rejection, protected continuity, deterministic successor checkpoints and bounded overflow failure |
-| W_Flow | **13/13 PASS** plus independent frozen-byte QA | schema/transitions; deterministic replay; one-writer declaration; local-blocker containment; authority separation; protected-surface/no-live-effect boundary |
-| SimLab protected basis | **36/36 compatibility + 73/73 verification checks**, known-bad policy-mutant rejection and independent QA | bounded verification-membrane design/evidence basis; deterministic scenario/property/result semantics; explicit failure detection |
+Required dimensions:
 
-The protected SimLab R7 baseline is provenance for the public reduction. Protected runner/evaluator/property intelligence is not distributed by the public pilot.
+1. deterministic task fingerprint and context-plan identity;
+2. required source-role coverage;
+3. metadata-only broad discovery with zero body hydration;
+4. exact JIT requests only for the selected missing cone;
+5. protected semantic coverage;
+6. duplicate semantic object count;
+7. context-miss rate;
+8. input/output tokens when actually observable;
+9. latency/cost when actually observable;
+10. user correction/restatement count;
+11. accepted-result / false-success outcome on the same declared acceptance contract;
+12. clean-consumer portability.
+
+A token reduction is not a PASS when accepted-result quality regresses or false success increases.
 
 ## Release benchmark gates
 
-Every executable public package must rerun the benchmark against the **exact frozen public candidate bytes**. A prior release or internal PASS is reusable evidence, not permission to skip qualification of changed bytes.
+Every executable public package must rerun the benchmark against the **exact frozen public candidate bytes**. Prior releases and internal PASS results remain provenance, not permission to skip qualification.
 
-### Context Kit
+### Context Compiler / Context Kit
 
-Required package benchmark:
+Required package gates:
 
-1. same input + same profile + same policy produces byte-stable normalized output;
-2. precedence and dedup resolve conflicts deterministically;
-3. secret-bearing or malformed exact references fail closed;
-4. protected context fields survive budget pressure or return structured `CONTEXT_MISS`;
-5. clean-consumer run succeeds outside private PAI paths/runtime;
-6. input size, output size and retained protected-field coverage are reported separately;
-7. no token-savings percentage is claimed without a representative corpus and reproducible tokenizer/model assumptions;
-8. broad discovery hydrates zero source bodies and one exact source is selected JIT;
-9. an exact source over its byte budget returns `CONTEXT_MISS` without body hydration;
-10. duplicate exact evidence refs are eliminated before protected-budget accounting;
-11. protected-field coverage and duplicate semantic object count are reported separately from byte reduction;
-12. once hard budgets and semantic-quality gates pass, `NO_MATERIAL_DELTA` ends optimization-only work.
+1. same semantic input + same strategy + same source metadata produces byte-stable plan identity;
+2. source ordering cannot change the task fingerprint/context-plan identity;
+3. protected fields and required roles fail closed rather than disappearing;
+4. broad discovery accepts metadata only;
+5. exact-JIT requests identify the bounded source/ref/hash/byte ceiling;
+6. exact sources over budget return `CONTEXT_MISS` without body hydration;
+7. duplicate exact evidence refs are eliminated before protected-budget accounting;
+8. missing required source roles produce an exact missing cone, not a full-history reload;
+9. Context Episode links strategy/source identities to a verified outcome and rejects raw prompt/transcript/message bodies;
+10. previous Context Capsule / Retrieval Economy / Continuity Carrier APIs remain compatible;
+11. public/privacy/secret scan passes;
+12. `npm pack` and clean-consumer install/use exercise the commercial compiler API;
+13. representative baseline-vs-compiled comparison uses the same acceptance contract and declares tokenizer/model/workload assumptions;
+14. no token-savings percentage is generalized beyond reproduced evidence;
+15. once budgets + protected semantics + outcome quality pass, `NO_MATERIAL_DELTA` ends optimization-only work.
 
 ### W_Flow Core
 
@@ -74,12 +84,8 @@ Required package benchmark:
 7. clean-consumer run succeeds with synthetic fixtures only;
 8. real-world claims remain canary-gated outside the synthetic lab.
 
-## Repository-level benchmark
-
-The public repository has an independent integrity gate in `.github/workflows/public-integrity.yml`. Every release PR and push to `main` reruns catalog/link integrity plus the exact package gates currently bound into that workflow.
-
-A repository-integrity PASS means that revision passed those checks. It does not upgrade a package beyond its declared maturity. In particular, SimLab remains `PILOT_ONLY` after a successful public-pilot release.
-
 ## Commercial evidence rule
 
-Engineering benchmarks answer **“does it behave as claimed?”** They do not answer **“will someone pay for it?”** Commercial maturity requires separate evidence such as external reuse, design-partner outcomes, support burden, conversion, paid pilot value and renewal. Popularity, stars and benchmark speed are not substitutes for willingness to pay.
+Engineering benchmarks answer **“does it behave as claimed?”** They do not answer **“will someone pay for it?”** Commercial maturity requires external reuse or design-partner evidence, outcome improvement, support burden, conversion/paid-pilot value and renewal/continued-use signals.
+
+For Context Compiler, the moat metric is not raw compression ratio. It is movement over time in **token/context cost per verified useful outcome** without degrading acceptance, provenance, privacy or authority fidelity.
