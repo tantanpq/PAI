@@ -15,6 +15,10 @@ jobs:
     steps:
       - name: Check out exact revision
         uses: actions/checkout@v4
+      - name: Set up Node 22 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
       - name: Validate public asset catalog and bounded content
         run: python3 scripts/check-public-integrity.py
       - name: Verify Context Kit recovered source identity
@@ -164,3 +168,20 @@ jobs:
           if (result.result.verdict !== 'PASS' || result.result.productionReady !== false) process.exit(1);
           console.log(`SIMLAB_CLEAN_CONSUMER_PASS sha256=${result.sha256}`);
           NODE
+
+  context-node24-compatibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out exact revision
+        uses: actions/checkout@v4
+      - name: Set up Node 24 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Test Context Compiler on Node 24
+        working-directory: capabilities/context
+        run: |
+          npm test
+          npm run benchmark
+          npm run qa
