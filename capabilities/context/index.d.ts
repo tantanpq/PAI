@@ -1,5 +1,6 @@
 export type ContextProfile = 'repo-engineering' | 'product-build' | 'runtime-repair' | 'independent-qa' | 'native-domain';
 export type ContextResolution = 'POINTER_ONLY' | 'EXACT_JIT';
+export type ContextVolatility = 'STABLE' | 'SESSION' | 'LIVE';
 
 export class ContextCapsuleError extends Error {
   code: string;
@@ -36,6 +37,7 @@ export interface SourceDescriptor {
   authorityClass?: string;
   truthClass?: string;
   freshness?: string;
+  volatility?: ContextVolatility;
   resolution?: ContextResolution;
 }
 
@@ -74,6 +76,7 @@ export interface ContextPlan {
   expansionRequests: Array<Record<string, unknown>>;
   missing: Array<Record<string, unknown>>;
   budgetDecision: Record<string, number>;
+  cachePlan: Record<string, unknown>;
   protectedState: Record<string, unknown>;
   invariants: string[];
 }
@@ -83,3 +86,4 @@ export function recordContextOutcome(input: { plan: ContextPlan; result: Record<
 
 export const PROFILE_CONTRACTS: Readonly<Record<string, Record<string, unknown>>>;
 export const RESOLUTION: Readonly<{ POINTER_ONLY: 'POINTER_ONLY'; EXACT_JIT: 'EXACT_JIT' }>;
+export const VOLATILITY: Readonly<{ STABLE: 'STABLE'; SESSION: 'SESSION'; LIVE: 'LIVE' }>;
