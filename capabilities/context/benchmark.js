@@ -1,7 +1,10 @@
 'use strict';
 
 const assert = require('node:assert/strict');
-const { compile, planRetrieval, resolveExactArtifact, buildContinuityCarrier, sha256 } = require('./index');
+const {
+  compile, planRetrieval, resolveExactArtifact, buildContinuityCarrier,
+  compileContextPlan, recordContextOutcome, sha256
+} = require('./index');
 
 const hash = 'a'.repeat(64);
 const item = (kind, id, value, extra = {}) => ({
@@ -75,6 +78,39 @@ assert.equal(oversizedExact.content, null);
 assert.equal(oversizedExact.miss.reason, 'EXACT_SOURCE_EXCEEDS_BUDGET');
 assert.equal(continuity.protectedState.evidenceRefs.length, 1);
 
+const compilerInput = {
+  profile: 'repo-engineering',
+  task: { id: 'benchmark-compiler', objective: 'verify context compiler package' },
+  constraints: ['do not invent source state'],
+  acceptance: ['package tests pass'],
+  authority: 'NONE',
+  sourceMap: [
+    { id: 'repo', ref: 'git:main', roles: ['REPOSITORY_BASELINE'], hash, priority: 10 },
+    { id: 'spec', ref: 'COMMERCIAL_CONTRACT.md', roles: ['SPEC'], tags: ['context', 'compiler'], priority: 5 },
+    { id: 'noise', ref: 'unrelated.md', roles: ['EVIDENCE'], tags: ['unrelated'] }
+  ]
+};
+const compilerPlan = compileContextPlan(compilerInput);
+const compilerPlanReplay = compileContextPlan({ ...compilerInput, sourceMap: [...compilerInput.sourceMap].reverse() });
+assert.equal(compilerPlan.status, 'READY');
+assert.equal(compilerPlan.contextPlanId, compilerPlanReplay.contextPlanId);
+assert.equal(compilerPlan.selectedSources.length, 2);
+assert.equal(compilerPlan.omissions.find(item => item.id === 'noise').reason, 'NOT_RELEVANT_TO_CURRENT_OBJECTIVE');
+const episode = recordContextOutcome({
+  plan: compilerPlan,
+  result: {
+    resultId: 'benchmark-result',
+    disposition: 'ACCEPTED',
+    accepted: true,
+    verificationRef: 'synthetic:test',
+    correctionCount: 0,
+    restatementCount: 0,
+    contextMissCount: 0
+  }
+});
+assert.equal(episode.rawContentStored, false);
+assert.equal(episode.outcome.accepted, true);
+
 const rawHistoryBytes = Buffer.byteLength(JSON.stringify(rawHistory));
 const continuityBytes = Buffer.byteLength(JSON.stringify(continuity));
 const protectedChecks = {
@@ -92,8 +128,9 @@ const semanticKeys = continuity.protectedState.evidenceRefs.map(ref => `${ref.ki
 const duplicateSemanticObjectCount = semanticKeys.length - new Set(semanticKeys).size;
 assert.equal(protectedFieldCoveragePercent, 100);
 assert.equal(duplicateSemanticObjectCount, 0);
+
 console.log(JSON.stringify({
-  schema: 'pai-context-kit-benchmark/v2',
+  schema: 'pai-context-kit-benchmark/v3',
   status: 'CONTEXT_BENCHMARK_PASS',
   iterations: 1000,
   uniqueSha256: shas.size,
@@ -102,6 +139,14 @@ console.log(JSON.stringify({
   continuityQuality: { protectedChecks, passed: Object.values(protectedChecks).every(Boolean), workingItems: continuity.workingSet.length },
   retrievalQuality: { discoveryBodyCount: retrieval.discovery.bodyCount, selectedId: retrieval.selectedId, nextAction: retrieval.next.action, oversizedExactBodyHydrated: oversizedExact.content !== null },
   semanticEconomy: { protectedFieldCoveragePercent, duplicateSemanticObjectCount, verifyImpliesHydrate: false, stopRule: 'NO_MATERIAL_DELTA' },
+  compilerQuality: {
+    strategyId: compilerPlan.strategy.id,
+    planReady: compilerPlan.status === 'READY',
+    deterministicPlanIdentity: compilerPlan.contextPlanId === compilerPlanReplay.contextPlanId,
+    selectedSourceCount: compilerPlan.selectedSources.length,
+    rawOutcomeStored: episode.rawContentStored,
+    outcomeLinked: episode.outcome.accepted === true
+  },
   contextMissUnknowns: first.capsule.contextMiss.unknownIds.length,
   provenanceNote: 'The broader PAI campaign measured 17,700 to 3,825 p95 visible tokens (78.39%) on its frozen workload. This public benchmark is synthetic and does not claim universal token savings.'
 }, null, 2));
