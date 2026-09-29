@@ -45,7 +45,7 @@
     "LICENSE"
   ],
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "license": "Apache-2.0",
   "keywords": [
@@ -57,5 +57,15 @@
     "retrieval",
     "token-economy",
     "resume"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tantanpq/PAI.git",
+    "directory": "capabilities/context"
+  },
+  "bugs": {
+    "url": "https://github.com/tantanpq/PAI/issues"
+  },
+  "homepage": "https://github.com/tantanpq/PAI/tree/main/capabilities/context",
+  "sideEffects": false
 }
