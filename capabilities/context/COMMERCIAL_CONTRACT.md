@@ -11,12 +11,12 @@ It is intentionally not a memory database, search engine, model router, schedule
 1. **Source owner stays external.** The compiler selects and describes context; it never becomes truth authority.
 2. **VERIFY != HYDRATE.** Metadata, identity, hash, provenance and freshness may be checked without loading a source body.
 3. **Protected semantics fail closed.** Objective, acceptance, authority/effect boundary, read/write/effect scopes, constraints, decisions, truth/source status, negation, contradiction, supersession and source provenance are never silently dropped to hit a budget.
-4. **Exact missing cone only.** Missing information emits structured `CONTEXT_MISS` for the required source role or exact ref. It does not request a full-history reload.
+4. **Exact missing cone only.** Missing information emits structured `CONTEXT_MISS` for the required source role or exact ref. Exact-JIT sources require a verifiable hash before a fetch request is emitted. It does not request a full-history reload.
 5. **Deterministic and tamper-evident plan identity.** Equivalent task semantics and source metadata produce the same task fingerprint and context-plan identity regardless of source ordering. Compiled plans are deeply immutable, and outcome recording verifies the plan digest before accepting lineage.
 6. **Outcome-linked evaluation.** A context strategy is evaluated by its verified Result, corrections/restatements and observable cost/latency/token metrics, not model self-rating.
 7. **No raw prompt telemetry.** Context episodes contain identities, refs, omission reasons, outcome labels and observable metrics only.
 8. **Adapters are replaceable.** GitHub, Drive, MCP, filesystem, SaaS and enterprise-knowledge connectors implement discovery/fetch outside the compiler.
-9. **One generic core, domain profiles.** Product/runtime/repo/QA/native differences are expressed through versioned context profiles, not forks of the compiler.
+9. **One generic core, domain profiles.** Product/runtime/repo/QA/native differences are expressed through deeply immutable versioned context profiles, not forks of the compiler. Caller-declared context ceilings fail closed when invalid; they are never silently widened.
 10. **No savings claim without evidence.** Token/cost reductions are workload-specific unless reproduced on a declared corpus, tokenizer/model and acceptance contract.
 
 ## Built-in profiles
