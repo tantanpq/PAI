@@ -22,6 +22,11 @@ if (
   pkg.license !== 'Apache-2.0' ||
   pkg.version !== '0.3.0-rc.1' ||
   pkg.types !== 'index.d.ts' ||
+  pkg.engines?.node !== '>=22' ||
+  pkg.sideEffects !== false ||
+  pkg.repository?.directory !== 'capabilities/context' ||
+  !pkg.bugs?.url ||
+  !pkg.homepage ||
   !pkg.exports?.['./compiler']
 ) {
   throw new Error('COMMERCIAL_PACKAGE_METADATA_INVALID');
