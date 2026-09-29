@@ -16,8 +16,11 @@ New public API:
 - source bodies are rejected from discovery metadata;
 - required source roles fail closed as `CONTEXT_MISS`;
 - equivalent source ordering yields identical plan identity;
-- runtime/product/QA profiles request exact JIT refs without hydrating them;
-- Context Episode rejects raw prompt/transcript/message bodies;
+- out-of-profile optional roles are excluded and required source-count overflow fails closed;
+- conflicting same-ref authority/truth/hash metadata fails closed;
+- truth/source status, negation/contradiction and supersession remain protected task semantics;
+- runtime profile requires desired state plus exact JIT runtime readback; product/QA/native profiles request their exact JIT refs without hydrating them;
+- Context Episode rejects raw prompt/transcript/message bodies and may bind acceptance/baseline/provider/model/tokenizer plus observed byte/token/cost metrics;
 - benchmark reports compiler-plan identity and outcome-link fields separately from byte reduction;
 - `npm pack` and clean-consumer use exercise the new API;
 - public-boundary QA scans compiler/tests/contracts;
