@@ -25,7 +25,7 @@ For new integrations, `pai-context-kit` is the supported front door. The existin
 | --- | --- | --- |
 | `repo-engineering` | `REPOSITORY_BASELINE` | pointer-first |
 | `product-build` | `PRODUCT_SPEC`, `REPOSITORY_BASELINE` | product spec |
-| `runtime-repair` | `RUNTIME_READBACK` | runtime readback |
+| `runtime-repair` | `DESIRED_STATE`, `RUNTIME_READBACK` | runtime readback |
 | `independent-qa` | `FROZEN_SUBJECT`, `TEST_CONTRACT` | frozen subject + tests |
 | `native-domain` | `NATIVE_OBJECT` | native object |
 
@@ -35,13 +35,14 @@ Custom strategies are allowed only when they carry an explicit id/version and re
 
 1. **VERIFY != HYDRATE** — identity/hash/provenance checks do not imply loading bodies.
 2. **Pointer first, exact JIT second** — discovery metadata contains no source bodies.
-3. **Protected semantics fail closed** — objective, acceptance, authority/effect/scope, constraints and provenance are not silently removed for size.
+3. **Protected semantics fail closed** — objective, acceptance, authority/effect/scope, constraints, truth/source status, negation/contradiction, supersession and provenance are not silently removed for size.
 4. **Exact missing cone only** — missing context identifies the required role/ref instead of requesting full history.
 5. **One semantic object, one active representation** — equivalent refs are merged deterministically.
 6. **Outcome-linked evaluation** — strategy quality is judged against verified Results and observed corrections/restatements/cost/latency/tokens, not model self-rating.
 7. **No raw prompt telemetry** — Context Episodes contain ids/refs/outcomes/metrics, not prompts or transcripts.
 8. **Adapters are replaceable** — GitHub, Drive, MCP, filesystem, SaaS and enterprise knowledge connectors remain outside the core.
 9. **Compaction != caching** — a smaller plan and a reusable provider prefix are measured separately; the compiler emits cache intent but never claims cache hits.
+10. **Profile roles are bounded** — optional sources outside the selected strategy are excluded unless the caller explicitly marks them required; conflicting authority/truth metadata for the same ref fails closed.
 
 See [COMMERCIAL_CONTRACT.md](COMMERCIAL_CONTRACT.md).
 
