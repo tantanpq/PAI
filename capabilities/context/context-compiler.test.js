@@ -68,6 +68,8 @@ test('plan identity is deterministic across source ordering', () => {
   };
   const a = compileContextPlan(input);
   const b = compileContextPlan({ ...input, sourceMap: [...input.sourceMap].reverse() });
+  assert.equal(a.status, 'READY');
+  assert.deepEqual(a.expansionRequests.map(request => request.maxBytes), [16384, 16384]);
   assert.equal(a.contextPlanId, b.contextPlanId);
   assert.equal(a.taskFingerprint, b.taskFingerprint);
 });
@@ -79,4 +81,5 @@ test('context episode links strategy to accepted result without raw content', ()
   assert.equal(episode.rawContentStored, false);
   assert.match(episode.episodeId, /^[a-f0-9]{64}$/);
   assert.throws(() => recordContextOutcome({ plan, result: { resultId: 'bad', disposition: 'ACCEPTED', prompt: 'raw secret' } }), { code: 'RAW_OUTCOME_BODY_FORBIDDEN' });
+  assert.throws(() => recordContextOutcome({ plan, result: { resultId: 'bad-2', disposition: 'REJECTED', accepted: true } }), { code: 'CONTEXT_EPISODE_RESULT_INVALID' });
 });
