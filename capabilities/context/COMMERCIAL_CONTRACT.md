@@ -67,3 +67,22 @@ A stable release requires:
 ## Moat boundary
 
 The portable compiler is intentionally generic. PAI-specific advantage belongs above it: learned context strategy selection from verified trajectories, personal continuity, qualified knowledge, source precedence, negative knowledge and outcome feedback. Those layers may consume Context Episodes but are not embedded in the public compiler.
+
+
+## Supported package surface
+
+`pai-context-kit` is the supported product-facing API for new consumers. The existing `pai-context-economy` package remains a lower-level public foundation/provenance surface; new integrations should not need to compose both packages. A later standalone repository may consolidate those primitives behind Context Kit/Compiler without changing their verified semantics.
+
+No third parallel Context package should be created merely to rename this capability.
+
+## Context reduction and provider caching
+
+Context selection/compaction and provider prompt caching are related but distinct optimizations.
+
+The compiler may classify source descriptors as `STABLE`, `SESSION`, or `LIVE` and emits a provider-neutral `cachePlan`:
+- stable, hash-bound refs may form a reusable prefix candidate;
+- session/live or unhashed refs stay in the dynamic set;
+- adapters decide whether a provider supports caching and how to express breakpoints/accounting;
+- the compiler never claims a cache hit and never expands context merely to cross a provider cache threshold without measured value.
+
+Cache economics must be benchmarked with actual provider usage. A cache hit that retains unnecessary context can still cost more than a smaller uncached plan, while compaction can change a prefix and reduce reuse.
