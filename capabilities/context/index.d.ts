@@ -114,6 +114,14 @@ export interface ContextOutcomeInput {
 
 export function recordContextOutcome(input: { plan: ContextPlan; result: ContextOutcomeInput }): Record<string, unknown>;
 
-export const PROFILE_CONTRACTS: Readonly<Record<string, Record<string, unknown>>>;
+export interface ContextProfileContract {
+  readonly id: string;
+  readonly version: string;
+  readonly requiredRoles: ReadonlyArray<string>;
+  readonly exactRoles: ReadonlyArray<string>;
+  readonly optionalRoles: ReadonlyArray<string>;
+  readonly maxSelectedSources: number;
+}
+export const PROFILE_CONTRACTS: Readonly<Record<string, Readonly<ContextProfileContract>>>;
 export const RESOLUTION: Readonly<{ POINTER_ONLY: 'POINTER_ONLY'; EXACT_JIT: 'EXACT_JIT' }>;
 export const VOLATILITY: Readonly<{ STABLE: 'STABLE'; SESSION: 'SESSION'; LIVE: 'LIVE' }>;
