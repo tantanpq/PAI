@@ -4,6 +4,8 @@ const crypto = require('node:crypto');
 
 const BODY_FIELDS = Object.freeze(['body', 'content', 'fullContent', 'raw', 'text', 'transcript', 'messages', 'prompt']);
 const RESOLUTION = Object.freeze({ POINTER_ONLY: 'POINTER_ONLY', EXACT_JIT: 'EXACT_JIT' });
+const VOLATILITY = Object.freeze({ STABLE: 'STABLE', SESSION: 'SESSION', LIVE: 'LIVE' });
+const VOLATILITY_RANK = Object.freeze({ STABLE: 0, SESSION: 1, LIVE: 2 });
 const OUTCOME_DISPOSITIONS = new Set(['ACCEPTED', 'REJECTED', 'NEEDS_REVISION', 'UNKNOWN']);
 
 const PROFILE_CONTRACTS = Object.freeze({
@@ -86,6 +88,7 @@ function normalizeSource(source) {
     authorityClass: text(source.authorityClass) ? source.authorityClass.trim() : null,
     truthClass: text(source.truthClass) ? source.truthClass.trim() : null,
     freshness: source.freshness || null,
+    volatility: Object.hasOwn(VOLATILITY_RANK, source.volatility) ? source.volatility : VOLATILITY.SESSION,
     resolution: source.resolution === RESOLUTION.EXACT_JIT ? RESOLUTION.EXACT_JIT : RESOLUTION.POINTER_ONLY
   };
 }
@@ -112,6 +115,7 @@ function mergeSources(sourceMap = []) {
       authorityClass: prior.authorityClass || source.authorityClass,
       truthClass: prior.truthClass || source.truthClass,
       freshness: prior.freshness || source.freshness,
+      volatility: VOLATILITY_RANK[prior.volatility] >= VOLATILITY_RANK[source.volatility] ? prior.volatility : source.volatility,
       resolution: prior.resolution === RESOLUTION.EXACT_JIT || source.resolution === RESOLUTION.EXACT_JIT ? RESOLUTION.EXACT_JIT : RESOLUTION.POINTER_ONLY
     });
   }
@@ -176,7 +180,7 @@ function compileContextPlan(input = {}) {
       id: source.id, ref: source.ref, roles: source.roles, name: source.name, required: source.required,
       priority: source.priority, hash: source.hash, sizeBytes: source.sizeBytes, maxBytes: source.maxBytes,
       authorityClass: source.authorityClass, truthClass: source.truthClass, freshness: source.freshness,
-      resolution: source.resolution
+      volatility: source.volatility, resolution: source.resolution
     };
     const nextBytes = jsonBytes([...selected, projected]);
     if (nextBytes > maxMetadataBytes) {
@@ -221,6 +225,21 @@ function compileContextPlan(input = {}) {
   if (exactRequests.some(request => request.maxBytes < 1)) missReasons.push({ code: 'HYDRATION_BUDGET_EXCEEDED', requestedBytes: exactBudget, maxHydrationBytes });
   else if (exactBudget > maxHydrationBytes && exactRequests.length) missReasons.push({ code: 'HYDRATION_BUDGET_EXCEEDED', requestedBytes: exactBudget, maxHydrationBytes });
 
+  const stablePrefixSources = selected
+    .filter(source => source.volatility === VOLATILITY.STABLE && source.hash)
+    .map(source => ({ id: source.id, ref: source.ref, hash: source.hash, roles: source.roles, resolution: source.resolution }));
+  const dynamicSources = selected
+    .filter(source => !(source.volatility === VOLATILITY.STABLE && source.hash))
+    .map(source => ({ id: source.id, ref: source.ref, hash: source.hash, volatility: source.volatility }));
+  const cachePlan = {
+    mode: stablePrefixSources.length ? 'STABLE_PREFIX_CANDIDATE' : 'NONE',
+    stablePrefixId: stablePrefixSources.length ? sha256({ strategy: { id: strategy.id, version: strategy.version }, sources: stablePrefixSources }) : null,
+    stableSources: stablePrefixSources,
+    dynamicSources,
+    providerSpecific: false,
+    note: 'Adapters decide whether/how to use provider caching; this plan does not guarantee a cache hit.'
+  };
+
   const planBase = {
     schema: 'context-compiler-plan/v1',
     status: missReasons.length ? 'CONTEXT_MISS' : 'READY',
@@ -232,7 +251,8 @@ function compileContextPlan(input = {}) {
     expansionRequests: exactRequests,
     missing: missReasons,
     budgetDecision: { maxSelectedSources, maxMetadataBytes, maxHydrationBytes, selectedSourceCount: selected.length, metadataBytes, requestedHydrationBytes: exactBudget },
-    invariants: ['VERIFY_NE_HYDRATE', 'POINTER_FIRST', 'PROTECTED_SEMANTICS', 'EXACT_MISSING_CONE_ONLY', 'OUTCOME_LINKABLE']
+    cachePlan,
+    invariants: ['VERIFY_NE_HYDRATE', 'POINTER_FIRST', 'PROTECTED_SEMANTICS', 'EXACT_MISSING_CONE_ONLY', 'OUTCOME_LINKABLE', 'CACHE_PLAN_NE_CONTEXT_TRUTH']
   };
   const contextPlanId = sha256(planBase);
   return Object.freeze({ ...planBase, contextPlanId });
@@ -279,4 +299,4 @@ function recordContextOutcome({ plan, result } = {}) {
   return Object.freeze({ ...episodeBase, episodeId: sha256(episodeBase) });
 }
 
-module.exports = { PROFILE_CONTRACTS, RESOLUTION, compileContextPlan, recordContextOutcome };
+module.exports = { PROFILE_CONTRACTS, RESOLUTION, VOLATILITY, compileContextPlan, recordContextOutcome };
