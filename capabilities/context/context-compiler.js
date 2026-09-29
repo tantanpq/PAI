@@ -188,9 +188,11 @@ function compileContextPlan(input = {}) {
   }
 
   const missingSelectedRequired = omissions.filter(item => item.required).map(item => item.id).sort();
-  const exactRequests = selected.filter(source => source.resolution === RESOLUTION.EXACT_JIT).map(source => ({
+  const exactSelected = selected.filter(source => source.resolution === RESOLUTION.EXACT_JIT);
+  const defaultExactMaxBytes = exactSelected.length ? Math.floor(maxHydrationBytes / exactSelected.length) : 0;
+  const exactRequests = exactSelected.map(source => ({
     action: 'EXACT_JIT_FETCH', id: source.id, ref: source.ref, expectedHash: source.hash,
-    maxBytes: source.maxBytes || maxHydrationBytes
+    maxBytes: source.maxBytes || defaultExactMaxBytes
   }));
   const exactBudget = exactRequests.reduce((sum, request) => sum + request.maxBytes, 0);
   const protectedState = {
@@ -216,7 +218,8 @@ function compileContextPlan(input = {}) {
   const missReasons = [];
   if (missingRoles.length) missReasons.push({ code: 'MISSING_REQUIRED_SOURCE_ROLE', roles: missingRoles });
   if (missingSelectedRequired.length) missReasons.push({ code: 'REQUIRED_SOURCE_NOT_SELECTED', sourceIds: missingSelectedRequired });
-  if (exactBudget > maxHydrationBytes && exactRequests.length) missReasons.push({ code: 'HYDRATION_BUDGET_EXCEEDED', requestedBytes: exactBudget, maxHydrationBytes });
+  if (exactRequests.some(request => request.maxBytes < 1)) missReasons.push({ code: 'HYDRATION_BUDGET_EXCEEDED', requestedBytes: exactBudget, maxHydrationBytes });
+  else if (exactBudget > maxHydrationBytes && exactRequests.length) missReasons.push({ code: 'HYDRATION_BUDGET_EXCEEDED', requestedBytes: exactBudget, maxHydrationBytes });
 
   const planBase = {
     schema: 'context-compiler-plan/v1',
@@ -242,6 +245,8 @@ function recordContextOutcome({ plan, result } = {}) {
   if (Object.keys(result).some(key => !allowed.has(key))) fail('CONTEXT_EPISODE_FIELD_INVALID');
   if (!text(result.resultId) || !OUTCOME_DISPOSITIONS.has(result.disposition)) fail('CONTEXT_EPISODE_RESULT_INVALID');
   if (result.accepted != null && typeof result.accepted !== 'boolean') fail('CONTEXT_EPISODE_RESULT_INVALID');
+  if (result.accepted === true && result.disposition !== 'ACCEPTED') fail('CONTEXT_EPISODE_RESULT_INVALID');
+  if (result.accepted === false && result.disposition === 'ACCEPTED') fail('CONTEXT_EPISODE_RESULT_INVALID');
   const metric = (value, field) => value == null ? null : (Number.isFinite(value) && value >= 0 ? Number(value) : fail(`CONTEXT_EPISODE_${field}_INVALID`));
   const count = (value, field) => value == null ? 0 : (Number.isSafeInteger(value) && value >= 0 ? value : fail(`CONTEXT_EPISODE_${field}_INVALID`));
   const outcome = {
