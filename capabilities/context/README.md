@@ -13,8 +13,11 @@ The commercial direction is deliberately narrow: **compile the smallest sufficie
 - **Retrieval Economy:** metadata-first discovery and exact hash-verified JIT recovery.
 - **Continuity Carrier:** protected objective/decision/open-loop/evidence state plus a bounded working set.
 - **Context Episode:** a raw-content-free record linking one context strategy and source set to an accepted/rejected Result plus observable token/cost/latency/correction metrics.
+- **Cache Plan:** provider-neutral stable-prefix candidates from hash-bound `STABLE` sources, with session/live sources kept dynamic. Adapters decide provider cache mechanics.
 
 The package performs no network, filesystem or memory-store I/O. Source discovery/fetch and authorization remain adapter/caller responsibilities.
+
+For new integrations, `pai-context-kit` is the supported front door. The existing `pai-context-economy` package remains a lower-level public foundation/provenance surface rather than a competing product API.
 
 ## Built-in commercial profiles
 
@@ -38,6 +41,7 @@ Custom strategies are allowed only when they carry an explicit id/version and re
 6. **Outcome-linked evaluation** — strategy quality is judged against verified Results and observed corrections/restatements/cost/latency/tokens, not model self-rating.
 7. **No raw prompt telemetry** — Context Episodes contain ids/refs/outcomes/metrics, not prompts or transcripts.
 8. **Adapters are replaceable** — GitHub, Drive, MCP, filesystem, SaaS and enterprise knowledge connectors remain outside the core.
+9. **Compaction != caching** — a smaller plan and a reusable provider prefix are measured separately; the compiler emits cache intent but never claims cache hits.
 
 See [COMMERCIAL_CONTRACT.md](COMMERCIAL_CONTRACT.md).
 
