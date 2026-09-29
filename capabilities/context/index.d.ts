@@ -61,6 +61,11 @@ export interface ContextPlanInput {
   privacyClass?: string;
   scopes?: { read?: string[]; write?: string[]; effect?: string };
   outputContract?: string;
+  truthState?: string;
+  sourceStatus?: string;
+  negations?: string[];
+  contradictions?: string[];
+  supersessionRefs?: string[];
   budget?: { maxSelectedSources?: number; maxMetadataBytes?: number; maxHydrationBytes?: number };
   sourceMap?: SourceDescriptor[];
 }
@@ -82,7 +87,31 @@ export interface ContextPlan {
 }
 
 export function compileContextPlan(input: ContextPlanInput): ContextPlan;
-export function recordContextOutcome(input: { plan: ContextPlan; result: Record<string, unknown> }): Record<string, unknown>;
+export interface ContextOutcomeInput {
+  resultId: string;
+  disposition: 'ACCEPTED' | 'REJECTED' | 'NEEDS_REVISION' | 'UNKNOWN';
+  accepted?: boolean;
+  verificationRef?: string;
+  acceptanceContractRef?: string;
+  baselinePlanId?: string;
+  provider?: string;
+  model?: string;
+  tokenizer?: string;
+  falseSuccess?: boolean;
+  correctionCount?: number;
+  restatementCount?: number;
+  contextMissCount?: number;
+  toolCallCount?: number;
+  latencyMs?: number;
+  inputTokens?: number;
+  outputTokens?: number;
+  inputBytes?: number;
+  outputBytes?: number;
+  hydratedBytes?: number;
+  costUsd?: number;
+}
+
+export function recordContextOutcome(input: { plan: ContextPlan; result: ContextOutcomeInput }): Record<string, unknown>;
 
 export const PROFILE_CONTRACTS: Readonly<Record<string, Record<string, unknown>>>;
 export const RESOLUTION: Readonly<{ POINTER_ONLY: 'POINTER_ONLY'; EXACT_JIT: 'EXACT_JIT' }>;
