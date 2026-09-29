@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { PROFILE_CONTRACTS, compileContextPlan, recordContextOutcome } = require('./context-compiler');
+const { PROFILE_CONTRACTS, VOLATILITY, compileContextPlan, recordContextOutcome } = require('./context-compiler');
 
 const hash = 'a'.repeat(64);
 const source = (id, ref, roles, extra = {}) => ({ id, ref, roles, hash, ...extra });
@@ -17,7 +17,7 @@ test('repo engineering keeps required baseline and only relevant optional pointe
     task: { id: 'task-1', objective: 'repair context compiler tests' },
     acceptance: ['tests pass'], authority: 'NONE', scopes: { read: ['repo'], write: ['capabilities/context'] },
     sourceMap: [
-      source('repo', 'git:main', ['REPOSITORY_BASELINE'], { name: 'repository baseline', required: true, priority: 10 }),
+      source('repo', 'git:main', ['REPOSITORY_BASELINE'], { name: 'repository baseline', required: true, priority: 10, volatility: VOLATILITY.STABLE }),
       source('spec', 'docs/context.md', ['SPEC'], { name: 'context compiler specification', tags: ['context', 'compiler'], priority: 5 }),
       source('mail', 'mail/thread', ['EVIDENCE'], { name: 'unrelated mail thread', tags: ['email'] })
     ]
@@ -26,6 +26,10 @@ test('repo engineering keeps required baseline and only relevant optional pointe
   assert.deepEqual(plan.selectedSources.map(item => item.id), ['repo','spec']);
   assert.ok(plan.omissions.some(item => item.id === 'mail' && item.reason === 'NOT_RELEVANT_TO_CURRENT_OBJECTIVE'));
   assert.equal(plan.expansionRequests.length, 0);
+  assert.equal(plan.cachePlan.mode, 'STABLE_PREFIX_CANDIDATE');
+  assert.match(plan.cachePlan.stablePrefixId, /^[a-f0-9]{64}$/);
+  assert.deepEqual(plan.cachePlan.stableSources.map(item => item.id), ['repo']);
+  assert.deepEqual(plan.cachePlan.dynamicSources.map(item => item.id), ['spec']);
 });
 
 test('missing required source role produces exact missing cone', () => {
