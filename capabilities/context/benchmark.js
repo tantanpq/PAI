@@ -103,9 +103,19 @@ const episode = recordContextOutcome({
     disposition: 'ACCEPTED',
     accepted: true,
     verificationRef: 'synthetic:test',
+    acceptanceContractRef: 'synthetic:acceptance-v1',
+    baselinePlanId: 'synthetic:baseline-plan',
+    provider: 'synthetic-provider',
+    model: 'synthetic-model',
+    tokenizer: 'synthetic-tokenizer',
+    falseSuccess: false,
     correctionCount: 0,
     restatementCount: 0,
-    contextMissCount: 0
+    contextMissCount: 0,
+    toolCallCount: 1,
+    inputBytes: Buffer.byteLength(JSON.stringify(compilerInput)),
+    outputBytes: Buffer.byteLength(JSON.stringify(compilerPlan)),
+    hydratedBytes: 0
   }
 });
 assert.equal(episode.rawContentStored, false);
@@ -146,6 +156,10 @@ console.log(JSON.stringify({
     selectedSourceCount: compilerPlan.selectedSources.length,
     rawOutcomeStored: episode.rawContentStored,
     outcomeLinked: episode.outcome.accepted === true,
+    acceptanceContractBound: episode.evaluation.acceptanceContractRef === 'synthetic:acceptance-v1',
+    falseSuccess: episode.evaluation.falseSuccess,
+    observableInputBytes: episode.metrics.inputBytes,
+    observableOutputBytes: episode.metrics.outputBytes,
     stablePrefixCandidate: compilerPlan.cachePlan.mode === 'STABLE_PREFIX_CANDIDATE',
     stablePrefixIdPresent: /^[a-f0-9]{64}$/.test(compilerPlan.cachePlan.stablePrefixId || '')
   },
