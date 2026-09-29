@@ -27,6 +27,11 @@ New public API:
 - exact PR workflow passes before promotion.
 
 ## Compatibility
+- Existing Context Kit 0.1/0.2 public APIs remain exported.
+- Context Compiler 0.3 RC raises the supported Node runtime floor to Node.js 22+. Node 18/20 are not supported by this RC; consumers that cannot upgrade their runtime should remain on the earlier supported package line.
+- Exact CI qualifies Node 22 LTS and Node 24 LTS. Newer/current Node versions may work but are not implied by this release evidence.
+- No npm-registry publication is claimed.
+
 
 No existing 0.1/0.2 export is removed. The new compiler API is additive. The prior `compile()`, Retrieval Economy and Continuity Carrier contracts remain available.
 
