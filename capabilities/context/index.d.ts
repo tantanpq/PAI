@@ -17,7 +17,7 @@ export function compile(request: Record<string, unknown>, options?: Record<strin
 export function planRetrieval(input: Record<string, unknown>): Record<string, unknown>;
 export function resolveExactArtifact(input: Record<string, unknown>): Record<string, unknown>;
 export function convergeLifecycleProjection(input: Record<string, unknown>): Record<string, unknown>;
-export function sha256(value: string | Buffer | Uint8Array): string;
+export function sha256(value: string | Uint8Array): string;
 
 export function buildContinuityCarrier(input: Record<string, unknown>): Record<string, unknown>;
 export function buildSuccessorCheckpoint(input: Record<string, unknown>): Record<string, unknown>;
