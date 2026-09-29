@@ -2,6 +2,10 @@
 
 Context Economy is a dependency-free JavaScript toolkit for sending a model the smallest sufficient context without weakening authority, provenance, privacy, acceptance, or rollback boundaries.
 
+## Product relationship
+
+This package is the lower-level public foundation/provenance surface. For new product integrations, prefer `pai-context-kit` / Context Compiler once its current release candidate is accepted; that package composes source maps, context profiles, exact-JIT plans, continuity and outcome-linked Context Episodes. Context Economy 0.1 semantics remain supported and are not silently redefined.
+
 It provides five composable primitives:
 
 - `buildContextCapsule`: preserves protected fields, applies explicit source caps, and returns `CONTEXT_MISS` instead of silently dropping required evidence.
