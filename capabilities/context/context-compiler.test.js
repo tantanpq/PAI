@@ -8,8 +8,15 @@ const source = (id, ref, roles, extra = {}) => ({ id, ref, roles, hash, ...extra
 
 test('commercial profiles are explicit and versioned', () => {
   assert.deepEqual(Object.keys(PROFILE_CONTRACTS).sort(), ['independent-qa','native-domain','product-build','repo-engineering','runtime-repair']);
-  for (const profile of Object.values(PROFILE_CONTRACTS)) assert.match(profile.version, /^\d+\.\d+\.\d+$/);
+  for (const profile of Object.values(PROFILE_CONTRACTS)) {
+    assert.match(profile.version, /^\d+\.\d+\.\d+$/);
+    assert.equal(Object.isFrozen(profile), true);
+    assert.equal(Object.isFrozen(profile.requiredRoles), true);
+    assert.equal(Object.isFrozen(profile.exactRoles), true);
+    assert.equal(Object.isFrozen(profile.optionalRoles), true);
+  }
   assert.deepEqual(PROFILE_CONTRACTS['runtime-repair'].requiredRoles, ['DESIRED_STATE','RUNTIME_READBACK']);
+  assert.throws(() => PROFILE_CONTRACTS['repo-engineering'].requiredRoles.push('MUTATED'), TypeError);
 });
 
 test('repo engineering keeps required baseline and only relevant optional pointers', () => {
@@ -60,6 +67,36 @@ test('runtime profile requests exact JIT readback but does not hydrate it', () =
   });
   assert.equal(missingDesired.status, 'CONTEXT_MISS');
   assert.deepEqual(missingDesired.missing[0], { code: 'MISSING_REQUIRED_SOURCE_ROLE', roles: ['DESIRED_STATE'] });
+});
+
+
+test('explicit invalid budgets fail closed instead of widening to defaults', () => {
+  for (const budget of [
+    { maxSelectedSources: 0 },
+    { maxMetadataBytes: 511 },
+    { maxHydrationBytes: -1 }
+  ]) {
+    assert.throws(
+      () => compileContextPlan({
+        profile: 'repo-engineering',
+        task: { objective: 'respect caller budget' },
+        budget,
+        sourceMap: [source('repo', 'git:main', ['REPOSITORY_BASELINE'])]
+      }),
+      { code: 'CONTEXT_BUDGET_INVALID' }
+    );
+  }
+});
+
+test('exact-JIT sources require a verifiable expected hash', () => {
+  const miss = compileContextPlan({
+    profile: 'native-domain',
+    task: { objective: 'read exact native object' },
+    sourceMap: [{ id: 'object', ref: 'native:1', roles: ['NATIVE_OBJECT'] }]
+  });
+  assert.equal(miss.status, 'CONTEXT_MISS');
+  assert.deepEqual(miss.missing, [{ code: 'EXACT_SOURCE_HASH_REQUIRED', sourceIds: ['object'] }]);
+  assert.deepEqual(miss.expansionRequests, []);
 });
 
 test('source bodies are rejected from discovery input', () => {
