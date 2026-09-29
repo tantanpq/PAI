@@ -10,7 +10,7 @@ It is intentionally not a memory database, search engine, model router, schedule
 
 1. **Source owner stays external.** The compiler selects and describes context; it never becomes truth authority.
 2. **VERIFY != HYDRATE.** Metadata, identity, hash, provenance and freshness may be checked without loading a source body.
-3. **Protected semantics fail closed.** Objective, acceptance, authority/effect boundary, read/write/effect scopes, constraints, decisions and source provenance are never silently dropped to hit a budget.
+3. **Protected semantics fail closed.** Objective, acceptance, authority/effect boundary, read/write/effect scopes, constraints, decisions, truth/source status, negation, contradiction, supersession and source provenance are never silently dropped to hit a budget.
 4. **Exact missing cone only.** Missing information emits structured `CONTEXT_MISS` for the required source role or exact ref. It does not request a full-history reload.
 5. **Deterministic plan identity.** Equivalent task semantics and source metadata produce the same task fingerprint and context-plan identity regardless of source ordering.
 6. **Outcome-linked evaluation.** A context strategy is evaluated by its verified Result, corrections/restatements and observable cost/latency/token metrics, not model self-rating.
@@ -25,7 +25,7 @@ It is intentionally not a memory database, search engine, model router, schedule
 | --- | --- | --- |
 | `repo-engineering` | `REPOSITORY_BASELINE` | pointer-first |
 | `product-build` | `PRODUCT_SPEC`, `REPOSITORY_BASELINE` | product spec |
-| `runtime-repair` | `RUNTIME_READBACK` | runtime readback |
+| `runtime-repair` | `DESIRED_STATE`, `RUNTIME_READBACK` | runtime readback |
 | `independent-qa` | `FROZEN_SUBJECT`, `TEST_CONTRACT` | frozen subject + tests |
 | `native-domain` | `NATIVE_OBJECT` | native object |
 
@@ -44,9 +44,9 @@ The compiler never performs network or filesystem I/O itself.
 
 `recordContextOutcome()` binds:
 
-`task fingerprint -> strategy -> selected refs -> omissions/misses -> Result disposition -> observable metrics`.
+`task fingerprint -> strategy -> selected refs -> omissions/misses -> acceptance/baseline identity -> Result disposition -> observable metrics`.
 
-Allowed metrics are corrections, restatements, context misses, latency, input/output tokens and cost when actually observed. Missing metrics stay unmeasured; they are never guessed.
+Allowed evaluation metadata includes acceptance-contract ref, baseline-plan ref, provider/model/tokenizer identity and false-success label. Observable metrics include corrections, restatements, context misses, tool calls, latency, input/output tokens, input/output/hydrated bytes and cost. Missing metrics stay unmeasured; they are never guessed.
 
 ## Commercial qualification gates
 
