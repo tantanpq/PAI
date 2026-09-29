@@ -111,7 +111,7 @@ function mergeSources(sourceMap = []) {
     for (const field of ['authorityClass', 'truthClass']) {
       if (prior[field] && source[field] && prior[field] !== source[field]) fail('SOURCE_METADATA_CONFLICT');
     }
-    if (prior.hash && source.hash && prior.hash === source.hash && prior.sizeBytes != null && source.sizeBytes != null && prior.sizeBytes !== source.sizeBytes) {
+    if (prior.sizeBytes != null && source.sizeBytes != null && prior.sizeBytes !== source.sizeBytes) {
       fail('SOURCE_METADATA_CONFLICT');
     }
     const freshness = [prior.freshness, source.freshness].filter(Boolean).sort().at(-1) || null;
@@ -120,6 +120,8 @@ function mergeSources(sourceMap = []) {
       : (prior.maxBytes ?? source.maxBytes);
     byRef.set(key, {
       ...prior,
+      id: [prior.id, source.id].sort()[0],
+      name: [prior.name, source.name].sort()[0],
       roles: [...new Set([...prior.roles, ...source.roles])].sort(),
       tags: [...new Set([...prior.tags, ...source.tags])].sort(),
       required: prior.required || source.required,
@@ -316,7 +318,7 @@ function recordContextOutcome({ plan, result } = {}) {
   if (result.accepted === false && result.disposition === 'ACCEPTED') fail('CONTEXT_EPISODE_RESULT_INVALID');
   if (result.falseSuccess != null && typeof result.falseSuccess !== 'boolean') fail('CONTEXT_EPISODE_RESULT_INVALID');
   const metric = (value, field) => value == null ? null : (Number.isFinite(value) && value >= 0 ? Number(value) : fail(`CONTEXT_EPISODE_${field}_INVALID`));
-  const count = (value, field) => value == null ? 0 : (Number.isSafeInteger(value) && value >= 0 ? value : fail(`CONTEXT_EPISODE_${field}_INVALID`));
+  const count = (value, field) => value == null ? null : (Number.isSafeInteger(value) && value >= 0 ? value : fail(`CONTEXT_EPISODE_${field}_INVALID`));
   const outcome = {
     resultId: result.resultId.trim(), disposition: result.disposition, accepted: result.accepted ?? null,
     verificationRef: text(result.verificationRef) ? result.verificationRef.trim() : null
