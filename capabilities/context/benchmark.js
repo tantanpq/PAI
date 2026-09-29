@@ -85,7 +85,7 @@ const compilerInput = {
   acceptance: ['package tests pass'],
   authority: 'NONE',
   sourceMap: [
-    { id: 'repo', ref: 'git:main', roles: ['REPOSITORY_BASELINE'], hash, priority: 10 },
+    { id: 'repo', ref: 'git:main', roles: ['REPOSITORY_BASELINE'], hash, priority: 10, volatility: 'STABLE' },
     { id: 'spec', ref: 'COMMERCIAL_CONTRACT.md', roles: ['SPEC'], tags: ['context', 'compiler'], priority: 5 },
     { id: 'noise', ref: 'unrelated.md', roles: ['EVIDENCE'], tags: ['unrelated'] }
   ]
@@ -145,7 +145,9 @@ console.log(JSON.stringify({
     deterministicPlanIdentity: compilerPlan.contextPlanId === compilerPlanReplay.contextPlanId,
     selectedSourceCount: compilerPlan.selectedSources.length,
     rawOutcomeStored: episode.rawContentStored,
-    outcomeLinked: episode.outcome.accepted === true
+    outcomeLinked: episode.outcome.accepted === true,
+    stablePrefixCandidate: compilerPlan.cachePlan.mode === 'STABLE_PREFIX_CANDIDATE',
+    stablePrefixIdPresent: /^[a-f0-9]{64}$/.test(compilerPlan.cachePlan.stablePrefixId || '')
   },
   contextMissUnknowns: first.capsule.contextMiss.unknownIds.length,
   provenanceNote: 'The broader PAI campaign measured 17,700 to 3,825 p95 visible tokens (78.39%) on its frozen workload. This public benchmark is synthetic and does not claim universal token savings.'
