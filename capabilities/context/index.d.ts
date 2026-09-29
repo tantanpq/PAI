@@ -1,6 +1,26 @@
 export type ContextProfile = 'repo-engineering' | 'product-build' | 'runtime-repair' | 'independent-qa' | 'native-domain';
 export type ContextResolution = 'POINTER_ONLY' | 'EXACT_JIT';
 
+export class ContextCapsuleError extends Error {
+  code: string;
+}
+
+export const PROFILES: Readonly<Record<string, Record<string, unknown>>>;
+export function canonical(value: unknown): string;
+export function compile(request: Record<string, unknown>, options?: Record<string, unknown>): {
+  capsule: Record<string, unknown>;
+  canonical: string;
+  sha256: string;
+};
+
+export function planRetrieval(input: Record<string, unknown>): Record<string, unknown>;
+export function resolveExactArtifact(input: Record<string, unknown>): Record<string, unknown>;
+export function convergeLifecycleProjection(input: Record<string, unknown>): Record<string, unknown>;
+export function sha256(value: string | Buffer | Uint8Array): string;
+
+export function buildContinuityCarrier(input: Record<string, unknown>): Record<string, unknown>;
+export function buildSuccessorCheckpoint(input: Record<string, unknown>): Record<string, unknown>;
+
 export interface SourceDescriptor {
   id: string;
   ref: string;
@@ -63,5 +83,3 @@ export function recordContextOutcome(input: { plan: ContextPlan; result: Record<
 
 export const PROFILE_CONTRACTS: Readonly<Record<string, Record<string, unknown>>>;
 export const RESOLUTION: Readonly<{ POINTER_ONLY: 'POINTER_ONLY'; EXACT_JIT: 'EXACT_JIT' }>;
-
-export * from './index';
