@@ -174,6 +174,16 @@ function compileContextPlan(input = {}) {
   if (!object(input) || !object(input.task) || !text(input.task.objective)) fail('CONTEXT_PLAN_INPUT_INVALID');
   assertNoBodies(input.task, 'RAW_TASK_BODY_FORBIDDEN');
   const strategy = strategyFor(input);
+  const profileId = Object.hasOwn(input, 'profile') ? input.profile.trim() : null;
+  const strategyContract = {
+    id: strategy.id,
+    version: strategy.version,
+    requiredRoles: strategy.requiredRoles,
+    exactRoles: strategy.exactRoles,
+    optionalRoles: strategy.optionalRoles,
+    maxSelectedSources: strategy.maxSelectedSources
+  };
+  const strategyContractDigest = sha256(strategyContract);
   if (input.budget != null && !object(input.budget)) fail('CONTEXT_BUDGET_INVALID');
   const budget = input.budget || {};
   const boundedBudget = (value, fallback, predicate) => {
@@ -181,7 +191,8 @@ function compileContextPlan(input = {}) {
     if (!Number.isSafeInteger(value) || !predicate(value)) fail('CONTEXT_BUDGET_INVALID');
     return value;
   };
-  const maxSelectedSources = boundedBudget(budget.maxSelectedSources, strategy.maxSelectedSources, value => value > 0);
+  const requestedMaxSelectedSources = boundedBudget(budget.maxSelectedSources, strategy.maxSelectedSources, value => value > 0);
+  const maxSelectedSources = Math.min(requestedMaxSelectedSources, strategy.maxSelectedSources);
   const maxMetadataBytes = boundedBudget(budget.maxMetadataBytes, 8192, value => value >= 512);
   const maxHydrationBytes = boundedBudget(budget.maxHydrationBytes, 32768, value => value >= 0);
   const sources = mergeSources(input.sourceMap || []);
@@ -204,12 +215,18 @@ function compileContextPlan(input = {}) {
       ...source,
       explicitRequired: source.required,
       requiredByRole,
-      selectionPriority: source.required || requiredByRole,
+      requiredRoleCount: source.roles.filter(role => requiredRoles.has(role)).length,
       allowedByRole,
       resolution: source.resolution === RESOLUTION.EXACT_JIT || exactByRole ? RESOLUTION.EXACT_JIT : RESOLUTION.POINTER_ONLY,
       relevance: relevance(source, terms)
     };
-  }).sort((a, b) => Number(b.selectionPriority) - Number(a.selectionPriority) || b.priority - a.priority || b.relevance - a.relevance || a.ref.localeCompare(b.ref));
+  }).sort((a, b) =>
+    Number(b.explicitRequired) - Number(a.explicitRequired) ||
+    b.requiredRoleCount - a.requiredRoleCount ||
+    b.priority - a.priority ||
+    b.relevance - a.relevance ||
+    a.ref.localeCompare(b.ref)
+  );
 
   let metadataBytes = 0;
   for (const source of ranked) {
@@ -293,7 +310,7 @@ function compileContextPlan(input = {}) {
     contradictions: strings(input.contradictions, 'CONTRADICTIONS_INVALID'),
     supersessionRefs: strings(input.supersessionRefs, 'SUPERSESSION_REFS_INVALID')
   };
-  const taskFingerprint = sha256({ strategy: { id: strategy.id, version: strategy.version }, protectedState });
+  const taskFingerprint = sha256({ strategy: { id: strategy.id, version: strategy.version, contractDigest: strategyContractDigest }, protectedState });
   const missReasons = [];
   if (missingRoles.length) missReasons.push({ code: 'MISSING_REQUIRED_SOURCE_ROLE', roles: missingRoles });
   if (missingSelectedRequired.length) missReasons.push({ code: 'REQUIRED_SOURCE_NOT_SELECTED', sourceIds: missingSelectedRequired });
@@ -309,7 +326,7 @@ function compileContextPlan(input = {}) {
     .map(source => ({ id: source.id, ref: source.ref, hash: source.hash, volatility: source.volatility }));
   const cachePlan = {
     mode: stablePrefixSources.length ? 'STABLE_PREFIX_CANDIDATE' : 'NONE',
-    stablePrefixId: stablePrefixSources.length ? sha256({ strategy: { id: strategy.id, version: strategy.version }, sources: stablePrefixSources }) : null,
+    stablePrefixId: stablePrefixSources.length ? sha256({ strategy: { id: strategy.id, version: strategy.version, contractDigest: strategyContractDigest }, sources: stablePrefixSources }) : null,
     stableSources: stablePrefixSources,
     dynamicSources,
     providerSpecific: false,
@@ -319,7 +336,7 @@ function compileContextPlan(input = {}) {
   const planBase = {
     schema: 'context-compiler-plan/v1',
     status: missReasons.length ? 'CONTEXT_MISS' : 'READY',
-    strategy: { id: strategy.id, version: strategy.version, profile: PROFILE_CONTRACTS[strategy.id] ? strategy.id : null },
+    strategy: { id: strategy.id, version: strategy.version, profile: profileId, contractDigest: strategyContractDigest },
     taskFingerprint,
     protectedState,
     selectedSources: selected,
