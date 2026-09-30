@@ -64,6 +64,7 @@ test('required roles need one selected source, while explicit required refs rema
   const rolePlan = compileContextPlan({
     profile: 'repo-engineering',
     task: { objective: 'compile repository change' },
+    query: 'no-extra-context-match',
     sourceMap: [
       source('primary', 'git:primary', ['REPOSITORY_BASELINE'], { priority: 10 }),
       source('alternate', 'git:alternate', ['REPOSITORY_BASELINE'], { priority: 1 })
