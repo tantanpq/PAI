@@ -47,7 +47,7 @@ function optionalText(owner, field, fallback, code) {
   return owner[field].trim();
 }
 function strings(value, code) {
-  if (value == null) return [];
+  if (value === undefined) return [];
   if (!Array.isArray(value) || value.some(item => !text(item))) fail(code);
   return [...new Set(value.map(item => item.trim()))].sort();
 }
@@ -186,15 +186,16 @@ function compileContextPlan(input = {}) {
   const strategyContractDigest = sha256(strategyContract);
   if (input.budget != null && !object(input.budget)) fail('CONTEXT_BUDGET_INVALID');
   const budget = input.budget || {};
-  const boundedBudget = (value, fallback, predicate) => {
-    if (value == null) return fallback;
+  const boundedBudget = (field, fallback, predicate) => {
+    if (!Object.hasOwn(budget, field)) return fallback;
+    const value = budget[field];
     if (!Number.isSafeInteger(value) || !predicate(value)) fail('CONTEXT_BUDGET_INVALID');
     return value;
   };
-  const requestedMaxSelectedSources = boundedBudget(budget.maxSelectedSources, strategy.maxSelectedSources, value => value > 0);
+  const requestedMaxSelectedSources = boundedBudget('maxSelectedSources', strategy.maxSelectedSources, value => value > 0);
   const maxSelectedSources = Math.min(requestedMaxSelectedSources, strategy.maxSelectedSources);
-  const maxMetadataBytes = boundedBudget(budget.maxMetadataBytes, 8192, value => value >= 512);
-  const maxHydrationBytes = boundedBudget(budget.maxHydrationBytes, 32768, value => value >= 0);
+  const maxMetadataBytes = boundedBudget('maxMetadataBytes', 8192, value => value >= 512);
+  const maxHydrationBytes = boundedBudget('maxHydrationBytes', 32768, value => value >= 0);
   const sources = mergeSources(input.sourceMap || []);
   const query = text(input.query) ? input.query.trim() : input.task.objective.trim();
   const terms = [...new Set(query.toLowerCase().split(/\W+/).filter(Boolean))].sort();
@@ -208,28 +209,35 @@ function compileContextPlan(input = {}) {
   const satisfiedRequiredRoles = new Set();
 
   const ranked = sources.map(source => {
-    const requiredByRole = source.roles.some(role => requiredRoles.has(role));
     const exactByRole = source.roles.some(role => exactRoles.has(role));
     const allowedByRole = source.roles.some(role => allowedRoles.has(role));
     return {
       ...source,
       explicitRequired: source.required,
-      requiredByRole,
-      requiredRoleCount: source.roles.filter(role => requiredRoles.has(role)).length,
       allowedByRole,
       resolution: source.resolution === RESOLUTION.EXACT_JIT || exactByRole ? RESOLUTION.EXACT_JIT : RESOLUTION.POINTER_ONLY,
       relevance: relevance(source, terms)
     };
-  }).sort((a, b) =>
-    Number(b.explicitRequired) - Number(a.explicitRequired) ||
-    b.requiredRoleCount - a.requiredRoleCount ||
-    b.priority - a.priority ||
-    b.relevance - a.relevance ||
-    a.ref.localeCompare(b.ref)
-  );
+  });
+  const remaining = [...ranked];
 
   let metadataBytes = 0;
-  for (const source of ranked) {
+  while (remaining.length) {
+    remaining.sort((a, b) => {
+      const aUncovered = a.roles.filter(role => requiredRoles.has(role) && !satisfiedRequiredRoles.has(role)).length;
+      const bUncovered = b.roles.filter(role => requiredRoles.has(role) && !satisfiedRequiredRoles.has(role)).length;
+      const aRequiredNow = a.explicitRequired || aUncovered > 0;
+      const bRequiredNow = b.explicitRequired || bUncovered > 0;
+      return (
+        Number(bRequiredNow) - Number(aRequiredNow) ||
+        Number(b.explicitRequired) - Number(a.explicitRequired) ||
+        bUncovered - aUncovered ||
+        b.priority - a.priority ||
+        b.relevance - a.relevance ||
+        a.ref.localeCompare(b.ref)
+      );
+    });
+    const source = remaining.shift();
     const roleNeeds = source.roles.filter(role => requiredRoles.has(role) && !satisfiedRequiredRoles.has(role));
     const selectionRequired = source.explicitRequired || roleNeeds.length > 0;
     if (!source.available) {
