@@ -484,7 +484,7 @@ function compileContextPlan(input = {}) {
   const missReasons = [];
   if (hashBlockedRoles.length) {
     const sourceIds = [...new Set(hashBlockedRoles.flatMap(role => exactHashBlocked.get(role).map(source => source.id)))].sort();
-    missReasons.push({ code: 'EXACT_SOURCE_HASH_REQUIRED', roles: hashBlockedRoles, sourceIds });
+    missReasons.push({ code: 'EXACT_SOURCE_HASH_REQUIRED', sourceIds });
   }
   if (absentRoles.length) missReasons.push({ code: 'MISSING_REQUIRED_SOURCE_ROLE', roles: absentRoles });
   if (coverSearchLimited) {
