@@ -19,7 +19,9 @@ New public API:
 - malformed explicit authority/effect/privacy/scope/truth/source classifications fail closed instead of becoming permissive defaults;
 - each exported package subpath has declarations scoped to its actual runtime exports;
 - exact-JIT sources without a verifiable expected hash return a structured miss and no fetch request;
-- required roles select a sufficient representative source instead of forcing every same-role candidate into context, while exact `required: true` refs remain fail-closed dependencies;
+- required roles select a minimum sufficient representative source instead of forcing every same-role candidate into context, preferring a source that covers more still-required roles, while exact `required: true` refs remain fail-closed dependencies;
+- caller source-count budgets can tighten but cannot widen the profile/strategy ceiling;
+- exact strategy role contracts are digest-bound into task, plan and cache identity, including custom strategies that reuse a built-in id;
 - malformed explicit source metadata and protected task/episode identity fields fail closed rather than silently defaulting;
 - Context Episodes retain bounded omitted-source, missing-cone and expansion-request provenance without raw bodies;
 - required source roles fail closed as `CONTEXT_MISS`;
