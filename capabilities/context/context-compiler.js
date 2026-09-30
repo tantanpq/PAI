@@ -196,8 +196,11 @@ function compileContextPlan(input = {}) {
   const maxSelectedSources = Math.min(requestedMaxSelectedSources, strategy.maxSelectedSources);
   const maxMetadataBytes = boundedBudget('maxMetadataBytes', 8192, value => value >= 512);
   const maxHydrationBytes = boundedBudget('maxHydrationBytes', 32768, value => value >= 0);
-  const sources = mergeSources(input.sourceMap || []);
-  const query = text(input.query) ? input.query.trim() : input.task.objective.trim();
+  if (Object.hasOwn(input, 'sourceMap') && !Array.isArray(input.sourceMap)) fail('SOURCE_MAP_INVALID');
+  const sources = mergeSources(Object.hasOwn(input, 'sourceMap') ? input.sourceMap : []);
+  const query = Object.hasOwn(input, 'query')
+    ? optionalText(input, 'query', null, 'CONTEXT_QUERY_INVALID')
+    : input.task.objective.trim();
   const terms = [...new Set(query.toLowerCase().split(/\W+/).filter(Boolean))].sort();
 
   const requiredRoles = new Set(strategy.requiredRoles);
@@ -480,13 +483,14 @@ function compileContextPlan(input = {}) {
     note: 'Adapters decide whether/how to use provider caching; this plan does not guarantee a cache hit.'
   };
 
+  const selectedSources = selected.map(source => projectedSource(source, source.selectedRequired));
   const planBase = {
     schema: 'context-compiler-plan/v1',
     status: missReasons.length ? 'CONTEXT_MISS' : 'READY',
     strategy: { id: strategy.id, version: strategy.version, profile: profileId, contractDigest: strategyContractDigest },
     taskFingerprint,
     protectedState,
-    selectedSources: selected,
+    selectedSources,
     omissions,
     expansionRequests: exactRequests,
     missing: missReasons,
