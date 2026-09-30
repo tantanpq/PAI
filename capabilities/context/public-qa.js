@@ -28,6 +28,42 @@ for (const field of ['dependencies', 'optionalDependencies', 'peerDependencies']
   if (pkg[field] && Object.keys(pkg[field]).length) throw new Error(`COMMERCIAL_PACKAGE_DEPENDENCY_BOUNDARY_INVALID:${field}`);
 }
 
+
+const subpathContracts = {
+  './compiler': {
+    types: './context-compiler.d.ts',
+    required: ['compileContextPlan', 'recordContextOutcome', 'assertPlanIntegrity', 'PROFILE_CONTRACTS', 'RESOLUTION', 'VOLATILITY'],
+    forbidden: ['planRetrieval', 'buildContinuityCarrier', 'ContextCapsuleError']
+  },
+  './context-capsule': {
+    types: './context-capsule.d.ts',
+    required: ['compile', 'canonical', 'ContextCapsuleError', 'PROFILES'],
+    forbidden: ['compileContextPlan', 'planRetrieval', 'buildContinuityCarrier']
+  },
+  './retrieval-economy': {
+    types: './retrieval-economy.d.ts',
+    required: ['planRetrieval', 'resolveExactArtifact', 'convergeLifecycleProjection', 'sha256'],
+    forbidden: ['compileContextPlan', 'compile', 'buildContinuityCarrier']
+  },
+  './continuity-carrier': {
+    types: './continuity-carrier.d.ts',
+    required: ['buildContinuityCarrier', 'buildSuccessorCheckpoint'],
+    forbidden: ['compileContextPlan', 'compile', 'planRetrieval']
+  }
+};
+for (const [subpath, contract] of Object.entries(subpathContracts)) {
+  if (pkg.exports?.[subpath]?.types !== contract.types) throw new Error(`SUBPATH_TYPES_MAPPING_INVALID:${subpath}`);
+  const declarationPath = path.join(root, contract.types.replace(/^\.\//, ''));
+  if (!fs.existsSync(declarationPath)) throw new Error(`SUBPATH_TYPES_FILE_MISSING:${subpath}`);
+  const declaration = fs.readFileSync(declarationPath, 'utf8');
+  for (const name of contract.required) {
+    if (!new RegExp(`\\b${name}\\b`).test(declaration)) throw new Error(`SUBPATH_TYPES_REQUIRED_EXPORT_MISSING:${subpath}:${name}`);
+  }
+  for (const name of contract.forbidden) {
+    if (new RegExp(`\\b${name}\\b`).test(declaration)) throw new Error(`SUBPATH_TYPES_OVERDECLARE:${subpath}:${name}`);
+  }
+}
+
 const npmBin = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 const dryRun = execFileSync(npmBin, ['pack', '--dry-run', '--json', '--ignore-scripts'], {
   cwd: root,
