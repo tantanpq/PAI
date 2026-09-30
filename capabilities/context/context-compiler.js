@@ -205,92 +205,226 @@ function compileContextPlan(input = {}) {
   const optionalRoles = new Set(strategy.optionalRoles);
   const allowedRoles = new Set([...requiredRoles, ...exactRoles, ...optionalRoles]);
   const selected = [];
+  const selectedRefs = new Set();
   const omissions = [];
-  const satisfiedRequiredRoles = new Set();
+  const omittedRefs = new Set();
+  let metadataBytes = 0;
 
-  const ranked = sources.map(source => {
+  const omit = (source, reason, required = false) => {
+    if (omittedRefs.has(source.ref)) return;
+    omittedRefs.add(source.ref);
+    omissions.push({ id: source.id, ref: source.ref, reason, required });
+  };
+  const projectedSource = (source, required = source.explicitRequired) => ({
+    id: source.id, ref: source.ref, roles: source.roles, name: source.name, required,
+    priority: source.priority, hash: source.hash, sizeBytes: source.sizeBytes, maxBytes: source.maxBytes,
+    authorityClass: source.authorityClass, truthClass: source.truthClass, freshness: source.freshness,
+    volatility: source.volatility, resolution: source.resolution
+  });
+  const selectionBytes = (selection) => jsonBytes(selection.map(item => projectedSource(item, item.selectedRequired)));
+  const hydrationShape = (selection) => {
+    const exact = selection.filter(source => source.resolution === RESOLUTION.EXACT_JIT && source.hash);
+    const fixedBytes = exact.reduce((sum, source) => sum + (source.maxBytes ?? 0), 0);
+    const dynamicCount = exact.filter(source => source.maxBytes == null).length;
+    return { fixedBytes, dynamicCount, feasible: fixedBytes + dynamicCount <= maxHydrationBytes };
+  };
+  const roleUsable = (source) =>
+    source.available &&
+    (!source.roles.some(role => exactRoles.has(role)) || Boolean(source.hash)) &&
+    (source.resolution !== RESOLUTION.EXACT_JIT || Boolean(source.hash));
+
+  const enriched = sources.map(source => {
     const exactByRole = source.roles.some(role => exactRoles.has(role));
-    const allowedByRole = source.roles.some(role => allowedRoles.has(role));
     return {
       ...source,
       explicitRequired: source.required,
-      allowedByRole,
+      allowedByRole: source.roles.some(role => allowedRoles.has(role)),
       resolution: source.resolution === RESOLUTION.EXACT_JIT || exactByRole ? RESOLUTION.EXACT_JIT : RESOLUTION.POINTER_ONLY,
       relevance: relevance(source, terms)
     };
   });
-  const remaining = [...ranked];
 
-  let metadataBytes = 0;
-  while (remaining.length) {
-    remaining.sort((a, b) => {
-      const aUncovered = a.roles.filter(role => requiredRoles.has(role) && !satisfiedRequiredRoles.has(role)).length;
-      const bUncovered = b.roles.filter(role => requiredRoles.has(role) && !satisfiedRequiredRoles.has(role)).length;
-      const aRequiredNow = a.explicitRequired || aUncovered > 0;
-      const bRequiredNow = b.explicitRequired || bUncovered > 0;
-      return (
-        Number(bRequiredNow) - Number(aRequiredNow) ||
-        Number(b.explicitRequired) - Number(a.explicitRequired) ||
-        bUncovered - aUncovered ||
-        b.priority - a.priority ||
-        b.relevance - a.relevance ||
-        a.ref.localeCompare(b.ref)
-      );
-    });
-    const source = remaining.shift();
-    const roleNeeds = source.roles.filter(role => requiredRoles.has(role) && !satisfiedRequiredRoles.has(role));
-    const selectionRequired = source.explicitRequired || roleNeeds.length > 0;
+  const addSelected = (source, required) => {
+    if (selectedRefs.has(source.ref)) return true;
+    if (selected.length >= maxSelectedSources) return false;
+    const candidate = { ...source, selectedRequired: required };
+    const next = [...selected, candidate];
+    if (selectionBytes(next) > maxMetadataBytes) return false;
+    selected.push(candidate);
+    selectedRefs.add(source.ref);
+    metadataBytes = selectionBytes(selected);
+    return true;
+  };
+
+  // Phase 1: exact descriptor-level requirements. These refs are task-specific
+  // dependencies and cannot be substituted by another source sharing a role.
+  const explicitRequired = enriched
+    .filter(source => source.explicitRequired)
+    .sort((a, b) => b.priority - a.priority || b.relevance - a.relevance || a.ref.localeCompare(b.ref));
+  for (const source of explicitRequired) {
     if (!source.available) {
-      omissions.push({ id: source.id, ref: source.ref, reason: 'SOURCE_UNAVAILABLE', required: source.explicitRequired });
+      omit(source, 'SOURCE_UNAVAILABLE', true);
       continue;
     }
-    if (!selectionRequired && !source.allowedByRole) {
-      omissions.push({ id: source.id, ref: source.ref, reason: 'ROLE_NOT_ALLOWED_BY_STRATEGY', required: false });
-      continue;
+    if (!addSelected(source, true)) {
+      const reason = selected.length >= maxSelectedSources
+        ? 'REQUIRED_SOURCE_LIMIT_EXCEEDED'
+        : 'REQUIRED_METADATA_BUDGET_EXCEEDED';
+      omit(source, reason, true);
     }
-    if (!selectionRequired && source.relevance <= 0) {
-      omissions.push({ id: source.id, ref: source.ref, reason: 'NOT_RELEVANT_TO_CURRENT_OBJECTIVE', required: false });
-      continue;
-    }
-    if (selected.length >= maxSelectedSources) {
-      omissions.push({
-        id: source.id,
-        ref: source.ref,
-        reason: source.explicitRequired ? 'REQUIRED_SOURCE_LIMIT_EXCEEDED' : 'SOURCE_LIMIT_EXCEEDED',
-        required: source.explicitRequired
-      });
-      continue;
-    }
-    const projected = {
-      id: source.id, ref: source.ref, roles: source.roles, name: source.name,
-      required: source.explicitRequired || roleNeeds.length > 0,
-      priority: source.priority, hash: source.hash, sizeBytes: source.sizeBytes, maxBytes: source.maxBytes,
-      authorityClass: source.authorityClass, truthClass: source.truthClass, freshness: source.freshness,
-      volatility: source.volatility, resolution: source.resolution
-    };
-    const nextBytes = jsonBytes([...selected, projected]);
-    if (nextBytes > maxMetadataBytes) {
-      omissions.push({
-        id: source.id, ref: source.ref,
-        reason: source.explicitRequired ? 'REQUIRED_METADATA_BUDGET_EXCEEDED' : 'METADATA_BUDGET_EXCEEDED',
-        required: source.explicitRequired
-      });
-      continue;
-    }
-    selected.push(projected);
-    metadataBytes = nextBytes;
-    for (const role of source.roles) if (requiredRoles.has(role)) satisfiedRequiredRoles.add(role);
   }
 
-  const missingRoles = [...requiredRoles].filter(role => !satisfiedRequiredRoles.has(role)).sort();
+  const rolesCoveredBy = (selection) => {
+    const covered = new Set();
+    for (const source of selection) {
+      if (!roleUsable(source)) continue;
+      for (const role of source.roles) if (requiredRoles.has(role)) covered.add(role);
+    }
+    return covered;
+  };
+
+  // Phase 2: find a bounded feasible cover for still-uncovered required roles.
+  // Set cover is NP-hard in general, so this uses deterministic iterative
+  // deepening + rarest-role branching with a hard node ceiling. Hitting the
+  // search ceiling returns a typed miss rather than a false "no cover" claim.
+  const initiallyCovered = rolesCoveredBy(selected);
+  const initialUncovered = [...requiredRoles].filter(role => !initiallyCovered.has(role)).sort();
+  const coverPool = enriched.filter(source =>
+    !selectedRefs.has(source.ref) &&
+    source.allowedByRole &&
+    roleUsable(source) &&
+    source.roles.some(role => requiredRoles.has(role))
+  );
+  const COVER_SEARCH_NODE_LIMIT = 50000;
+  let coverSearchNodes = 0;
+  let coverSearchLimited = false;
+
+  const coverCandidatesForRole = (role, chosenRefs, uncoveredSet) =>
+    coverPool
+      .filter(source => !chosenRefs.has(source.ref) && source.roles.includes(role))
+      .sort((a, b) => {
+        const aCoverage = a.roles.filter(candidateRole => uncoveredSet.has(candidateRole)).length;
+        const bCoverage = b.roles.filter(candidateRole => uncoveredSet.has(candidateRole)).length;
+        return bCoverage - aCoverage || b.priority - a.priority || b.relevance - a.relevance || a.ref.localeCompare(b.ref);
+      });
+
+  const searchCoverAtDepth = (uncoveredSet, chosen, chosenRefs, depthLimit) => {
+    coverSearchNodes += 1;
+    if (coverSearchNodes > COVER_SEARCH_NODE_LIMIT) {
+      coverSearchLimited = true;
+      return null;
+    }
+    if (uncoveredSet.size === 0) {
+      const whole = [...selected, ...chosen];
+      return hydrationShape(whole).feasible && selectionBytes(whole) <= maxMetadataBytes ? chosen : null;
+    }
+    if (chosen.length >= depthLimit || selected.length + chosen.length >= maxSelectedSources) return null;
+
+    let branchRole = null;
+    let branchCandidates = null;
+    for (const role of [...uncoveredSet].sort()) {
+      const candidates = coverCandidatesForRole(role, chosenRefs, uncoveredSet);
+      if (!candidates.length) return null;
+      if (!branchCandidates || candidates.length < branchCandidates.length) {
+        branchRole = role;
+        branchCandidates = candidates;
+      }
+    }
+
+    for (const source of branchCandidates) {
+      if (coverSearchLimited) return null;
+      const candidate = { ...source, selectedRequired: true };
+      const nextChosen = [...chosen, candidate];
+      const whole = [...selected, ...nextChosen];
+      if (selectionBytes(whole) > maxMetadataBytes || !hydrationShape(whole).feasible) continue;
+      const nextUncovered = new Set(uncoveredSet);
+      for (const role of source.roles) nextUncovered.delete(role);
+      const nextRefs = new Set(chosenRefs);
+      nextRefs.add(source.ref);
+      const result = searchCoverAtDepth(nextUncovered, nextChosen, nextRefs, depthLimit);
+      if (result) return result;
+    }
+    return null;
+  };
+
+  let cover = initialUncovered.length ? null : [];
+  if (initialUncovered.length) {
+    const maxCoverSources = Math.max(0, maxSelectedSources - selected.length);
+    for (let depth = 1; depth <= maxCoverSources && !cover && !coverSearchLimited; depth += 1) {
+      cover = searchCoverAtDepth(new Set(initialUncovered), [], new Set(), depth);
+    }
+  }
+  if (cover) {
+    for (const source of cover) addSelected(source, true);
+  }
+
+  const coveredAfterSearch = rolesCoveredBy(selected);
+  const missingRoles = [...requiredRoles].filter(role => !coveredAfterSearch.has(role)).sort();
+
+  // Phase 3: add relevant optional refs only after the protected required cone
+  // has a feasible cover. Optional refs never turn an otherwise READY plan into
+  // a miss simply because they cannot fit or cannot be verified.
+  const optionalRanked = enriched
+    .filter(source => !selectedRefs.has(source.ref) && !source.explicitRequired)
+    .sort((a, b) => b.priority - a.priority || b.relevance - a.relevance || a.ref.localeCompare(b.ref));
+  if (!missingRoles.length && !coverSearchLimited) {
+    for (const source of optionalRanked) {
+      if (!source.available) {
+        omit(source, 'SOURCE_UNAVAILABLE', false);
+        continue;
+      }
+      if (!source.allowedByRole) {
+        omit(source, 'ROLE_NOT_ALLOWED_BY_STRATEGY', false);
+        continue;
+      }
+      if (source.relevance <= 0) {
+        omit(source, 'NOT_RELEVANT_TO_CURRENT_OBJECTIVE', false);
+        continue;
+      }
+      if (source.resolution === RESOLUTION.EXACT_JIT && !source.hash) {
+        omit(source, 'EXACT_SOURCE_HASH_UNAVAILABLE', false);
+        continue;
+      }
+      if (selected.length >= maxSelectedSources) {
+        omit(source, 'SOURCE_LIMIT_EXCEEDED', false);
+        continue;
+      }
+      const candidate = { ...source, selectedRequired: false };
+      const whole = [...selected, candidate];
+      if (selectionBytes(whole) > maxMetadataBytes) {
+        omit(source, 'METADATA_BUDGET_EXCEEDED', false);
+        continue;
+      }
+      if (!hydrationShape(whole).feasible) {
+        omit(source, 'HYDRATION_BUDGET_EXCEEDED', false);
+        continue;
+      }
+      addSelected(source, false);
+    }
+  } else {
+    for (const source of optionalRanked) {
+      if (!omittedRefs.has(source.ref)) omit(source, 'REQUIRED_ROLE_COVER_INCOMPLETE', false);
+    }
+  }
+
+  for (const source of enriched) {
+    if (selectedRefs.has(source.ref) || omittedRefs.has(source.ref)) continue;
+    if (!source.available) omit(source, 'SOURCE_UNAVAILABLE', source.explicitRequired);
+    else if (source.resolution === RESOLUTION.EXACT_JIT && !source.hash) omit(source, 'EXACT_SOURCE_HASH_UNAVAILABLE', source.explicitRequired);
+    else omit(source, 'NOT_SELECTED', source.explicitRequired);
+  }
+
   const missingSelectedRequired = omissions.filter(item => item.required).map(item => item.id).sort();
   const exactSelected = selected.filter(source => source.resolution === RESOLUTION.EXACT_JIT);
   const exactUnhashed = exactSelected.filter(source => !source.hash);
   const exactFetchable = exactSelected.filter(source => source.hash);
-  const defaultExactMaxBytes = exactFetchable.length ? Math.floor(maxHydrationBytes / exactFetchable.length) : 0;
+  const fixedHydrationBytes = exactFetchable.reduce((sum, source) => sum + (source.maxBytes ?? 0), 0);
+  const dynamicExactCount = exactFetchable.filter(source => source.maxBytes == null).length;
+  const remainingHydrationBytes = Math.max(0, maxHydrationBytes - fixedHydrationBytes);
+  const defaultExactMaxBytes = dynamicExactCount ? Math.floor(remainingHydrationBytes / dynamicExactCount) : 0;
   const exactRequests = exactFetchable.map(source => ({
     action: 'EXACT_JIT_FETCH', id: source.id, ref: source.ref, expectedHash: source.hash,
-    maxBytes: source.maxBytes || defaultExactMaxBytes
+    maxBytes: source.maxBytes ?? defaultExactMaxBytes
   }));
   const exactBudget = exactRequests.reduce((sum, request) => sum + request.maxBytes, 0);
   if (Object.hasOwn(input, 'scopes') && !object(input.scopes)) fail('SCOPES_INVALID');
@@ -320,7 +454,12 @@ function compileContextPlan(input = {}) {
   };
   const taskFingerprint = sha256({ strategy: { id: strategy.id, version: strategy.version, contractDigest: strategyContractDigest }, protectedState });
   const missReasons = [];
-  if (missingRoles.length) missReasons.push({ code: 'MISSING_REQUIRED_SOURCE_ROLE', roles: missingRoles });
+  if (coverSearchLimited) missReasons.push({ code: 'REQUIRED_ROLE_COVER_SEARCH_LIMIT', nodeLimit: COVER_SEARCH_NODE_LIMIT, roles: missingRoles });
+  else if (missingRoles.length) {
+    const absentRoles = missingRoles.filter(role => !coverPool.some(source => source.roles.includes(role)));
+    const code = absentRoles.length ? 'MISSING_REQUIRED_SOURCE_ROLE' : 'REQUIRED_ROLE_COVER_NOT_FEASIBLE';
+    missReasons.push({ code, roles: missingRoles, maxSelectedSources, maxMetadataBytes, maxHydrationBytes });
+  }
   if (missingSelectedRequired.length) missReasons.push({ code: 'REQUIRED_SOURCE_NOT_SELECTED', sourceIds: missingSelectedRequired });
   if (exactUnhashed.length) missReasons.push({ code: 'EXACT_SOURCE_HASH_REQUIRED', sourceIds: exactUnhashed.map(source => source.id).sort() });
   if (exactRequests.some(request => request.maxBytes < 1)) missReasons.push({ code: 'HYDRATION_BUDGET_EXCEEDED', requestedBytes: exactBudget, maxHydrationBytes });
