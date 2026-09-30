@@ -15,7 +15,9 @@ New public API:
 - Context Compiler commercial suite passes;
 - source bodies are rejected from discovery metadata;
 - exported built-in profile contracts are deeply immutable;
-- explicit invalid context ceilings fail closed rather than widening;
+- explicit invalid context ceilings fail closed rather than widening, including custom-strategy `maxSelectedSources`;
+- malformed explicit authority/effect/privacy/scope/truth/source classifications fail closed instead of becoming permissive defaults;
+- each exported package subpath has declarations scoped to its actual runtime exports;
 - exact-JIT sources without a verifiable expected hash return a structured miss and no fetch request;
 - required source roles fail closed as `CONTEXT_MISS`;
 - equivalent source ordering yields identical plan identity;
