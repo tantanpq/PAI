@@ -74,6 +74,18 @@ test('required roles need one selected source, while explicit required refs rema
   assert.deepEqual(rolePlan.selectedSources.map(item => item.id), ['primary']);
   assert.ok(rolePlan.omissions.some(item => item.id === 'alternate' && item.required === false));
 
+  const multiRole = compileContextPlan({
+    strategy: { id: 'multi-role', version: '1.0.0', requiredRoles: ['A', 'B'], exactRoles: [], optionalRoles: [] },
+    task: { objective: 'minimum sufficient required roles' },
+    query: 'no-extra-context-match',
+    sourceMap: [
+      source('one-role', 'ref:a', ['A'], { priority: 100 }),
+      source('two-roles', 'ref:ab', ['A', 'B'], { priority: 1 })
+    ]
+  });
+  assert.equal(multiRole.status, 'READY');
+  assert.deepEqual(multiRole.selectedSources.map(item => item.id), ['two-roles']);
+
   const exactRequired = compileContextPlan({
     profile: 'repo-engineering',
     task: { objective: 'compile repository change' },
@@ -85,6 +97,44 @@ test('required roles need one selected source, while explicit required refs rema
   });
   assert.equal(exactRequired.status, 'CONTEXT_MISS');
   assert.ok(exactRequired.missing.some(item => item.code === 'REQUIRED_SOURCE_NOT_SELECTED'));
+});
+
+test('profile source ceiling cannot be widened by caller budget', () => {
+  const sourceMap = [
+    source('repo', 'git:main', ['REPOSITORY_BASELINE'], { priority: 100 }),
+    ...Array.from({ length: 9 }, (_, index) =>
+      source(`spec-${index}`, `spec:${index}`, ['SPEC'], { tags: ['context'], priority: 50 - index })
+    )
+  ];
+  const plan = compileContextPlan({
+    profile: 'repo-engineering',
+    task: { objective: 'use context specs' },
+    query: 'context',
+    budget: { maxSelectedSources: 100 },
+    sourceMap
+  });
+  assert.equal(plan.status, 'READY');
+  assert.equal(plan.budgetDecision.maxSelectedSources, PROFILE_CONTRACTS['repo-engineering'].maxSelectedSources);
+  assert.equal(plan.selectedSources.length, PROFILE_CONTRACTS['repo-engineering'].maxSelectedSources);
+  assert.ok(plan.omissions.some(item => item.reason === 'SOURCE_LIMIT_EXCEEDED'));
+});
+
+test('custom strategy contract digest prevents built-in id collision and semantic aliasing', () => {
+  const a = compileContextPlan({
+    strategy: { id: 'repo-engineering', version: '1.0.0', requiredRoles: ['A'], exactRoles: [], optionalRoles: [] },
+    task: { objective: 'same task' },
+    sourceMap: [source('one', 'ref:1', ['A'])]
+  });
+  const b = compileContextPlan({
+    strategy: { id: 'repo-engineering', version: '1.0.0', requiredRoles: ['B'], exactRoles: [], optionalRoles: [] },
+    task: { objective: 'same task' },
+    sourceMap: [source('one', 'ref:1', ['B'])]
+  });
+  assert.equal(a.strategy.profile, null);
+  assert.equal(b.strategy.profile, null);
+  assert.notEqual(a.strategy.contractDigest, b.strategy.contractDigest);
+  assert.notEqual(a.taskFingerprint, b.taskFingerprint);
+  assert.notEqual(a.contextPlanId, b.contextPlanId);
 });
 
 test('repo engineering keeps required baseline and only relevant optional pointers', () => {
