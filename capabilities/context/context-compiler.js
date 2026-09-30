@@ -41,6 +41,11 @@ function deepFreeze(value) {
 }
 deepFreeze(PROFILE_CONTRACTS);
 function text(value) { return typeof value === 'string' && value.trim().length > 0; }
+function optionalText(owner, field, fallback, code) {
+  if (!Object.hasOwn(owner, field)) return fallback;
+  if (!text(owner[field])) fail(code);
+  return owner[field].trim();
+}
 function strings(value, code) {
   if (value == null) return [];
   if (!Array.isArray(value) || value.some(item => !text(item))) fail(code);
@@ -59,8 +64,15 @@ function assertNoBodies(value, code) {
 }
 
 function strategyFor(input = {}) {
-  if (text(input.profile) && PROFILE_CONTRACTS[input.profile]) return PROFILE_CONTRACTS[input.profile];
-  if (object(input.strategy) && text(input.strategy.id) && text(input.strategy.version)) {
+  const hasProfile = Object.hasOwn(input, 'profile');
+  const hasStrategy = Object.hasOwn(input, 'strategy');
+  if (hasProfile && hasStrategy) fail('CONTEXT_STRATEGY_AMBIGUOUS');
+  if (hasProfile) {
+    if (!text(input.profile) || !PROFILE_CONTRACTS[input.profile]) fail('CONTEXT_PROFILE_INVALID');
+    return PROFILE_CONTRACTS[input.profile];
+  }
+  if (hasStrategy) {
+    if (!object(input.strategy) || !text(input.strategy.id) || !text(input.strategy.version)) fail('CONTEXT_STRATEGY_INVALID');
     const hasStrategyLimit = Object.hasOwn(input.strategy, 'maxSelectedSources');
     if (hasStrategyLimit && (!Number.isSafeInteger(input.strategy.maxSelectedSources) || input.strategy.maxSelectedSources <= 0)) {
       fail('STRATEGY_MAX_SELECTED_SOURCES_INVALID');
@@ -75,7 +87,6 @@ function strategyFor(input = {}) {
   }
   fail('CONTEXT_STRATEGY_REQUIRED');
 }
-
 function normalizeSource(source) {
   if (!object(source)) fail('SOURCE_METADATA_INVALID');
   assertNoBodies(source, 'SOURCE_BODY_IN_DISCOVERY_FORBIDDEN');
@@ -85,25 +96,33 @@ function normalizeSource(source) {
   if (source.hash != null && !/^[a-f0-9]{64}$/.test(source.hash)) fail('SOURCE_HASH_INVALID');
   if (source.sizeBytes != null && (!Number.isSafeInteger(source.sizeBytes) || source.sizeBytes < 0)) fail('SOURCE_SIZE_INVALID');
   if (source.maxBytes != null && (!Number.isSafeInteger(source.maxBytes) || source.maxBytes < 1)) fail('SOURCE_MAX_BYTES_INVALID');
-  if (source.freshness != null && (!text(source.freshness) || !Number.isFinite(Date.parse(source.freshness)))) fail('SOURCE_FRESHNESS_INVALID');
+  if (Object.hasOwn(source, 'required') && typeof source.required !== 'boolean') fail('SOURCE_REQUIRED_INVALID');
+  if (Object.hasOwn(source, 'available') && typeof source.available !== 'boolean') fail('SOURCE_AVAILABLE_INVALID');
+  if (Object.hasOwn(source, 'priority') && !Number.isFinite(source.priority)) fail('SOURCE_PRIORITY_INVALID');
+  if (Object.hasOwn(source, 'volatility') && !Object.hasOwn(VOLATILITY_RANK, source.volatility)) fail('SOURCE_VOLATILITY_INVALID');
+  if (Object.hasOwn(source, 'resolution') && !Object.values(RESOLUTION).includes(source.resolution)) fail('SOURCE_RESOLUTION_INVALID');
+  let freshness = null;
+  if (Object.hasOwn(source, 'freshness')) {
+    if (!text(source.freshness) || !Number.isFinite(Date.parse(source.freshness))) fail('SOURCE_FRESHNESS_INVALID');
+    freshness = new Date(source.freshness).toISOString();
+  }
   return {
     id: source.id.trim(), ref: source.ref.trim(), roles,
-    name: text(source.name) ? source.name.trim() : source.id.trim(),
+    name: optionalText(source, 'name', source.id.trim(), 'SOURCE_NAME_INVALID'),
     tags: strings(source.tags, 'SOURCE_TAGS_INVALID'),
-    required: source.required === true,
-    priority: Number.isFinite(source.priority) ? Number(source.priority) : 0,
-    available: source.available !== false,
+    required: source.required ?? false,
+    priority: source.priority ?? 0,
+    available: source.available ?? true,
     hash: source.hash || null,
     sizeBytes: source.sizeBytes ?? null,
     maxBytes: source.maxBytes ?? null,
-    authorityClass: text(source.authorityClass) ? source.authorityClass.trim() : null,
-    truthClass: text(source.truthClass) ? source.truthClass.trim() : null,
-    freshness: source.freshness || null,
-    volatility: Object.hasOwn(VOLATILITY_RANK, source.volatility) ? source.volatility : VOLATILITY.SESSION,
-    resolution: source.resolution === RESOLUTION.EXACT_JIT ? RESOLUTION.EXACT_JIT : RESOLUTION.POINTER_ONLY
+    authorityClass: optionalText(source, 'authorityClass', null, 'SOURCE_AUTHORITY_CLASS_INVALID'),
+    truthClass: optionalText(source, 'truthClass', null, 'SOURCE_TRUTH_CLASS_INVALID'),
+    freshness,
+    volatility: source.volatility ?? VOLATILITY.SESSION,
+    resolution: source.resolution ?? RESOLUTION.POINTER_ONLY
   };
 }
-
 function mergeSources(sourceMap = []) {
   if (!Array.isArray(sourceMap) || sourceMap.length > 256) fail('SOURCE_MAP_INVALID');
   const byRef = new Map();
@@ -131,7 +150,7 @@ function mergeSources(sourceMap = []) {
       tags: [...new Set([...prior.tags, ...source.tags])].sort(),
       required: prior.required || source.required,
       priority: Math.max(prior.priority, source.priority),
-      available: prior.available || source.available,
+      available: prior.available && source.available,
       hash: prior.hash || source.hash,
       sizeBytes: prior.sizeBytes ?? source.sizeBytes,
       maxBytes,
