@@ -194,12 +194,7 @@ function compileContextPlan(input = {}) {
   const allowedRoles = new Set([...requiredRoles, ...exactRoles, ...optionalRoles]);
   const selected = [];
   const omissions = [];
-  const missingRoles = [];
-
-  for (const role of [...requiredRoles].sort()) {
-    const candidates = sources.filter(source => source.roles.includes(role) && source.available);
-    if (!candidates.length) missingRoles.push(role);
-  }
+  const satisfiedRequiredRoles = new Set();
 
   const ranked = sources.map(source => {
     const requiredByRole = source.roles.some(role => requiredRoles.has(role));
@@ -207,24 +202,28 @@ function compileContextPlan(input = {}) {
     const allowedByRole = source.roles.some(role => allowedRoles.has(role));
     return {
       ...source,
-      required: source.required || requiredByRole,
+      explicitRequired: source.required,
+      requiredByRole,
+      selectionPriority: source.required || requiredByRole,
       allowedByRole,
       resolution: source.resolution === RESOLUTION.EXACT_JIT || exactByRole ? RESOLUTION.EXACT_JIT : RESOLUTION.POINTER_ONLY,
       relevance: relevance(source, terms)
     };
-  }).sort((a, b) => Number(b.required) - Number(a.required) || b.priority - a.priority || b.relevance - a.relevance || a.ref.localeCompare(b.ref));
+  }).sort((a, b) => Number(b.selectionPriority) - Number(a.selectionPriority) || b.priority - a.priority || b.relevance - a.relevance || a.ref.localeCompare(b.ref));
 
   let metadataBytes = 0;
   for (const source of ranked) {
+    const roleNeeds = source.roles.filter(role => requiredRoles.has(role) && !satisfiedRequiredRoles.has(role));
+    const selectionRequired = source.explicitRequired || roleNeeds.length > 0;
     if (!source.available) {
-      omissions.push({ id: source.id, ref: source.ref, reason: 'SOURCE_UNAVAILABLE', required: source.required });
+      omissions.push({ id: source.id, ref: source.ref, reason: 'SOURCE_UNAVAILABLE', required: source.explicitRequired });
       continue;
     }
-    if (!source.required && !source.allowedByRole) {
+    if (!selectionRequired && !source.allowedByRole) {
       omissions.push({ id: source.id, ref: source.ref, reason: 'ROLE_NOT_ALLOWED_BY_STRATEGY', required: false });
       continue;
     }
-    if (!source.required && source.relevance <= 0) {
+    if (!selectionRequired && source.relevance <= 0) {
       omissions.push({ id: source.id, ref: source.ref, reason: 'NOT_RELEVANT_TO_CURRENT_OBJECTIVE', required: false });
       continue;
     }
@@ -232,26 +231,33 @@ function compileContextPlan(input = {}) {
       omissions.push({
         id: source.id,
         ref: source.ref,
-        reason: source.required ? 'REQUIRED_SOURCE_LIMIT_EXCEEDED' : 'SOURCE_LIMIT_EXCEEDED',
-        required: source.required
+        reason: source.explicitRequired ? 'REQUIRED_SOURCE_LIMIT_EXCEEDED' : 'SOURCE_LIMIT_EXCEEDED',
+        required: source.explicitRequired
       });
       continue;
     }
     const projected = {
-      id: source.id, ref: source.ref, roles: source.roles, name: source.name, required: source.required,
+      id: source.id, ref: source.ref, roles: source.roles, name: source.name,
+      required: source.explicitRequired || roleNeeds.length > 0,
       priority: source.priority, hash: source.hash, sizeBytes: source.sizeBytes, maxBytes: source.maxBytes,
       authorityClass: source.authorityClass, truthClass: source.truthClass, freshness: source.freshness,
       volatility: source.volatility, resolution: source.resolution
     };
     const nextBytes = jsonBytes([...selected, projected]);
     if (nextBytes > maxMetadataBytes) {
-      omissions.push({ id: source.id, ref: source.ref, reason: source.required ? 'REQUIRED_METADATA_BUDGET_EXCEEDED' : 'METADATA_BUDGET_EXCEEDED', required: source.required });
+      omissions.push({
+        id: source.id, ref: source.ref,
+        reason: source.explicitRequired ? 'REQUIRED_METADATA_BUDGET_EXCEEDED' : 'METADATA_BUDGET_EXCEEDED',
+        required: source.explicitRequired
+      });
       continue;
     }
     selected.push(projected);
     metadataBytes = nextBytes;
+    for (const role of source.roles) if (requiredRoles.has(role)) satisfiedRequiredRoles.add(role);
   }
 
+  const missingRoles = [...requiredRoles].filter(role => !satisfiedRequiredRoles.has(role)).sort();
   const missingSelectedRequired = omissions.filter(item => item.required).map(item => item.id).sort();
   const exactSelected = selected.filter(source => source.resolution === RESOLUTION.EXACT_JIT);
   const exactUnhashed = exactSelected.filter(source => !source.hash);
@@ -262,32 +268,27 @@ function compileContextPlan(input = {}) {
     maxBytes: source.maxBytes || defaultExactMaxBytes
   }));
   const exactBudget = exactRequests.reduce((sum, request) => sum + request.maxBytes, 0);
-  const protectedText = (owner, field, fallback, code) => {
-    if (!Object.hasOwn(owner, field)) return fallback;
-    if (!text(owner[field])) fail(code);
-    return owner[field].trim();
-  };
   if (Object.hasOwn(input, 'scopes') && !object(input.scopes)) fail('SCOPES_INVALID');
   const protectedState = {
-    taskId: text(input.task.id) ? input.task.id.trim() : null,
+    taskId: optionalText(input.task, 'id', null, 'TASK_ID_INVALID'),
     objective: input.task.objective.trim(),
-    taskClass: text(input.task.class) ? input.task.class.trim() : null,
-    projectRef: text(input.task.projectRef) ? input.task.projectRef.trim() : null,
-    checkpointRef: text(input.task.checkpointRef) ? input.task.checkpointRef.trim() : null,
+    taskClass: optionalText(input.task, 'class', null, 'TASK_CLASS_INVALID'),
+    projectRef: optionalText(input.task, 'projectRef', null, 'PROJECT_REF_INVALID'),
+    checkpointRef: optionalText(input.task, 'checkpointRef', null, 'CHECKPOINT_REF_INVALID'),
     constraints: strings(input.constraints, 'CONSTRAINTS_INVALID'),
     acceptedDecisions: strings(input.acceptedDecisions, 'DECISIONS_INVALID'),
     acceptance: strings(input.acceptance, 'ACCEPTANCE_INVALID'),
-    authority: protectedText(input, 'authority', 'NONE', 'AUTHORITY_INVALID'),
-    effectClass: protectedText(input, 'effectClass', 'NONE', 'EFFECT_CLASS_INVALID'),
-    privacyClass: protectedText(input, 'privacyClass', 'PUBLIC', 'PRIVACY_CLASS_INVALID'),
+    authority: optionalText(input, 'authority', 'NONE', 'AUTHORITY_INVALID'),
+    effectClass: optionalText(input, 'effectClass', 'NONE', 'EFFECT_CLASS_INVALID'),
+    privacyClass: optionalText(input, 'privacyClass', 'PUBLIC', 'PRIVACY_CLASS_INVALID'),
     scopes: object(input.scopes) ? {
       read: strings(input.scopes.read, 'READ_SCOPE_INVALID'),
       write: strings(input.scopes.write, 'WRITE_SCOPE_INVALID'),
-      effect: protectedText(input.scopes, 'effect', 'NONE', 'EFFECT_SCOPE_INVALID')
+      effect: optionalText(input.scopes, 'effect', 'NONE', 'EFFECT_SCOPE_INVALID')
     } : { read: [], write: [], effect: 'NONE' },
-    outputContract: protectedText(input, 'outputContract', null, 'OUTPUT_CONTRACT_INVALID'),
-    truthState: protectedText(input, 'truthState', null, 'TRUTH_STATE_INVALID'),
-    sourceStatus: protectedText(input, 'sourceStatus', null, 'SOURCE_STATUS_INVALID'),
+    outputContract: optionalText(input, 'outputContract', null, 'OUTPUT_CONTRACT_INVALID'),
+    truthState: optionalText(input, 'truthState', null, 'TRUTH_STATE_INVALID'),
+    sourceStatus: optionalText(input, 'sourceStatus', null, 'SOURCE_STATUS_INVALID'),
     negations: strings(input.negations, 'NEGATIONS_INVALID'),
     contradictions: strings(input.contradictions, 'CONTRADICTIONS_INVALID'),
     supersessionRefs: strings(input.supersessionRefs, 'SUPERSESSION_REFS_INVALID')
@@ -360,14 +361,14 @@ function recordContextOutcome({ plan, result } = {}) {
   const count = (value, field) => value == null ? null : (Number.isSafeInteger(value) && value >= 0 ? value : fail(`CONTEXT_EPISODE_${field}_INVALID`));
   const outcome = {
     resultId: result.resultId.trim(), disposition: result.disposition, accepted: result.accepted ?? null,
-    verificationRef: text(result.verificationRef) ? result.verificationRef.trim() : null
+    verificationRef: optionalText(result, 'verificationRef', null, 'CONTEXT_EPISODE_RESULT_INVALID')
   };
   const evaluation = {
-    acceptanceContractRef: text(result.acceptanceContractRef) ? result.acceptanceContractRef.trim() : null,
-    baselinePlanId: text(result.baselinePlanId) ? result.baselinePlanId.trim() : null,
-    provider: text(result.provider) ? result.provider.trim() : null,
-    model: text(result.model) ? result.model.trim() : null,
-    tokenizer: text(result.tokenizer) ? result.tokenizer.trim() : null,
+    acceptanceContractRef: optionalText(result, 'acceptanceContractRef', null, 'CONTEXT_EPISODE_RESULT_INVALID'),
+    baselinePlanId: optionalText(result, 'baselinePlanId', null, 'CONTEXT_EPISODE_RESULT_INVALID'),
+    provider: optionalText(result, 'provider', null, 'CONTEXT_EPISODE_RESULT_INVALID'),
+    model: optionalText(result, 'model', null, 'CONTEXT_EPISODE_RESULT_INVALID'),
+    tokenizer: optionalText(result, 'tokenizer', null, 'CONTEXT_EPISODE_RESULT_INVALID'),
     falseSuccess: result.falseSuccess ?? null
   };
   const metrics = {
@@ -384,12 +385,18 @@ function recordContextOutcome({ plan, result } = {}) {
     costUsd: metric(result.costUsd, 'COST_USD')
   };
   const selectedSources = plan.selectedSources.map(source => ({ id: source.id, ref: source.ref, hash: source.hash, roles: source.roles, resolution: source.resolution }));
+  const omittedSources = plan.omissions.map(item => ({ id: item.id, ref: item.ref, reason: item.reason, required: item.required }));
+  const missing = plan.missing.map(item => ({ ...item }));
+  const expansionRequests = plan.expansionRequests.map(request => ({ ...request }));
   const episodeBase = {
     schema: 'context-episode/v1',
     contextPlanId: plan.contextPlanId,
     taskFingerprint: plan.taskFingerprint,
     strategy: plan.strategy,
     selectedSources,
+    omittedSources,
+    missing,
+    expansionRequests,
     omissionReasons: [...new Set(plan.omissions.map(item => item.reason))].sort(),
     missingCodes: [...new Set(plan.missing.map(item => item.code))].sort(),
     budgetDecision: plan.budgetDecision,
