@@ -83,6 +83,21 @@ test('bounded cover search finds a feasible non-greedy required-role cover', () 
   assert.deepEqual(plan.missing, []);
 });
 
+test('selected required hashless exact ref reports only an exact-hash miss', () => {
+  const plan = compileContextPlan({
+    profile: 'native-domain',
+    task: { objective: 'read exact required native object' },
+    sourceMap: [
+      { id: 'object', ref: 'native:required', roles: ['NATIVE_OBJECT'], required: true }
+    ]
+  });
+  assert.equal(plan.status, 'CONTEXT_MISS');
+  assert.deepEqual(plan.selectedSources.map(item => item.id), ['object']);
+  assert.deepEqual(plan.missing, [{ code: 'EXACT_SOURCE_HASH_REQUIRED', sourceIds: ['object'] }]);
+  assert.equal(plan.missing.some(item => item.code === 'MISSING_REQUIRED_SOURCE_ROLE'), false);
+  assert.deepEqual(plan.expansionRequests, []);
+});
+
 test('exact-role cover prefers a verifiable hashed candidate over an unusable unhashed candidate', () => {
   const plan = compileContextPlan({
     profile: 'native-domain',
