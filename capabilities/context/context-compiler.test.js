@@ -60,6 +60,62 @@ test('source metadata explicit invalid values fail closed', () => {
   }
 });
 
+test('required-role coverage reranks against still-uncovered roles', () => {
+  const plan = compileContextPlan({
+    strategy: {
+      id: 'cover',
+      version: '1.0.0',
+      requiredRoles: ['A', 'B', 'C', 'D'],
+      exactRoles: [],
+      optionalRoles: [],
+      maxSelectedSources: 2
+    },
+    task: { objective: 'cover all required roles within two refs' },
+    query: 'no-optional-match',
+    sourceMap: [
+      source('ab', 'ref:ab', ['A', 'B'], { priority: 100 }),
+      source('ac', 'ref:ac', ['A', 'C'], { priority: 90 }),
+      source('bd', 'ref:bd', ['B', 'D'], { priority: 80 }),
+      source('cd', 'ref:cd', ['C', 'D'], { priority: 1 })
+    ]
+  });
+  assert.equal(plan.status, 'READY');
+  assert.deepEqual(plan.selectedSources.map(item => item.id), ['ab', 'cd']);
+  assert.deepEqual(plan.missing, []);
+});
+
+test('explicit null protected arrays fail closed rather than becoming empty', () => {
+  for (const [field, code] of [
+    ['constraints', 'CONSTRAINTS_INVALID'],
+    ['acceptedDecisions', 'DECISIONS_INVALID'],
+    ['acceptance', 'ACCEPTANCE_INVALID'],
+    ['negations', 'NEGATIONS_INVALID'],
+    ['contradictions', 'CONTRADICTIONS_INVALID'],
+    ['supersessionRefs', 'SUPERSESSION_REFS_INVALID']
+  ]) {
+    assert.throws(
+      () => compileContextPlan({
+        profile: 'repo-engineering',
+        task: { objective: 'preserve protected arrays' },
+        [field]: null,
+        sourceMap: [source('repo', 'git:main', ['REPOSITORY_BASELINE'])]
+      }),
+      { code }
+    );
+  }
+  for (const [field, code] of [['read', 'READ_SCOPE_INVALID'], ['write', 'WRITE_SCOPE_INVALID']]) {
+    assert.throws(
+      () => compileContextPlan({
+        profile: 'repo-engineering',
+        task: { objective: 'preserve protected scopes' },
+        scopes: { [field]: null },
+        sourceMap: [source('repo', 'git:main', ['REPOSITORY_BASELINE'])]
+      }),
+      { code }
+    );
+  }
+});
+
 test('required roles need one selected source, while explicit required refs remain exact requirements', () => {
   const rolePlan = compileContextPlan({
     profile: 'repo-engineering',
@@ -250,8 +306,11 @@ test('explicit malformed protected classifications fail closed', () => {
 test('explicit invalid budgets fail closed instead of widening to defaults', () => {
   for (const budget of [
     { maxSelectedSources: 0 },
+    { maxSelectedSources: null },
     { maxMetadataBytes: 511 },
-    { maxHydrationBytes: -1 }
+    { maxMetadataBytes: null },
+    { maxHydrationBytes: -1 },
+    { maxHydrationBytes: null }
   ]) {
     assert.throws(
       () => compileContextPlan({
