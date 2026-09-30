@@ -75,7 +75,7 @@ export interface ContextPlan {
   readonly status: 'READY' | 'CONTEXT_MISS';
   readonly contextPlanId: string;
   readonly taskFingerprint: string;
-  readonly strategy: Readonly<{ id: string; version: string; profile: string | null }>;
+  readonly strategy: Readonly<{ id: string; version: string; profile: string | null; contractDigest: string }>;
   readonly selectedSources: ReadonlyArray<Readonly<Record<string, unknown>>>;
   readonly omissions: ReadonlyArray<Readonly<Record<string, unknown>>>;
   readonly expansionRequests: ReadonlyArray<Readonly<Record<string, unknown>>>;
