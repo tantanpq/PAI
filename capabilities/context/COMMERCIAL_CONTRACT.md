@@ -16,7 +16,7 @@ It is intentionally not a memory database, search engine, model router, schedule
 6. **Outcome-linked evaluation.** A context strategy is evaluated by its verified Result, corrections/restatements and observable cost/latency/token metrics, not model self-rating.
 7. **No raw prompt telemetry.** Context episodes contain identities, refs, omission reasons, outcome labels and observable metrics only.
 8. **Adapters are replaceable.** GitHub, Drive, MCP, filesystem, SaaS and enterprise-knowledge connectors implement discovery/fetch outside the compiler.
-9. **One generic core, domain profiles.** Product/runtime/repo/QA/native differences are expressed through deeply immutable versioned context profiles, not forks of the compiler. Caller-declared context ceilings fail closed when invalid; they are never silently widened.
+9. **One generic core, domain profiles.** Product/runtime/repo/QA/native differences are expressed through deeply immutable versioned context profiles, not forks of the compiler. A required role requires one sufficient selected source; only descriptor-level `required: true` turns a specific ref into a must-select dependency. Caller-declared context ceilings fail closed when invalid; they are never silently widened.
 10. **No savings claim without evidence.** Token/cost reductions are workload-specific unless reproduced on a declared corpus, tokenizer/model and acceptance contract.
 
 ## Built-in profiles
