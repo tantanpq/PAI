@@ -60,6 +60,64 @@ test('source metadata explicit invalid values fail closed', () => {
   }
 });
 
+test('bounded cover search finds a feasible non-greedy required-role cover', () => {
+  const plan = compileContextPlan({
+    strategy: {
+      id: 'cover-backtracking',
+      version: '1.0.0',
+      requiredRoles: ['A', 'B', 'C', 'D', 'E', 'F'],
+      exactRoles: [],
+      optionalRoles: [],
+      maxSelectedSources: 2
+    },
+    task: { objective: 'find feasible bounded cover' },
+    query: 'no-optional-match',
+    sourceMap: [
+      source('abc', 'ref:abc', ['A', 'B', 'C'], { priority: 100 }),
+      source('abd', 'ref:abd', ['A', 'B', 'D'], { priority: 90 }),
+      source('cef', 'ref:cef', ['C', 'E', 'F'], { priority: 1 })
+    ]
+  });
+  assert.equal(plan.status, 'READY');
+  assert.deepEqual(plan.selectedSources.map(item => item.id), ['abd', 'cef']);
+  assert.deepEqual(plan.missing, []);
+});
+
+test('exact-role cover prefers a verifiable hashed candidate over an unusable unhashed candidate', () => {
+  const plan = compileContextPlan({
+    profile: 'native-domain',
+    task: { objective: 'read native object' },
+    sourceMap: [
+      { id: 'unhashed', ref: 'native:unhashed', roles: ['NATIVE_OBJECT'], priority: 100 },
+      source('hashed', 'native:hashed', ['NATIVE_OBJECT'], { priority: 1 })
+    ]
+  });
+  assert.equal(plan.status, 'READY');
+  assert.deepEqual(plan.selectedSources.map(item => item.id), ['hashed']);
+  assert.deepEqual(plan.expansionRequests.map(item => item.id), ['hashed']);
+  assert.ok(plan.omissions.some(item => item.id === 'unhashed' && item.reason === 'EXACT_SOURCE_HASH_UNAVAILABLE'));
+});
+
+test('infeasible role cover returns a typed cover miss rather than a false absent-role claim', () => {
+  const plan = compileContextPlan({
+    strategy: {
+      id: 'cover-infeasible',
+      version: '1.0.0',
+      requiredRoles: ['A', 'B', 'C'],
+      exactRoles: [],
+      optionalRoles: [],
+      maxSelectedSources: 1
+    },
+    task: { objective: 'prove bounded cover infeasible' },
+    sourceMap: [
+      source('ab', 'ref:ab', ['A', 'B']),
+      source('ac', 'ref:ac', ['A', 'C'])
+    ]
+  });
+  assert.equal(plan.status, 'CONTEXT_MISS');
+  assert.equal(plan.missing[0].code, 'REQUIRED_ROLE_COVER_NOT_FEASIBLE');
+});
+
 test('required-role coverage reranks against still-uncovered roles', () => {
   const plan = compileContextPlan({
     strategy: {
@@ -333,6 +391,26 @@ test('exact-JIT sources require a verifiable expected hash', () => {
   assert.equal(miss.status, 'CONTEXT_MISS');
   assert.deepEqual(miss.missing, [{ code: 'EXACT_SOURCE_HASH_REQUIRED', sourceIds: ['object'] }]);
   assert.deepEqual(miss.expansionRequests, []);
+});
+
+test('explicit malformed source map and query fail closed', () => {
+  assert.throws(
+    () => compileContextPlan({
+      profile: 'repo-engineering',
+      task: { objective: 'x' },
+      sourceMap: null
+    }),
+    { code: 'SOURCE_MAP_INVALID' }
+  );
+  assert.throws(
+    () => compileContextPlan({
+      profile: 'repo-engineering',
+      task: { objective: 'x' },
+      query: null,
+      sourceMap: [source('repo', 'git:main', ['REPOSITORY_BASELINE'])]
+    }),
+    { code: 'CONTEXT_QUERY_INVALID' }
+  );
 });
 
 test('source bodies are rejected from discovery input', () => {
