@@ -19,6 +19,73 @@ test('commercial profiles are explicit and versioned', () => {
   assert.throws(() => PROFILE_CONTRACTS['repo-engineering'].requiredRoles.push('MUTATED'), TypeError);
 });
 
+test('strategy declaration is unambiguous and explicit invalid profiles fail closed', () => {
+  assert.throws(
+    () => compileContextPlan({
+      profile: 'does-not-exist',
+      task: { objective: 'x' },
+      sourceMap: []
+    }),
+    { code: 'CONTEXT_PROFILE_INVALID' }
+  );
+  assert.throws(
+    () => compileContextPlan({
+      profile: 'repo-engineering',
+      strategy: { id: 'custom', version: '1.0.0' },
+      task: { objective: 'x' },
+      sourceMap: []
+    }),
+    { code: 'CONTEXT_STRATEGY_AMBIGUOUS' }
+  );
+});
+
+test('source metadata explicit invalid values fail closed', () => {
+  for (const [field, value, code] of [
+    ['required', 'true', 'SOURCE_REQUIRED_INVALID'],
+    ['available', 'false', 'SOURCE_AVAILABLE_INVALID'],
+    ['priority', 'high', 'SOURCE_PRIORITY_INVALID'],
+    ['volatility', 'PERMANENT', 'SOURCE_VOLATILITY_INVALID'],
+    ['resolution', 'FULL_BODY', 'SOURCE_RESOLUTION_INVALID'],
+    ['authorityClass', 0, 'SOURCE_AUTHORITY_CLASS_INVALID'],
+    ['truthClass', false, 'SOURCE_TRUTH_CLASS_INVALID']
+  ]) {
+    assert.throws(
+      () => compileContextPlan({
+        profile: 'repo-engineering',
+        task: { objective: 'validate metadata' },
+        sourceMap: [{ id: 'repo', ref: 'git:main', roles: ['REPOSITORY_BASELINE'], [field]: value }]
+      }),
+      { code }
+    );
+  }
+});
+
+test('required roles need one selected source, while explicit required refs remain exact requirements', () => {
+  const rolePlan = compileContextPlan({
+    profile: 'repo-engineering',
+    task: { objective: 'compile repository change' },
+    sourceMap: [
+      source('primary', 'git:primary', ['REPOSITORY_BASELINE'], { priority: 10 }),
+      source('alternate', 'git:alternate', ['REPOSITORY_BASELINE'], { priority: 1 })
+    ]
+  });
+  assert.equal(rolePlan.status, 'READY');
+  assert.deepEqual(rolePlan.selectedSources.map(item => item.id), ['primary']);
+  assert.ok(rolePlan.omissions.some(item => item.id === 'alternate' && item.required === false));
+
+  const exactRequired = compileContextPlan({
+    profile: 'repo-engineering',
+    task: { objective: 'compile repository change' },
+    budget: { maxSelectedSources: 1 },
+    sourceMap: [
+      source('primary', 'git:primary', ['REPOSITORY_BASELINE'], { required: true, priority: 10 }),
+      source('must-have', 'evidence:must-have', ['EVIDENCE'], { required: true, priority: 9 })
+    ]
+  });
+  assert.equal(exactRequired.status, 'CONTEXT_MISS');
+  assert.ok(exactRequired.missing.some(item => item.code === 'REQUIRED_SOURCE_NOT_SELECTED'));
+});
+
 test('repo engineering keeps required baseline and only relevant optional pointers', () => {
   const plan = compileContextPlan({
     profile: 'repo-engineering',
@@ -246,6 +313,29 @@ test('compiled plan is deeply immutable and outcome recording rejects tampered p
   );
 });
 
+test('protected task identity and episode metadata reject malformed explicit values', () => {
+  assert.throws(
+    () => compileContextPlan({
+      profile: 'repo-engineering',
+      task: { objective: 'protect task identity', projectRef: 0 },
+      sourceMap: [source('repo', 'git:main', ['REPOSITORY_BASELINE'])]
+    }),
+    { code: 'PROJECT_REF_INVALID' }
+  );
+  const plan = compileContextPlan({
+    profile: 'repo-engineering',
+    task: { objective: 'protect episode metadata' },
+    sourceMap: [source('repo', 'git:main', ['REPOSITORY_BASELINE'])]
+  });
+  assert.throws(
+    () => recordContextOutcome({
+      plan,
+      result: { resultId: 'r', disposition: 'UNKNOWN', provider: 7 }
+    }),
+    { code: 'CONTEXT_EPISODE_RESULT_INVALID' }
+  );
+});
+
 test('context episode links strategy to accepted result without raw content', () => {
   const plan = compileContextPlan({ profile: 'native-domain', task: { objective: 'read native object' }, sourceMap: [source('object','native:1',['NATIVE_OBJECT'])] });
   const episode = recordContextOutcome({ plan, result: {
@@ -261,6 +351,9 @@ test('context episode links strategy to accepted result without raw content', ()
   assert.equal(episode.metrics.hydratedBytes, 256);
   assert.equal(episode.metrics.toolCallCount, 2);
   assert.equal(episode.rawContentStored, false);
+  assert.deepEqual(episode.omittedSources, plan.omissions);
+  assert.deepEqual(episode.missing, plan.missing);
+  assert.deepEqual(episode.expansionRequests, plan.expansionRequests);
   const unmeasured = recordContextOutcome({
     plan,
     result: { resultId: 'result-unmeasured', disposition: 'UNKNOWN' }
