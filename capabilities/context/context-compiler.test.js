@@ -70,6 +70,65 @@ test('runtime profile requests exact JIT readback but does not hydrate it', () =
 });
 
 
+test('custom strategy ceilings fail closed when explicitly invalid', () => {
+  for (const maxSelectedSources of [0, -1, 1.5, '2']) {
+    assert.throws(
+      () => compileContextPlan({
+        strategy: {
+          id: 'custom-budget',
+          version: '1.0.0',
+          requiredRoles: ['A'],
+          exactRoles: [],
+          optionalRoles: [],
+          maxSelectedSources
+        },
+        task: { objective: 'respect custom strategy ceiling' },
+        sourceMap: [source('one', 'ref:1', ['A'])]
+      }),
+      { code: 'STRATEGY_MAX_SELECTED_SOURCES_INVALID' }
+    );
+  }
+});
+
+test('explicit malformed protected classifications fail closed', () => {
+  for (const [field, value, code] of [
+    ['privacyClass', '', 'PRIVACY_CLASS_INVALID'],
+    ['authority', 0, 'AUTHORITY_INVALID'],
+    ['effectClass', false, 'EFFECT_CLASS_INVALID'],
+    ['outputContract', {}, 'OUTPUT_CONTRACT_INVALID'],
+    ['truthState', [], 'TRUTH_STATE_INVALID'],
+    ['sourceStatus', '', 'SOURCE_STATUS_INVALID']
+  ]) {
+    assert.throws(
+      () => compileContextPlan({
+        profile: 'repo-engineering',
+        task: { objective: 'protect classifications' },
+        [field]: value,
+        sourceMap: [source('repo', 'git:main', ['REPOSITORY_BASELINE'])]
+      }),
+      { code }
+    );
+  }
+  assert.throws(
+    () => compileContextPlan({
+      profile: 'repo-engineering',
+      task: { objective: 'protect scopes' },
+      scopes: 'repo',
+      sourceMap: [source('repo', 'git:main', ['REPOSITORY_BASELINE'])]
+    }),
+    { code: 'SCOPES_INVALID' }
+  );
+  assert.throws(
+    () => compileContextPlan({
+      profile: 'repo-engineering',
+      task: { objective: 'protect effect scope' },
+      scopes: { effect: false },
+      sourceMap: [source('repo', 'git:main', ['REPOSITORY_BASELINE'])]
+    }),
+    { code: 'EFFECT_SCOPE_INVALID' }
+  );
+});
+
 test('explicit invalid budgets fail closed instead of widening to defaults', () => {
   for (const budget of [
     { maxSelectedSources: 0 },
