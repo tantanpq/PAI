@@ -61,12 +61,16 @@ function assertNoBodies(value, code) {
 function strategyFor(input = {}) {
   if (text(input.profile) && PROFILE_CONTRACTS[input.profile]) return PROFILE_CONTRACTS[input.profile];
   if (object(input.strategy) && text(input.strategy.id) && text(input.strategy.version)) {
-    return Object.freeze({
+    const hasStrategyLimit = Object.hasOwn(input.strategy, 'maxSelectedSources');
+    if (hasStrategyLimit && (!Number.isSafeInteger(input.strategy.maxSelectedSources) || input.strategy.maxSelectedSources <= 0)) {
+      fail('STRATEGY_MAX_SELECTED_SOURCES_INVALID');
+    }
+    return deepFreeze({
       id: input.strategy.id.trim(), version: input.strategy.version.trim(),
       requiredRoles: strings(input.strategy.requiredRoles, 'STRATEGY_REQUIRED_ROLES_INVALID'),
       exactRoles: strings(input.strategy.exactRoles, 'STRATEGY_EXACT_ROLES_INVALID'),
       optionalRoles: strings(input.strategy.optionalRoles, 'STRATEGY_OPTIONAL_ROLES_INVALID'),
-      maxSelectedSources: Number.isSafeInteger(input.strategy.maxSelectedSources) && input.strategy.maxSelectedSources > 0 ? input.strategy.maxSelectedSources : 8
+      maxSelectedSources: hasStrategyLimit ? input.strategy.maxSelectedSources : 8
     });
   }
   fail('CONTEXT_STRATEGY_REQUIRED');
@@ -239,6 +243,12 @@ function compileContextPlan(input = {}) {
     maxBytes: source.maxBytes || defaultExactMaxBytes
   }));
   const exactBudget = exactRequests.reduce((sum, request) => sum + request.maxBytes, 0);
+  const protectedText = (owner, field, fallback, code) => {
+    if (!Object.hasOwn(owner, field)) return fallback;
+    if (!text(owner[field])) fail(code);
+    return owner[field].trim();
+  };
+  if (Object.hasOwn(input, 'scopes') && !object(input.scopes)) fail('SCOPES_INVALID');
   const protectedState = {
     taskId: text(input.task.id) ? input.task.id.trim() : null,
     objective: input.task.objective.trim(),
@@ -248,17 +258,17 @@ function compileContextPlan(input = {}) {
     constraints: strings(input.constraints, 'CONSTRAINTS_INVALID'),
     acceptedDecisions: strings(input.acceptedDecisions, 'DECISIONS_INVALID'),
     acceptance: strings(input.acceptance, 'ACCEPTANCE_INVALID'),
-    authority: text(input.authority) ? input.authority.trim() : 'NONE',
-    effectClass: text(input.effectClass) ? input.effectClass.trim() : 'NONE',
-    privacyClass: text(input.privacyClass) ? input.privacyClass.trim() : 'PUBLIC',
+    authority: protectedText(input, 'authority', 'NONE', 'AUTHORITY_INVALID'),
+    effectClass: protectedText(input, 'effectClass', 'NONE', 'EFFECT_CLASS_INVALID'),
+    privacyClass: protectedText(input, 'privacyClass', 'PUBLIC', 'PRIVACY_CLASS_INVALID'),
     scopes: object(input.scopes) ? {
       read: strings(input.scopes.read, 'READ_SCOPE_INVALID'),
       write: strings(input.scopes.write, 'WRITE_SCOPE_INVALID'),
-      effect: text(input.scopes.effect) ? input.scopes.effect.trim() : 'NONE'
+      effect: protectedText(input.scopes, 'effect', 'NONE', 'EFFECT_SCOPE_INVALID')
     } : { read: [], write: [], effect: 'NONE' },
-    outputContract: text(input.outputContract) ? input.outputContract.trim() : null,
-    truthState: text(input.truthState) ? input.truthState.trim() : null,
-    sourceStatus: text(input.sourceStatus) ? input.sourceStatus.trim() : null,
+    outputContract: protectedText(input, 'outputContract', null, 'OUTPUT_CONTRACT_INVALID'),
+    truthState: protectedText(input, 'truthState', null, 'TRUTH_STATE_INVALID'),
+    sourceStatus: protectedText(input, 'sourceStatus', null, 'SOURCE_STATUS_INVALID'),
     negations: strings(input.negations, 'NEGATIONS_INVALID'),
     contradictions: strings(input.contradictions, 'CONTRADICTIONS_INVALID'),
     supersessionRefs: strings(input.supersessionRefs, 'SUPERSESSION_REFS_INVALID')
