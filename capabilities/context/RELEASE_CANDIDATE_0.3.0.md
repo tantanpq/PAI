@@ -19,6 +19,9 @@ New public API:
 - malformed explicit authority/effect/privacy/scope/truth/source classifications fail closed instead of becoming permissive defaults;
 - each exported package subpath has declarations scoped to its actual runtime exports;
 - exact-JIT sources without a verifiable expected hash return a structured miss and no fetch request;
+- required roles select a sufficient representative source instead of forcing every same-role candidate into context, while exact `required: true` refs remain fail-closed dependencies;
+- malformed explicit source metadata and protected task/episode identity fields fail closed rather than silently defaulting;
+- Context Episodes retain bounded omitted-source, missing-cone and expansion-request provenance without raw bodies;
 - required source roles fail closed as `CONTEXT_MISS`;
 - equivalent source ordering yields identical plan identity;
 - compiled plans are deeply immutable and Context Episode creation rejects post-compile plan tampering;
