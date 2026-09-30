@@ -298,6 +298,28 @@ function compileContextPlan(input = {}) {
     roleUsable(source) &&
     source.roles.some(role => requiredRoles.has(role))
   );
+  const roleCandidates = (role) => enriched.filter(source =>
+    !selectedRefs.has(source.ref) &&
+    source.allowedByRole &&
+    source.available &&
+    source.roles.includes(role)
+  );
+  const exactHashBlocked = new Map();
+  const trulyAbsentRoles = [];
+  const searchableRoles = [];
+  for (const role of initialUncovered) {
+    const candidates = roleCandidates(role);
+    const usable = candidates.filter(roleUsable);
+    if (usable.length) {
+      searchableRoles.push(role);
+      continue;
+    }
+    const hashBlocked = candidates.filter(source =>
+      source.resolution === RESOLUTION.EXACT_JIT && !source.hash
+    );
+    if (hashBlocked.length) exactHashBlocked.set(role, hashBlocked);
+    else trulyAbsentRoles.push(role);
+  }
   const COVER_SEARCH_NODE_LIMIT = 50000;
   let coverSearchNodes = 0;
   let coverSearchLimited = false;
@@ -350,11 +372,11 @@ function compileContextPlan(input = {}) {
     return null;
   };
 
-  let cover = initialUncovered.length ? null : [];
-  if (initialUncovered.length) {
+  let cover = searchableRoles.length ? null : [];
+  if (searchableRoles.length) {
     const maxCoverSources = Math.max(0, maxSelectedSources - selected.length);
     for (let depth = 1; depth <= maxCoverSources && !cover && !coverSearchLimited; depth += 1) {
-      cover = searchCoverAtDepth(new Set(initialUncovered), [], new Set(), depth);
+      cover = searchCoverAtDepth(new Set(searchableRoles), [], new Set(), depth);
     }
   }
   if (cover) {
@@ -363,6 +385,9 @@ function compileContextPlan(input = {}) {
 
   const coveredAfterSearch = rolesCoveredBy(selected);
   const missingRoles = [...requiredRoles].filter(role => !coveredAfterSearch.has(role)).sort();
+  const hashBlockedRoles = missingRoles.filter(role => exactHashBlocked.has(role)).sort();
+  const absentRoles = missingRoles.filter(role => trulyAbsentRoles.includes(role)).sort();
+  const uncoveredFeasibleRoles = missingRoles.filter(role => !exactHashBlocked.has(role) && !trulyAbsentRoles.includes(role)).sort();
 
   // Phase 3: add relevant optional refs only after the protected required cone
   // has a feasible cover. Optional refs never turn an otherwise READY plan into
@@ -457,14 +482,28 @@ function compileContextPlan(input = {}) {
   };
   const taskFingerprint = sha256({ strategy: { id: strategy.id, version: strategy.version, contractDigest: strategyContractDigest }, protectedState });
   const missReasons = [];
-  if (coverSearchLimited) missReasons.push({ code: 'REQUIRED_ROLE_COVER_SEARCH_LIMIT', nodeLimit: COVER_SEARCH_NODE_LIMIT, roles: missingRoles });
-  else if (missingRoles.length) {
-    const absentRoles = missingRoles.filter(role => !coverPool.some(source => source.roles.includes(role)));
-    const code = absentRoles.length ? 'MISSING_REQUIRED_SOURCE_ROLE' : 'REQUIRED_ROLE_COVER_NOT_FEASIBLE';
-    missReasons.push({ code, roles: missingRoles, maxSelectedSources, maxMetadataBytes, maxHydrationBytes });
+  if (hashBlockedRoles.length) {
+    const sourceIds = [...new Set(hashBlockedRoles.flatMap(role => exactHashBlocked.get(role).map(source => source.id)))].sort();
+    missReasons.push({ code: 'EXACT_SOURCE_HASH_REQUIRED', roles: hashBlockedRoles, sourceIds });
+  }
+  if (absentRoles.length) missReasons.push({ code: 'MISSING_REQUIRED_SOURCE_ROLE', roles: absentRoles });
+  if (coverSearchLimited) {
+    missReasons.push({ code: 'REQUIRED_ROLE_COVER_SEARCH_LIMIT', nodeLimit: COVER_SEARCH_NODE_LIMIT, roles: uncoveredFeasibleRoles });
+  } else if (uncoveredFeasibleRoles.length) {
+    missReasons.push({
+      code: 'REQUIRED_ROLE_COVER_NOT_FEASIBLE',
+      roles: uncoveredFeasibleRoles,
+      maxSelectedSources,
+      maxMetadataBytes,
+      maxHydrationBytes
+    });
   }
   if (missingSelectedRequired.length) missReasons.push({ code: 'REQUIRED_SOURCE_NOT_SELECTED', sourceIds: missingSelectedRequired });
-  if (exactUnhashed.length) missReasons.push({ code: 'EXACT_SOURCE_HASH_REQUIRED', sourceIds: exactUnhashed.map(source => source.id).sort() });
+  if (exactUnhashed.length) {
+    const alreadyReported = new Set(missReasons.flatMap(reason => reason.code === 'EXACT_SOURCE_HASH_REQUIRED' ? (reason.sourceIds || []) : []));
+    const extraUnhashed = exactUnhashed.map(source => source.id).filter(id => !alreadyReported.has(id)).sort();
+    if (extraUnhashed.length) missReasons.push({ code: 'EXACT_SOURCE_HASH_REQUIRED', sourceIds: extraUnhashed });
+  }
   if (exactRequests.some(request => request.maxBytes < 1)) missReasons.push({ code: 'HYDRATION_BUDGET_EXCEEDED', requestedBytes: exactBudget, maxHydrationBytes });
   else if (exactBudget > maxHydrationBytes && exactRequests.length) missReasons.push({ code: 'HYDRATION_BUDGET_EXCEEDED', requestedBytes: exactBudget, maxHydrationBytes });
 
