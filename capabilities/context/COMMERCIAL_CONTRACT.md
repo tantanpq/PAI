@@ -10,7 +10,7 @@ It is intentionally not a memory database, search engine, model router, schedule
 
 1. **Source owner stays external.** The compiler selects and describes context; it never becomes truth authority.
 2. **VERIFY != HYDRATE.** Metadata, identity, hash, provenance and freshness may be checked without loading a source body.
-3. **Protected semantics fail closed.** Objective, acceptance, authority/effect boundary, read/write/effect scopes, constraints, decisions, truth/source status, negation, contradiction, supersession and source provenance are never silently dropped to hit a budget.
+3. **Protected semantics fail closed.** Objective, acceptance, authority/effect boundary, privacy classification, read/write/effect scopes, constraints, decisions, truth/source status, negation, contradiction, supersession and source provenance are never silently dropped or coerced from malformed explicit values.
 4. **Exact missing cone only.** Missing information emits structured `CONTEXT_MISS` for the required source role or exact ref. Exact-JIT sources require a verifiable hash before a fetch request is emitted. It does not request a full-history reload.
 5. **Deterministic and tamper-evident plan identity.** Equivalent task semantics and source metadata produce the same task fingerprint and context-plan identity regardless of source ordering. Compiled plans are deeply immutable, and outcome recording verifies the plan digest before accepting lineage.
 6. **Outcome-linked evaluation.** A context strategy is evaluated by its verified Result, corrections/restatements and observable cost/latency/token metrics, not model self-rating.
@@ -60,7 +60,7 @@ A stable release requires:
 - public/privacy/secret/provenance scan;
 - representative compact-vs-baseline comparison with the same acceptance contract;
 - no increase in false-success or accepted-result regression on the declared benchmark;
-- backwards compatibility or an explicit semver migration note;
+- backwards compatibility or an explicit semver migration note, including runtime/type parity for every exported package subpath;
 - an explicit supported-runtime floor and CI on the declared LTS runtime family;
 - independent exact-candidate review;
 - rollback/revoke path.
