@@ -314,9 +314,15 @@ function compileContextPlan(input = {}) {
       searchableRoles.push(role);
       continue;
     }
-    const hashBlocked = candidates.filter(source =>
-      source.resolution === RESOLUTION.EXACT_JIT && !source.hash
+    const selectedHashBlocked = selected.filter(source =>
+      source.roles.includes(role) &&
+      source.resolution === RESOLUTION.EXACT_JIT &&
+      !source.hash
     );
+    const hashBlocked = [
+      ...selectedHashBlocked,
+      ...candidates.filter(source => source.resolution === RESOLUTION.EXACT_JIT && !source.hash)
+    ];
     if (hashBlocked.length) exactHashBlocked.set(role, hashBlocked);
     else trulyAbsentRoles.push(role);
   }
