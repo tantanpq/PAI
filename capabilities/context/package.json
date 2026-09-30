@@ -11,7 +11,7 @@
       "default": "./index.js"
     },
     "./compiler": {
-      "types": "./index.d.ts",
+      "types": "./context-compiler.d.ts",
       "require": "./context-compiler.js",
       "default": "./context-compiler.js"
     },
@@ -21,32 +21,32 @@
       "default": "./index.js"
     },
     "./context-capsule": {
-      "types": "./index.d.ts",
+      "types": "./context-capsule.d.ts",
       "require": "./context-capsule.js",
       "default": "./context-capsule.js"
     },
     "./context-capsule.js": {
-      "types": "./index.d.ts",
+      "types": "./context-capsule.d.ts",
       "require": "./context-capsule.js",
       "default": "./context-capsule.js"
     },
     "./retrieval-economy": {
-      "types": "./index.d.ts",
+      "types": "./retrieval-economy.d.ts",
       "require": "./retrieval-economy.js",
       "default": "./retrieval-economy.js"
     },
     "./retrieval-economy.js": {
-      "types": "./index.d.ts",
+      "types": "./retrieval-economy.d.ts",
       "require": "./retrieval-economy.js",
       "default": "./retrieval-economy.js"
     },
     "./continuity-carrier": {
-      "types": "./index.d.ts",
+      "types": "./continuity-carrier.d.ts",
       "require": "./continuity-carrier.js",
       "default": "./continuity-carrier.js"
     },
     "./continuity-carrier.js": {
-      "types": "./index.d.ts",
+      "types": "./continuity-carrier.d.ts",
       "require": "./continuity-carrier.js",
       "default": "./continuity-carrier.js"
     },
@@ -69,6 +69,10 @@
     "continuity-carrier.js",
     "index.js",
     "index.d.ts",
+    "context-compiler.d.ts",
+    "continuity-carrier.d.ts",
+    "retrieval-economy.d.ts",
+    "context-capsule.d.ts",
     "public-qa.js",
     "README.md",
     "SCHEMA.md",
