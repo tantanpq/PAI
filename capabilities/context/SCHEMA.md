@@ -9,7 +9,7 @@ Context Kit 0.3 is additive: the `compile()` Context Capsule v1 API, Retrieval E
 - `profile`: one built-in profile, or `strategy` with explicit id/version/role contract;
 - `task.objective`: required;
 - optional task identity/class/project/checkpoint refs;
-- protected `constraints`, `acceptedDecisions`, `acceptance`, `authority`, `effectClass`, `privacyClass`, `scopes`, `outputContract`, truth/source status, negations, contradictions and supersession refs;
+- protected `constraints`, `acceptedDecisions`, `acceptance`, `authority`, `effectClass`, `privacyClass`, `scopes`, `outputContract`, truth/source status, negations, contradictions and supersession refs; defaults apply only when optional classification fields are omitted, while malformed explicit classifications fail closed;
 - a metadata-only `sourceMap`;
 - bounded `maxSelectedSources`, `maxMetadataBytes`, and `maxHydrationBytes`; omitted values use profile/default ceilings, while explicitly invalid values fail closed instead of widening to a default.
 
