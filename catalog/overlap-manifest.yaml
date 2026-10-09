@@ -1,0 +1,52 @@
+# Canonical overlap manifest — tantanpq/PAI vs tantanpq/pai-reliability-evidence
+# Generated 2026-10-09 per founder decision.
+# Rule: PAI = canonical maintained public copy. pai-reliability-evidence = historical
+# archive (content preserved, archive header attached). Google Drive = authoritative
+# source for doctrine; repo copies are projections.
+generated: "2026-10-09"
+decision_ref: docs/change-notes/CHANGE_NOTE_20261009_PUBLIC_CONVERGENCE_R1.md
+audit_ref: codex-analysis-2026-10-08 (workspace/pai-repo-hygiene/)
+pairs:
+  - path: skills/deterministic-source-resolution.md
+    canonical: tantanpq/PAI
+    evidence_status: archived
+    diff: provenance-footer-only
+  - path: skills/reachable-path-policy-integrity.md
+    canonical: tantanpq/PAI
+    evidence_status: archived
+    diff: provenance-footer-only
+  - path: skills/release-scope-integrity.md
+    canonical: tantanpq/PAI
+    evidence_status: archived
+    diff: link-restored-2026-10-09
+    note: "Founder decision 2026-10-09: restored link to ../patterns/release-scope-integrity-receipt.md in PAI copy."
+  - path: workflows/community-assurance-baseline.md
+    canonical: tantanpq/PAI
+    evidence_status: archived
+    diff: link-restored-2026-10-09
+    note: "Founder decision 2026-10-09: restored direct link to ASSURANCE.md in PAI copy."
+  - path: runbooks/source-only-resume.md
+    canonical: tantanpq/PAI
+    evidence_status: archived
+    diff: provenance-footer-only
+  - path: patterns/deterministic-source-resolution-contract.md
+    canonical: tantanpq/PAI
+    evidence_status: archived
+    diff: provenance-footer-only
+  - path: patterns/reachable-path-policy-integrity-checklist.md
+    canonical: tantanpq/PAI
+    evidence_status: archived
+    diff: provenance-footer-only
+  - path: case-studies/a-canary-pass-is-not-a-stable-owner.md
+    canonical: tantanpq/PAI
+    evidence_status: archived
+    diff: byte-identical
+  - path: case-studies/green-tests-wrong-release.md
+    canonical: tantanpq/PAI
+    evidence_status: archived
+    diff: provenance-footer-only
+  - path: case-studies/verified-but-not-activated.md
+    canonical: tantanpq/PAI
+    evidence_status: archived
+    diff: byte-identical
+line_endings: LF

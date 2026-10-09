@@ -40,6 +40,8 @@ UNSUPPORTED_CLAIMS
 
 > Passing tests do not authorize unreviewed composition changes.
 
+For the longer receipt contract, see [`../patterns/release-scope-integrity-receipt.md`](../patterns/release-scope-integrity-receipt.md).
+
 ## Claim boundary
 
 This skill checks release composition against a declared authorization boundary. It does not certify security, correctness, or production readiness.

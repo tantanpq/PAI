@@ -1,3 +1,4 @@
+<!-- Authoritative source: Google Drive — FOUNDER.md (2026-09-18). This repo copy is a projection; see Drive for the canonical version. -->
 # Founder
 
 ## Tân — creator of PAI

@@ -1,3 +1,4 @@
+<!-- Authoritative source: Google Drive — ROADMAP.md (2026-09-18). This repo copy is a projection; see Drive for the canonical version. -->
 # PAI Public Roadmap
 
 This roadmap is intentionally release-oriented. It describes independently useful and verifiable public surfaces, not a promise that every internal PAI component will be published.

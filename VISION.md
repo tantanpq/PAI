@@ -1,3 +1,4 @@
+<!-- Authoritative source: Google Drive — VISION.md (2026-09-18). This repo copy is a projection; see Drive for the canonical version. -->
 # PAI Vision
 
 **PAI stands for Personal Assistant Intelligence.**

@@ -124,7 +124,7 @@ PUBLICATION_BOUNDARY:
 
 ## Next step
 
-If this baseline exposes a reproducible defect, repair the **owning seam**, rerun the bounded evidence, and preserve the before/after result. If the claim requires private source, deep reconstruction, repeated verification, or customer-controlled execution, use the fuller PAI Assurance boundary rather than widening the public claim.
+If this baseline exposes a reproducible defect, repair the **owning seam**, rerun the bounded evidence, and preserve the before/after result. If the claim requires private source, deep reconstruction, repeated verification, or customer-controlled execution, see `ASSURANCE.md` for the full PAI Assurance boundary.
 
 ## Provenance
 
