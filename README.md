@@ -1,3 +1,7 @@
+> **STATUS NOTICE - 2026-10-28: This repository is a historical snapshot and is no longer the current public face of the project.**
+> PAI development has been consolidated into a private core. The public positioning below (including the "Open Foundation" package map and the "PAI Assurance" line) is superseded and must not be read as a current product, launch, pricing, or availability claim. The current public home of the work is [zlinegroup.us](https://zlinegroup.us). This repository remains readable for provenance; its contents are preserved unchanged below this notice.
+
+---
 # PAI
 
 ## Personal Assistant Intelligence
