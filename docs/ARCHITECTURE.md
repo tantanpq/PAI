@@ -14,7 +14,7 @@ ONE PAI = MIND + BODY
     Skills / Tools / Packs / Labs
     Examples / Docs / Case Studies
   Protected PAI core (private)
-    Mind / Chief-in-Mind implementation
+    Mind / Chief implementation
     Mission Framework runtime (live autonomous cycles)
     SimLab R7 verification system + Sim Studio study layer
     control-plane (CP) family
@@ -34,9 +34,9 @@ PAI's canonical vocabulary is locked (program-scoped lock). The root identity is
 
 `ONE PAI = MIND + BODY`
 
-One personal intelligence (the **Mind**) acts through replaceable execution surfaces (the **Body**). Locked names in public use include **PAI Personal**, **One PAI**, **Mind**, **Body**, **Chief-in-Mind** (the coordinating role inside the Mind), **Host**, **Farm** (a multi-host capacity topology for the one Body - never another scheduler, graph or authority), **Program**, **Campaign**, **Work Seed**, **Result Event** and **Operator Intent**.
+One personal intelligence (the **Mind**) acts through replaceable execution surfaces (the **Body**). Locked names in public use include **PAI Personal**, **One PAI**, **Mind**, **Body**, **Chief** (the coordinating role inside the Mind; "Chief-in-Mind" appears only as a shorthand for this boundary in the lock package's checkpoint, not as a locked name), **Host**, **Farm** (a multi-host capacity topology for the one Body - never another scheduler, graph or authority), **Program**, **Campaign**, **Work Seed**, **Result Event** and **Operator Intent**.
 
-The following are cross-cutting semantics rather than hierarchy levels:
+The following are cross-cutting semantics rather than hierarchy levels. **Naming-source note:** CAPABILITY / MODULE / PACK / LOOP are **not** part of the locked P1 registry above — their definitions come from the 2026-08-11 naming DRAFT (non-canonical, never locked) and are used in this repository as working terms only.
 
 - **CAPABILITY**: a demonstrated ability with evidence.
 - **MODULE**: a software implementation component.

@@ -29,7 +29,7 @@ PAI is not intended to be one permanent model. Models, tools and executors are r
 
 ## Canonical vocabulary
 
-PAI's architecture vocabulary is locked (program-scoped lock). The root identity is **ONE PAI = MIND + BODY**: one personal intelligence (the Mind) acting through replaceable execution surfaces (the Body). Locked names in public use include **PAI Personal**, **One PAI**, **Mind**, **Body**, **Chief-in-Mind** (the coordinating role inside the Mind), **Host**, **Farm**, **Program**, **Campaign**, **Work Seed**, **Result Event** and **Operator Intent**. **Farm** means a multi-host capacity topology for the one Body - never another scheduler, graph or authority.
+PAI's architecture vocabulary is locked (program-scoped lock). The root identity is **ONE PAI = MIND + BODY**: one personal intelligence (the Mind) acting through replaceable execution surfaces (the Body). Locked names in public use include **PAI Personal**, **One PAI**, **Mind**, **Body**, **Chief** (the coordinating role inside the Mind), **Host**, **Farm**, **Program**, **Campaign**, **Work Seed**, **Result Event** and **Operator Intent**. **Farm** means a multi-host capacity topology for the one Body - never another scheduler, graph or authority.
 
 ## What changed recently
 
@@ -135,7 +135,7 @@ Public PAI is curated. A useful internal result does **not** automatically becom
 
 Public candidates must be useful on their own, bounded by evidence, sanitized, rights-cleared, versionable, testable, and safe to separate from the protected implementation.
 
-Protected material stays private, including deep PAI Mind/Chief internals, proprietary continuity/routing intelligence, private evaluation and failure corpora, sensitive authority/execution machinery, customer/private evidence, credentials, trust roots, and private/sovereign execution details.
+Protected material stays private, including deep Mind/Chief internals, proprietary continuity/routing intelligence, private evaluation and failure corpora, sensitive authority/execution machinery, customer/private evidence, credentials, trust roots, and private/sovereign execution details.
 
 ## Evidence-first release discipline
 
