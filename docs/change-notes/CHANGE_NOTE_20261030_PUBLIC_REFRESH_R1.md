@@ -32,9 +32,12 @@
   its repo-gap follow-up (naming lock, W_Flow, brief-to-result loop), the
   SimLab R7 / Sim Studio reviews, the Mission Framework cycle-1 live proof
   (2026-10-30) and the moat standard v0.3 lock record.
-- Independent review and the house release gate are pending. The local
-  repository check returned PUBLIC_INTEGRITY_PASS; CI is configured to run
-  the check on pull requests and pushes to main.
+- Independent Codex review: PASS (round 2, 2026-10-30; round 1 returned FAIL
+  with four findings, all fixed and re-verified). House release gate on the
+  refresh package: PASS (exit 0; 0 BLOCKER, 0 HIGH, no new findings). The
+  repository check returned PUBLIC_INTEGRITY_PASS locally, and the GitHub
+  Public integrity run for the release commit passed (run 41164579342).
+  Release commit: `4ba4d3723d77cffba8e95a6110f3afaed4b354b7`.
 
 ## Rollback
 - Before commit, rollback means restoring the five edited tracked files to
