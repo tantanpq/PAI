@@ -5,30 +5,36 @@ PAI uses one product identity with separate public and protected implementation 
 ## Topology
 
 ```text
-ONE PAI
-├── Public PAI repository
-│   ├── Foundation
-│   ├── Context & Continuity
-│   ├── W_Flow
-│   ├── Assurance & SimLab public surfaces
-│   ├── Skills / Tools / Packs / Labs
-│   └── Examples / Docs / Case Studies
-└── Protected PAI core
-    ├── private Mind / Chief implementation
-    ├── proprietary continuity and routing intelligence
-    ├── authority / execution internals
-    ├── protected evaluation and failure intelligence
-    ├── customer/private evidence
-    └── private or sovereign execution internals
+ONE PAI = MIND + BODY
+  Public PAI repository (this repo)
+    Foundation
+    Context & Continuity
+    W_Flow
+    Assurance & SimLab public surfaces
+    Skills / Tools / Packs / Labs
+    Examples / Docs / Case Studies
+  Protected PAI core (private)
+    Mind / Chief-in-Mind implementation
+    Mission Framework runtime (live autonomous cycles)
+    SimLab R7 verification system + Sim Studio study layer
+    control-plane (CP) family
+    outcome-projection trust machinery
+    learning corpus and distillation
+    proprietary continuity and routing intelligence
+    authority / execution internals
+    protected evaluation and failure intelligence
+    customer/private evidence
 ```
 
 The public repository is a distribution and collaboration surface. It is not a mirror of the private implementation.
 
 ## Naming model
 
-PAI uses the structural hierarchy:
+PAI's canonical vocabulary is locked (program-scoped lock). The root identity is:
 
-`PORTFOLIO → PRODUCT → DOMAIN → BRANCH → TEAM → ROLE/JD → SKILL → TOOL → EXECUTOR`
+`ONE PAI = MIND + BODY`
+
+One personal intelligence (the **Mind**) acts through replaceable execution surfaces (the **Body**). Locked names in public use include **PAI Personal**, **One PAI**, **Mind**, **Body**, **Chief-in-Mind** (the coordinating role inside the Mind), **Host**, **Farm** (a multi-host capacity topology for the one Body - never another scheduler, graph or authority), **Program**, **Campaign**, **Work Seed**, **Result Event** and **Operator Intent**.
 
 The following are cross-cutting semantics rather than hierarchy levels:
 

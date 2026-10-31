@@ -40,7 +40,7 @@ UNSUPPORTED_CLAIMS
 
 > Passing tests do not authorize unreviewed composition changes.
 
-For the longer receipt contract, see [`../patterns/release-scope-integrity-receipt.md`](../patterns/release-scope-integrity-receipt.md).
+For the longer receipt contract, see the [release-scope integrity receipt](https://github.com/tantanpq/pai-reliability-evidence/blob/main/patterns/release-scope-integrity-receipt.md) in the evidence archive.
 
 ## Claim boundary
 

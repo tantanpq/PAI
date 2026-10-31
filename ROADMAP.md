@@ -1,4 +1,4 @@
-<!-- Authoritative source: Google Drive — ROADMAP.md (2026-09-18). This repo copy is a projection; see Drive for the canonical version. -->
+<!-- Maintained in this repository. Refreshed in place 2026-10-30; the earlier Drive-projection note is superseded. -->
 # PAI Public Roadmap
 
 This roadmap is intentionally release-oriented. It describes independently useful and verifiable public surfaces, not a promise that every internal PAI component will be published.
@@ -87,6 +87,8 @@ The three executable surfaces now provide stable anchors for this convergence; c
 
 Status: **FUTURE / COMMERCIAL-EVIDENCE GATED**
 
+Public name: **Zline Assurance**. The internal standard is locked and a first full internal case has completed; the commercial pilot remains founder-gated.
+
 Acceptance:
 
 - public Assurance scope and sample report;
@@ -94,6 +96,21 @@ Acceptance:
 - measured pilot metrics defined;
 - no pricing/payment/legal commitment until separately approved;
 - paid evidence and repeatability, not repository popularity, determine commercial maturity.
+
+## R6 - Living systems and public refresh
+
+Status: **IN PROGRESS**
+
+Reached so far:
+
+- Mission Framework is LIVE INTERNALLY: its first full live cycle passed on 2026-10-30 with independent verification; public outputs are published content on zlinegroup.us;
+- the internal SimLab line advanced to R7 with a study layer (Sim Studio) in daily use; the public pilot boundary is unchanged;
+- a locked outcome standard (v0.3) governs how results are projected as evidence, independently verified and counted as done;
+- work is dispatched and closed on a brief-to-result-with-proof discipline, continuously;
+- the control-plane family runs daily operations, with a free public subset (pai-cp-free);
+- canonical architecture vocabulary locked (ONE PAI = MIND + BODY) and applied across public documents; a draft naming ladder that was never adopted has been removed.
+
+Acceptance for closing R6: this refresh passes independent review and the repository's public-integrity gate, and every public claim stays within the evidence above.
 
 ## Continuous rule
 
