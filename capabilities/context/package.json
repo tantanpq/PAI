@@ -1,11 +1,60 @@
 {
   "name": "pai-context-kit",
-  "version": "0.2.0",
-  "description": "Deterministic context capsules, metadata-first exact-JIT retrieval, and protected continuity carriers.",
+  "version": "0.3.0-rc.1",
+  "description": "Deterministic context compiler, bounded capsules, exact-JIT retrieval, protected continuity, and outcome-linked context episodes.",
   "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./index.js",
+      "default": "./index.js"
+    },
+    "./compiler": {
+      "types": "./context-compiler.d.ts",
+      "require": "./context-compiler.js",
+      "default": "./context-compiler.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "require": "./index.js",
+      "default": "./index.js"
+    },
+    "./context-capsule": {
+      "types": "./context-capsule.d.ts",
+      "require": "./context-capsule.js",
+      "default": "./context-capsule.js"
+    },
+    "./context-capsule.js": {
+      "types": "./context-capsule.d.ts",
+      "require": "./context-capsule.js",
+      "default": "./context-capsule.js"
+    },
+    "./retrieval-economy": {
+      "types": "./retrieval-economy.d.ts",
+      "require": "./retrieval-economy.js",
+      "default": "./retrieval-economy.js"
+    },
+    "./retrieval-economy.js": {
+      "types": "./retrieval-economy.d.ts",
+      "require": "./retrieval-economy.js",
+      "default": "./retrieval-economy.js"
+    },
+    "./continuity-carrier": {
+      "types": "./continuity-carrier.d.ts",
+      "require": "./continuity-carrier.js",
+      "default": "./continuity-carrier.js"
+    },
+    "./continuity-carrier.js": {
+      "types": "./continuity-carrier.d.ts",
+      "require": "./continuity-carrier.js",
+      "default": "./continuity-carrier.js"
+    },
+    "./package.json": "./package.json"
+  },
   "type": "commonjs",
   "scripts": {
-    "test": "node --test context-capsule.test.js context-kit-v2.test.js",
+    "test": "node --test context-capsule.test.js context-kit-v2.test.js context-compiler.test.js",
     "benchmark": "node benchmark.js",
     "qa": "node public-qa.js",
     "example": "node examples/basic.js"
@@ -14,26 +63,49 @@
     "context-capsule.js",
     "context-capsule.test.js",
     "context-kit-v2.test.js",
+    "context-compiler.js",
+    "context-compiler.test.js",
     "retrieval-economy.js",
     "continuity-carrier.js",
     "index.js",
+    "index.d.ts",
+    "context-compiler.d.ts",
+    "continuity-carrier.d.ts",
+    "retrieval-economy.d.ts",
+    "context-capsule.d.ts",
     "public-qa.js",
     "README.md",
     "SCHEMA.md",
+    "COMMERCIAL_CONTRACT.md",
     "PROVENANCE.md",
+    "RELEASE_CANDIDATE_0.2.0.md",
+    "RELEASE_CANDIDATE_0.3.0.md",
     "benchmark.js",
     "examples/",
     "LICENSE"
   ],
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "license": "Apache-2.0",
   "keywords": [
     "ai",
     "context",
+    "context-compiler",
     "continuity",
     "deterministic",
+    "retrieval",
+    "token-economy",
     "resume"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tantanpq/PAI.git",
+    "directory": "capabilities/context"
+  },
+  "bugs": {
+    "url": "https://github.com/tantanpq/PAI/issues"
+  },
+  "homepage": "https://github.com/tantanpq/PAI/tree/main/capabilities/context",
+  "sideEffects": false
 }

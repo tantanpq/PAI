@@ -3,5 +3,6 @@
 module.exports = {
   ...require('./context-capsule'),
   ...require('./retrieval-economy'),
-  ...require('./continuity-carrier')
+  ...require('./continuity-carrier'),
+  ...require('./context-compiler')
 };

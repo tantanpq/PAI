@@ -15,6 +15,10 @@ jobs:
     steps:
       - name: Check out exact revision
         uses: actions/checkout@v4
+      - name: Set up Node 22 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
       - name: Validate public asset catalog and bounded content
         run: python3 scripts/check-public-integrity.py
       - name: Verify Context Kit recovered source identity
@@ -57,7 +61,7 @@ jobs:
       - name: Benchmark Context Kit deterministic behavior
         working-directory: capabilities/context
         run: npm run benchmark
-      - name: Pack and verify Context Kit as a clean consumer
+      - name: Pack and verify Context Compiler as a clean consumer
         shell: bash
         run: |
           set -euo pipefail
@@ -71,13 +75,31 @@ jobs:
           npm init -y >/dev/null 2>&1
           npm install "$TARBALL" >/dev/null
           node - <<'NODE'
-          const { compile, planRetrieval, buildContinuityCarrier } = require('pai-context-kit');
+          const { compile, planRetrieval, buildContinuityCarrier, compileContextPlan, recordContextOutcome } = require('pai-context-kit');
+          const compilerSubpath = require('pai-context-kit/compiler');
+          const legacyCapsuleSubpath = require('pai-context-kit/context-capsule');
+          const legacyRetrievalSubpath = require('pai-context-kit/retrieval-economy');
+          const legacyContinuitySubpath = require('pai-context-kit/continuity-carrier');
+          const packageMetadata = require('pai-context-kit/package.json');
           const result = compile({ owner: { principalId: 'clean', accountId: 'clean', workspaceId: 'clean' }, profile: 'resume', budget: 1, coverage: { observedUserSignals: 1, unobservedHostedChatTurns: 0 }, items: [{ kind: 'intent', id: 'i1', value: 'clean consumer', privacyClass: 'PUBLIC', provenance: { source: 'synthetic-fixture' }, freshness: '2026-09-11T00:00:00Z' }] });
           if (result.capsule.items.length !== 1) process.exit(1);
-          const plan = planRetrieval({ query: 'context', candidates: [{ id: 'context', ref: 'context.md' }] });
+          const retrieval = planRetrieval({ query: 'context', candidates: [{ id: 'context', ref: 'context.md' }] });
           const carrier = buildContinuityCarrier({ objective: 'clean consumer', nextOutcome: 'pass', constraints: [], acceptedDecisions: [], openLoops: [], programRefs: [], evidenceRefs: [], terminalResult: null, workingSet: [], budget: { totalBytes: 1024, outputReserveBytes: 128, maxWorkingItems: 0 } });
-          if (plan.discovery.bodyCount !== 0 || carrier.status !== 'READY') process.exit(1);
-          console.log(`CONTEXT_CLEAN_CONSUMER_PASS sha256=${result.sha256} retrieval=${plan.status} continuity=${carrier.status}`);
+          const plan = compileContextPlan({ profile: 'repo-engineering', task: { objective: 'clean consumer context compiler' }, sourceMap: [{ id: 'repo', ref: 'git:main', roles: ['REPOSITORY_BASELINE'] }] });
+          const episode = recordContextOutcome({ plan, result: { resultId: 'clean-result', disposition: 'ACCEPTED', accepted: true } });
+          if (
+            retrieval.discovery.bodyCount !== 0 ||
+            carrier.status !== 'READY' ||
+            plan.status !== 'READY' ||
+            episode.rawContentStored !== false ||
+            typeof compilerSubpath.compileContextPlan !== 'function' ||
+            typeof compilerSubpath.recordContextOutcome !== 'function' ||
+            typeof legacyCapsuleSubpath.compile !== 'function' ||
+            typeof legacyRetrievalSubpath.planRetrieval !== 'function' ||
+            typeof legacyContinuitySubpath.buildContinuityCarrier !== 'function' ||
+            packageMetadata.version !== '0.3.0-rc.1'
+          ) process.exit(1);
+          console.log(`CONTEXT_CLEAN_CONSUMER_PASS sha256=${result.sha256} retrieval=${retrieval.status} continuity=${carrier.status} compiler=${plan.status}`);
           NODE
       - name: Verify W_Flow recovered source identity
         shell: bash
@@ -154,3 +176,20 @@ jobs:
           if (result.result.verdict !== 'PASS' || result.result.productionReady !== false) process.exit(1);
           console.log(`SIMLAB_CLEAN_CONSUMER_PASS sha256=${result.sha256}`);
           NODE
+
+  context-node24-compatibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out exact revision
+        uses: actions/checkout@v4
+      - name: Set up Node 24 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Test Context Compiler on Node 24
+        working-directory: capabilities/context
+        run: |
+          npm test
+          npm run benchmark
+          npm run qa

@@ -1,63 +1,94 @@
 # Context Kit schema
 
-Context Kit 0.2 keeps the `compile()` v1 contract below and adds retrieval and continuity contracts.
+Context Kit 0.3 is additive: the `compile()` Context Capsule v1 API, Retrieval Economy and Continuity Carrier remain compatible while Context Compiler adds a versioned orchestration and outcome-evaluation layer.
 
-## Request
+## Context Compiler plan
 
-Required top-level fields:
+`compileContextPlan()` accepts:
 
-- `owner`: object with non-empty `principalId`, `accountId`, `workspaceId`.
-- `profile`: `resume`, `passport`, or `work`.
-- `budget`: positive integer measured in selected items.
-- `coverage`: non-negative integer counts `observedUserSignals` and `unobservedHostedChatTurns`.
-- `items`: array of evidence items.
+- `profile`: one built-in profile, or `strategy` with explicit id/version/role contract;
+- `task.objective`: required;
+- optional task identity/class/project/checkpoint refs;
+- protected `constraints`, `acceptedDecisions`, `acceptance`, `authority`, `effectClass`, `privacyClass`, `scopes`, `outputContract`, truth/source status, negations, contradictions and supersession refs; defaults apply only when optional classification fields are omitted, while malformed explicit classifications fail closed;
+- a metadata-only `sourceMap`;
+- bounded `maxSelectedSources`, `maxMetadataBytes`, and `maxHydrationBytes`; omitted values use profile/default ceilings, while explicitly invalid values fail closed instead of widening to a default.
 
-Each item requires:
+Source descriptors require `id`, `ref` and one or more `roles`. Optional fields include hash, size, maxBytes, tags, priority, freshness, authorityClass, truthClass, availability, resolution and `volatility = STABLE | SESSION | LIVE`. A hash is mandatory whenever the selected strategy resolves that source as `EXACT_JIT`; otherwise the plan returns `CONTEXT_MISS / EXACT_SOURCE_HASH_REQUIRED` and emits no unusable fetch request. Built-in/custom strategies admit non-required sources only when at least one role is declared in that strategy; the selected set must cover every `requiredRole`; the compiler uses deterministic bounded cover search across source-count, metadata and hydration ceilings, and returns a typed search-limit miss instead of a false infeasibility claim if its safety ceiling is reached, while descriptor-level `required: true` protects that exact ref; caller-marked `required: true` sources remain protected task-specific requirements. Conflicting hash/authority/truth metadata for the same ref fails closed.
 
-- `kind`: one of `programResult`, `currentPicture`, `outcome`, `intent`, `experience`, `memory`, `constraint`, `unknown`, `artifact`;
-- `id`, `value`, `freshness`: non-empty strings;
-- `privacyClass`: `PUBLIC`, `PERSONAL`, or `SECRET`;
-- `provenance.source`: non-empty string.
+Source-body fields such as `body`, `content`, `raw`, `text`, `messages`, `transcript` or `prompt` are forbidden in discovery input.
 
-`programResult`, `experience`, and `artifact` additionally require a non-empty `locator` and 64-character lowercase hexadecimal `hash`.
+Output schema: `context-compiler-plan/v1`.
 
-## Selection
+It contains:
+- deterministic `taskFingerprint` and `contextPlanId`;
+- versioned strategy/profile;
+- protected state;
+- selected source metadata;
+- explicit omissions;
+- exact `EXACT_JIT_FETCH` requests;
+- structured missing-role/ref/budget reasons;
+- budget decision;
+- provider-neutral `cachePlan` with hash-bound stable-prefix candidates and dynamic refs;
+- stable invariants.
 
-Precedence is deterministic: `programResult` → `currentPicture` → `outcome` → `intent` → `experience` → `memory` → `constraint` → `unknown` → `artifact`, then item id and canonical digest.
+A required role with no available source returns `CONTEXT_MISS`. It does not trigger a broad history/source-body reload.
 
-Omissions are explicit: `PROFILE_EXCLUDED`, `PRIVACY_REDACTED`, `DUPLICATE`, `BUDGET_EXCEEDED`.
+## Built-in source-role profiles
 
-## Output
+- `repo-engineering`: requires `REPOSITORY_BASELINE`.
+- `product-build`: requires `PRODUCT_SPEC` and `REPOSITORY_BASELINE`; product spec defaults to exact JIT.
+- `runtime-repair`: requires `DESIRED_STATE` plus exact-JIT `RUNTIME_READBACK`; repair context must know both intended and observed state.
+- `independent-qa`: requires exact-JIT `FROZEN_SUBJECT` and `TEST_CONTRACT`.
+- `native-domain`: requires exact-JIT `NATIVE_OBJECT`.
 
-`compile()` returns:
+Profiles express context requirements only. They do not grant authority or execute source fetches.
 
-- `capsule`: selected items, omissions, coverage, declared policy, ownership marker and optional `CONTEXT_MISS`;
-- `canonical`: deterministic canonical string;
-- `sha256`: SHA-256 of the canonical capsule.
+## Context Episode
 
-A selected `unknown` item produces `contextMiss = { code: 'CONTEXT_MISS', unknownIds: [...] }`.
+`recordContextOutcome()` accepts one compiler plan plus:
 
-## Failure mode
+- `resultId`;
+- disposition: `ACCEPTED | REJECTED | NEEDS_REVISION | UNKNOWN`;
+- optional accepted boolean and verificationRef;
+- observable correction/restatement/context-miss counts;
+- optional acceptance-contract/baseline/provider/model/tokenizer identity and false-success label;
+- observable latency, input/output tokens, input/output/hydrated bytes, tool-call count and cost.
 
-Malformed or credential-like inputs fail closed with `ContextCapsuleError` code `MALFORMED_INPUT`.
+Output schema: `context-episode/v1`.
+
+It links task fingerprint, strategy, selected source identities, omission/miss classes, budget decision and outcome. Raw prompt/source/transcript/message fields are rejected and `rawContentStored` is always false.
+
+## Context Capsule v1
+
+The existing `compile()` request requires:
+- owner principal/account/workspace;
+- profile `resume | passport | work`;
+- positive item budget;
+- observed/unobserved coverage;
+- evidence items with kind/id/value/privacy/provenance/freshness.
+
+Selection remains deterministic. Explicit omissions remain `PROFILE_EXCLUDED`, `PRIVACY_REDACTED`, `DUPLICATE`, `BUDGET_EXCEEDED`.
 
 ## Retrieval Economy
 
-`planRetrieval()` accepts a query plus bounded caller-supplied metadata candidates. Candidate bodies (`body`, `content`, `fullContent`, `raw`, `text`) are rejected with `BROAD_DISCOVERY_BODY_FORBIDDEN`. Output contains metadata pointers and, on a hit, exactly one `EXACT_JIT_FETCH` instruction.
+`planRetrieval()` is metadata-only and emits at most an exact JIT ref on a hit.
 
-`resolveExactArtifact()` accepts one stable identity, expected SHA-256, primary ref, optional archive ref, and at most two exact candidate values. It never searches history. A matching artifact is returned only after hash verification and byte-budget enforcement; otherwise it returns `CONTEXT_MISS` or throws `EXACT_ARTIFACT_HASH_DRIFT`.
+`resolveExactArtifact()` verifies one stable identity against its expected SHA-256 and byte budget. Oversized exact sources return `CONTEXT_MISS` with `content: null`.
 
-`convergeLifecycleProjection()` selects the newest timestamped governed attempt for the same stable identity. This rejects a stale cached running attempt when a newer terminal attempt exists without allowing an older terminal attempt to mask a legitimate newer retry. Ranking does not create authority; callers supply the governed attempt projection.
+`convergeLifecycleProjection()` rejects stale cached attempt projections using caller-supplied governed attempt metadata.
 
 ## Continuity Carrier
 
-`buildContinuityCarrier()` protects:
+`buildContinuityCarrier()` protects objective/next outcome, constraints, accepted decisions, open loops, Program/Campaign/Mission refs, exact evidence refs and terminal Result pointer. Identical exact refs are deduplicated before budget accounting.
 
-- objective and next outcome;
-- constraints and accepted decisions;
-- open loops and Program/Campaign/Mission refs;
-- exact evidence refs and terminal Result pointer.
+Raw history is rejected; protected overflow returns `CONTEXT_MISS`.
 
-The protected set is never summarized away. If it cannot fit, the result is `CONTEXT_MISS`. Recent working items are admitted only within the remaining byte/item budget. Passing `rawHistory` is rejected with `RAW_HISTORY_NOT_ACCEPTED`.
+## Invariants
 
-`buildSuccessorCheckpoint()` emits the same protected contract with an empty working set. Raw transcript storage, source fetching, truth decisions and effect execution remain external.
+- VERIFY != HYDRATE.
+- Metadata first; exact JIT only when required.
+- Protected semantics are never silently traded for size.
+- Missing context expands the exact missing cone.
+- Outcome metrics are observed or null, never invented.
+- Core performs no network, filesystem, persistence, scheduling or authority action.
+- Context reduction and provider caching are distinct; cachePlan is advisory and never proves a cache hit.

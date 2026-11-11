@@ -7,8 +7,11 @@ This compatible candidate keeps the Context Capsule 0.1 API and adds Retrieval E
 ## Required qualification
 
 - original Context Capsule suite remains 6/6 PASS;
-- new 0.2 suite passes six tests covering metadata-only discovery, exact archive/hash lookup, stable-ID convergence, protected continuity, successor checkpoints, and bounded overflow failure;
+- new 0.2 suite passes eight tests covering metadata-only discovery, exact archive/hash lookup, over-budget no-hydration behavior, stable-ID convergence, protected continuity, duplicate exact-ref elimination, successor checkpoints, and bounded overflow failure;
 - benchmark v2 reports economy and continuity quality separately;
+- benchmark v2 reports protected-field coverage and duplicate semantic object count separately from byte reduction;
+- exact sources over budget return `CONTEXT_MISS` with no body hydration;
+- context-only optimization stops at `NO_MATERIAL_DELTA` after hard budgets and semantic-quality gates pass;
 - 1,000 deterministic capsule replays produce one SHA-256;
 - `npm pack` and a clean temporary consumer succeed;
 - repository public-integrity workflow passes on the exact PR merge ref;
