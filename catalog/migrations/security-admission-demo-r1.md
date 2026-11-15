@@ -1,5 +1,7 @@
 # Qualification Receipt — Security Admission Demo R1
 
+Historical migration identities describe the originally imported revision, not the current documentation bytes.
+
 Qualification: `AUTO_RELEASE`
 Asset: `pai.assurance.security-evidence-before-software-admission`
 Target path: `demos/security-evidence-before-software-admission.md`
@@ -17,7 +19,7 @@ Target path: `demos/security-evidence-before-software-admission.md`
 
 ## AUTO_RELEASE basis
 
-This is an already-public synthetic non-code demo migrated into the canonical PAI public repository. The current release policy permits documentation and synthetic examples derived only from public-safe sources after deterministic safety checks. The source itself records 7/7 bounded focused behavior checks, including negative cases, but this release does not upgrade that evidence into a security certification.
+This is an already-public synthetic non-code demo migrated into the canonical PAI public repository. The current release policy permits documentation and synthetic examples derived only from public-safe sources after deterministic safety checks. The source describes bounded behavior checks, but their implementation and test suite are not included or reproduced here. This migration makes no executable verification or security-certification claim.
 
 ## Boundary review
 

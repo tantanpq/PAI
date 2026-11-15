@@ -1,9 +1,9 @@
-<!-- Authoritative source: Google Drive — FOUNDER.md (2026-09-18). This repo copy is a projection; see Drive for the canonical version. -->
+<!-- Authoritative source: Google Drive â€” FOUNDER.md (2026-09-18). This repo copy is a projection; see Drive for the canonical version. -->
 # Founder
 
 ## Tân — creator of PAI
 
-I am building **PAI — Personal Assistant Intelligence**: user-owned intelligence designed to preserve continuity, understand goals, continue useful work across time, and verify outcomes against evidence.
+I am building **PAI â€” Personal Assistant Intelligence**: user-owned intelligence designed to preserve continuity, understand goals, continue useful work across time, and verify outcomes against evidence.
 
 My interest is not in building another chatbot interface or an agent swarm for its own sake. I am interested in what happens when AI can become a durable extension of a person's capability without taking ownership away from that person.
 
@@ -33,11 +33,12 @@ Powerful models matter, but they are not the whole system. Continuity, evidence,
 
 ## What is public today
 
-The public PAI repository currently includes three executable capability surfaces:
+The public PAI repository currently includes four executable capability surfaces:
 
-- **Context Kit 0.2.0 candidate / 0.1.0 tagged** for deterministic bounded context, Retrieval Economy and protected continuity;
-- **W_Flow Core 0.1.0** for replayable provider-neutral work-loop semantics;
-- **SimLab Core 0.1.0 public pilot** for deterministic synthetic verification.
+- [**Context Kit 0.2.0 candidate / 0.1.0 tagged**](capabilities/context/README.md) for deterministic bounded context, Retrieval Economy and protected continuity;
+- [**Context Economy 0.1.0**](capabilities/context-economy/README.md) for deterministic context-selection primitives;
+- [**W_Flow Core 0.1.0**](capabilities/wflow/README.md) for replayable provider-neutral work-loop semantics;
+- [**SimLab Core 0.1.0 public pilot**](capabilities/simlab/README.md) for deterministic synthetic verification.
 
 It also contains public Skills, runbooks, workflows, patterns, case studies and reliability evidence.
 
@@ -51,7 +52,7 @@ Other future directions may include team/work continuity, professional-domain in
 
 ## Public work
 
-- [PAI](https://github.com/tantanpq/PAI) — the primary public Open Foundation and product surface.
-- [PAI Reliability Evidence](https://github.com/tantanpq/pai-reliability-evidence) — earlier public evidence, patterns, case studies and reliability work retained for provenance.
+- [PAI](https://github.com/tantanpq/PAI) â€” the primary public Open Foundation and product surface.
+- [PAI Reliability Evidence](https://github.com/tantanpq/pai-reliability-evidence) â€” earlier public evidence, patterns, case studies and reliability work retained for provenance.
 
 For the project thesis, principles and product direction, see [`VISION.md`](VISION.md).

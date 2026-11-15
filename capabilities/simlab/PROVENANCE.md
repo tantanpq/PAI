@@ -4,7 +4,7 @@
 
 The public pilot is a new sanitized implementation of the reusable SimLab contract surface. It is **not** a source dump of the protected PAI SimLab R7 runner, policy registry, private failure corpus or repair intelligence.
 
-Before packaging, an independent R7 QA copy on an admitted QA host was re-read and its published identities matched the current SimLab capability contract, including:
+Historical provenance records list the following private source identities. The corresponding bytes and QA logs are not included, so these identities are not verified by this repository:
 
 - runner SHA-256 `262D5F8FBB22B20C701D59BC6A094E78B4DDD6CEB8BC258601A424A5CF4F0C6E`;
 - verification membrane SHA-256 `505D1127E36077D5C60683569C4C227C95860F095B36236CDC5CC94AEA3A0BEF`;
@@ -13,7 +13,7 @@ Before packaging, an independent R7 QA copy on an admitted QA host was re-read a
 - usage-contract SHA-256 `DEAE91A1C12B516044FE9CBD403489E85A8E556AEF4816D4F793CDC7196084A2`;
 - cognitive-kernel SHA-256 `99339FEB9EC611A1875E6824ACCFCA0B81E913C6E32F0925E919DF5C03910BE6`.
 
-The internal/source evidence basis remains 36/36 compatibility checks plus 73/73 verification-membrane checks, known-bad policy mutant rejection, and independent cross-host QA. Those results justify the contract direction only; they do not substitute for verification of this public package.
+Private compatibility suites, verification-membrane checks and cross-host QA are not included. They supply no reproducible public test result here.
 
 ## Public reduction
 

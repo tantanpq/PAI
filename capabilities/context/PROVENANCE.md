@@ -14,7 +14,7 @@ The compiler and original test file are reused rather than rewritten. Public-onl
 
 ## 0.2 candidate lineage
 
-The 0.2 candidate adopts public-safe patterns from the completed PAI Context Economy and Hosted E2E Closure work:
+The 0.2 candidate adopts public-safe patterns associated with Context Economy and continuity design:
 
 - metadata-only broad discovery followed by one exact JIT fetch;
 - bounded tool/source payloads and explicit `CONTEXT_MISS`;
@@ -23,6 +23,6 @@ The 0.2 candidate adopts public-safe patterns from the completed PAI Context Eco
 - protected continuity fields plus bounded working context and cold raw history;
 - two-axis benchmarking: economy and continuity quality.
 
-The broader campaign measured p95 visible context from 17,700 to 3,825 tokens (78.39%) on its frozen workload with zero acceptance regression and no false-success increase. This is lineage evidence, not a universal Context Kit performance claim.
+Private campaign workloads, measurements and audit outcomes are not included or verified here. The included synthetic fixtures and benchmark support the public behavior claims.
 
 Protected Personal continuity data, private Mind/Chief implementation, proprietary retrieval/ranking/routing/adaptation logic, private evaluation corpora, credentials, host topology and authority internals are not part of this package.

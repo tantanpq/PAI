@@ -1,5 +1,7 @@
 # CHANGE NOTE - 2026-10-30 - PUBLIC REFRESH R1
 
+> Historical change description only. Private operating-system sources, independent review and house-gate logs are not included or reproduced here. This note does not establish private operational or audit results. Current public claims are bounded to the included code and tests.
+
 ## Decision (founder-directed 2026-10-30)
 - `tantanpq/PAI` is again the maintained public face of the Open Foundation. The
   2026-10-28 "historical snapshot" README notice is superseded; product and
@@ -12,8 +14,8 @@
   naming; Mission Framework, CP family and verifiable outcome projection rows);
   canonical vocabulary and "What changed recently" sections added; repository
   layout block corrected to the actual tree; related public repositories listed;
-  maturity section updated (SimLab internal R7 in daily use; public pilot
-  boundary unchanged).
+  maturity section updated with a private SimLab description; public pilot
+  boundary unchanged.
 - `docs/ARCHITECTURE.md` - topology updated to the living systems; naming model
   replaced: the draft PORTFOLIO-to-EXECUTOR ladder was never adopted and is
   removed; the locked vocabulary (ONE PAI = MIND + BODY, program-scoped lock)
@@ -26,18 +28,14 @@
   projection note; R5 carries the Zline Assurance public name; new R6 milestone
   records the living-systems state and this refresh.
 
-## Evidence
-- Current-state sources are internal records of the operating system: the
-  2026-10-30 tools audit and inventory draft, the handoff-system research and
-  its repo-gap follow-up (naming lock, W_Flow, brief-to-result loop), the
-  SimLab R7 / Sim Studio reviews, the Mission Framework cycle-1 live proof
-  (2026-10-30) and the moat standard v0.3 lock record.
-- Independent Codex review: PASS (round 2, 2026-10-30; round 1 returned FAIL
-  with four findings, all fixed and re-verified). House release gate on the
-  refresh package: PASS (exit 0; 0 BLOCKER, 0 HIGH, no new findings). The
-  repository check returned PUBLIC_INTEGRITY_PASS locally, and the GitHub
-  Public integrity run for the release commit passed (run 41164579342).
-  Release commit: `4ba4d3723d77cffba8e95a6110f3afaed4b354b7`.
+## Evidence scope
+- The original note referred to internal tools audits, handoff research, private
+  verification studies, mission-cycle records and an outcome-standard record.
+  These sources, private review logs and house-gate logs are not included here.
+  No private operational or independent-audit result is established by this note.
+- Historical public workflow reference: run `41164579342`, release commit
+  `4ba4d3723d77cffba8e95a6110f3afaed4b354b7`. This is a recorded historical
+  reference, not a substitute for running the current public workflow locally.
 
 ## Rollback
 - Before commit, rollback means restoring the five edited tracked files to

@@ -83,5 +83,5 @@ console.log(JSON.stringify({
   continuityQuality: { protectedChecks, passed: Object.values(protectedChecks).every(Boolean), workingItems: continuity.workingSet.length },
   retrievalQuality: { discoveryBodyCount: retrieval.discovery.bodyCount, selectedId: retrieval.selectedId, nextAction: retrieval.next.action },
   contextMissUnknowns: first.capsule.contextMiss.unknownIds.length,
-  provenanceNote: 'The broader PAI campaign measured 17,700 to 3,825 p95 visible tokens (78.39%) on its frozen workload. This public benchmark is synthetic and does not claim universal token savings.'
+  provenanceNote: 'Measurements apply only to the included synthetic fixture; private workloads and results are not included or verified here.'
 }, null, 2));

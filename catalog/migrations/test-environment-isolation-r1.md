@@ -1,5 +1,7 @@
 # Migration Receipt — Test-Environment Isolation R1
 
+Historical migration identities describe the originally imported revision, not the current documentation bytes.
+
 Status: `RELEASED / AUTO_RELEASE_AFTER_IQA / POST_MERGE_READBACK_PASS`
 
 Source repository: `tantanpq/pai-reliability-evidence`
@@ -17,16 +19,9 @@ Independent QA evidence: `evidence/2026-09-02-test-environment-isolation.md` blo
 
 ## Qualification evidence
 
-The source evidence reports independent verification of the bounded candidate:
+The source describes candidate-owned fixture isolation. Its test suites, tree manifests, production hashes and independent QA logs are not included or reproduced here; no audited source-system result is claimed by this repository.
 
-- focused suite: 31/31 PASS;
-- full suite: 167/167 PASS, 0 failures, 0 skips;
-- deterministic tree-manifest replay: expected 219-entry identity matched;
-- protected production, launcher and history bytes: unchanged;
-- the test consumed a candidate-owned fixture rather than mutable live policy;
-- activation remained disabled and independent QA observed no live mutation.
-
-The migration changes no executable or protected production code. The case-study status line is normalized from `private-staged portfolio draft` to `public foundation case study` because the exact source is already publicly published under CC BY 4.0; both migrated files add explicit provenance footers. The technical claims and their limitations are otherwise preserved.
+The migration changes no executable or protected production code. The case-study status line is normalized from `private-staged portfolio draft` to `public foundation case study` because the exact source is already publicly published under CC BY 4.0; both migrated files add explicit provenance footers. The original narrative is retained for provenance; public wording now distinguishes the pattern from unavailable source-system results.
 
 ## Public boundary
 

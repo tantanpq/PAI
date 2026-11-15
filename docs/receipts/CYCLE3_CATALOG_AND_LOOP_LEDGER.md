@@ -14,7 +14,7 @@ PRIVACY_CHECK: PASS
 SECRET_CHECK: PASS
 RIGHTS_CHECK: PASS
 MOAT_CHECK: PASS
-CLAIM_BOUNDARY: Proves three consecutive bounded AUTO_RELEASE cycles; does not enable unconstrained publish
+CLAIM_BOUNDARY: Candidate ledger only; third-cycle completion is not established while merge identity and readback remain pending
 UNSUPPORTED_CLAIMS: Does not claim Site Ops/website live projection or Personal Beta release
 PUBLIC_READBACK: (filled after merge)
 SUPERSEDES: none

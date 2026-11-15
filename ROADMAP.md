@@ -81,13 +81,13 @@ Acceptance:
 - public case studies connect to the capability/pattern that produced the lesson;
 - website/media surfaces derive from accepted GitHub release identities rather than independent truth.
 
-The three executable surfaces now provide stable anchors for this convergence; completion is not claimed yet.
+The four executable source packages now provide stable anchors for this convergence; completion is not claimed yet.
 
 ## R5 — Assurance design-partner package
 
 Status: **FUTURE / COMMERCIAL-EVIDENCE GATED**
 
-Public name: **Zline Assurance**. The internal standard is locked and a first full internal case has completed; the commercial pilot remains founder-gated.
+Public name: **Zline Assurance**. This is a product direction; no internal-case result or service readiness is established by this repository.
 
 Acceptance:
 
@@ -97,20 +97,13 @@ Acceptance:
 - no pricing/payment/legal commitment until separately approved;
 - paid evidence and repeatability, not repository popularity, determine commercial maturity.
 
-## R6 - Living systems and public refresh
+## R6 - Public documentation alignment
 
 Status: **IN PROGRESS**
 
-Reached so far:
+The public documentation describes the Open Foundation and its boundary with private systems. Private mission cycles, internal verification systems, signed outcomes and control-plane operations have no implementation or runnable evidence in this repository. No private operational result is claimed here.
 
-- Mission Framework is LIVE INTERNALLY: its first full live cycle passed on 2026-10-30 with independent verification; public outputs are published content on zlinegroup.us;
-- the internal SimLab line advanced to R7 with a study layer (Sim Studio) in daily use; the public pilot boundary is unchanged;
-- a locked outcome standard (v0.3) governs how results are projected as evidence, independently verified and counted as done;
-- work is dispatched and closed on a brief-to-result-with-proof discipline, continuously;
-- the control-plane family runs daily operations, with a free public subset (pai-cp-free);
-- canonical architecture vocabulary locked (ONE PAI = MIND + BODY) and applied across public documents; a draft naming ladder that was never adopted has been removed.
-
-Acceptance for closing R6: this refresh passes independent review and the repository's public-integrity gate, and every public claim stays within the evidence above.
+Acceptance: public documentation must match the included code, tests and benchmarks, distinguish historical source narratives from reproduced results, and pass the repository integrity gate.
 
 ## Continuous rule
 

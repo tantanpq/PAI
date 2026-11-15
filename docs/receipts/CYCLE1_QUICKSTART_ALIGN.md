@@ -8,7 +8,7 @@ SOURCE_PROVENANCE: LICENSE.md; capabilities/* README PUBLIC/PILOT status; closed
 PUBLIC_COMMIT_OR_TAG: 253afedb348b9d04d4dc839f454ca79035daca54
 DECLARED_DELTA: Replace stale PACKAGE_CANDIDATE / pending-license wording with published PUBLIC/PILOT status
 OBSERVED_DELTA: docs/QUICKSTART.md only
-TEST_STATUS: Local Unified Public Release pack 28/28 PASS (candidate pack)
+TEST_STATUS: Historical external qualification pack is not included or reproduced here; no local test total is claimed
 INDEPENDENT_QA: not required for this AUTO_RELEASE docs PATCH
 PRIVACY_CHECK: PASS (no private data)
 SECRET_CHECK: PASS
