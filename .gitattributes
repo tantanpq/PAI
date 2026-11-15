@@ -1,0 +1,8 @@
+# Preserve the published bytes used by source-identity checks on every platform.
+capabilities/context/context-capsule.js text eol=lf
+capabilities/context/context-capsule.test.js text eol=lf
+capabilities/wflow/loop_harness.py text eol=lf
+capabilities/wflow/test_loop_harness.py text eol=lf
+capabilities/wflow/LOOP_BLUEPRINT_SCHEMA.json text eol=lf
+capabilities/wflow/LOOP_INSTANCE_TEMPLATE.json text eol=lf
+capabilities/wflow/LOOP_INSTANCE_SEMANTICS.json text eol=lf
