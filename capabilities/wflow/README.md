@@ -70,7 +70,7 @@ The public package reuses these verified source artifacts byte-identically:
 - `LOOP_INSTANCE_TEMPLATE.json`;
 - `LOOP_INSTANCE_SEMANTICS.json`.
 
-The recovered source family previously passed **13/13** tests including the original **8/8** core suite, plus independent frozen-byte QA.
+The public core suite contains eight tests. Additional source-family suites and frozen-byte QA artifacts are not included; their results are not verified by this repository.
 
 The exact PR #17 package and its first post-merge `main` revision passed:
 

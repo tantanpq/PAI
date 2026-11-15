@@ -61,7 +61,7 @@ The exact PR #19 package and the first post-merge public `main` revision both pa
 - `npm pack` and clean temporary consumer install/use PASS;
 - package result explicitly remains `productionReady=false`, `liveProven=false`, `formalProof=false`, authority `NONE`.
 
-The protected R7 implementation was used only as a hash-verified design/evidence basis. Its runner, private property registry, advanced evaluators, application fixtures and failure intelligence are not distributed here.
+The provenance records describe a private R7 design basis; its bytes and verification logs are not available or verified here. Its runner, private property registry, advanced evaluators, application fixtures and failure intelligence are not distributed here.
 
 ## What it does not do
 

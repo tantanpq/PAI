@@ -6,7 +6,7 @@ A cutover can look healthy at the instant a canary succeeds while still leaving 
 
 ## Verification pattern
 
-The bounded verification sequence used here was stricter:
+A bounded verification sequence should:
 
 1. promote the intended owner through the existing governed path;
 2. verify the previous competing owner remains disabled;
@@ -17,9 +17,9 @@ The bounded verification sequence used here was stricter:
 7. independently re-read the exact runtime evidence;
 8. compare the expected bytes through the relevant candidate, winner, and consumer access paths.
 
-## Verified outcome
+## Evidence boundary
 
-The post-promotion result and independent QA both reached terminal `DONE / PASS`. The bounded soak recorded **30/30** passing health snapshots, the associated campaign check completed **48/48** with **0 failures**, active claims remained **0** across the soak observations, and the targeted regression set completed **12/12**. Independent QA also confirmed that the prior competing owner remained disabled and re-read the exact runtime evidence used for the result.
+This is an engineering narrative. The original runtime, soak observations, regression suite and independent QA logs are not included or reproduced here. No audited ownership-continuity result is claimed by this repository.
 
 ## Synthetic walkthrough
 
@@ -35,6 +35,6 @@ The lesson is simple: **a green canary proves an event; a soak can provide evide
 
 ## Limits
 
-This case does not claim long-term availability, HA certification, correctness for every scheduler/host/release, or production certification. It is a bounded ownership-continuity proof only.
+This case does not claim long-term availability, HA certification, correctness for every scheduler/host/release, or production certification. It illustrates checks to request for ownership continuity; it supplies no executable proof.
 
 The public version contains no private source, credential, host identity, internal path, raw operational log, or private provenance fingerprint.

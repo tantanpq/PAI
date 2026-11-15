@@ -14,7 +14,7 @@
 
 ## Protected-source basis
 
-Before the public reduction, an independent P341 R7 QA copy was re-read and matched the current protected capability identities:
+Historical provenance records list these private source hashes. Their source bytes and QA logs are unavailable here; no private identity-verification result is established by this repository:
 
 - R7 runner SHA-256: `262D5F8FBB22B20C701D59BC6A094E78B4DDD6CEB8BC258601A424A5CF4F0C6E`
 - verification membrane SHA-256: `505D1127E36077D5C60683569C4C227C95860F095B36236CDC5CC94AEA3A0BEF`
@@ -23,7 +23,7 @@ Before the public reduction, an independent P341 R7 QA copy was re-read and matc
 - usage contract SHA-256: `DEAE91A1C12B516044FE9CBD403489E85A8E556AEF4816D4F793CDC7196084A2`
 - cognitive kernel SHA-256: `99339FEB9EC611A1875E6824ACCFCA0B81E913C6E32F0925E919DF5C03910BE6`
 
-These hashes establish provenance of the design/evidence basis only. Protected R7 code and private evidence are not part of the public package.
+These hashes are historical identifiers only; absent source bytes cannot establish identity or correctness here. Protected R7 code and private evidence are not part of the public package.
 
 ## Exact PR qualification
 

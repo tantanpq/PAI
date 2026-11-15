@@ -71,9 +71,10 @@ PAI is being developed in layers. Presence on this page is not a claim of produc
 
 ### Available now — Open Foundation
 
-- **Context Kit 0.2.0 candidate / 0.1.0 tagged** — deterministic bounded capsules, metadata-first exact-JIT retrieval and protected continuity carriers.
-- **W_Flow Core 0.1.0** — provider-neutral, replayable work-loop and state semantics.
-- **SimLab Core 0.1.0 public pilot** — deterministic synthetic verification with explicit `PASS / FAIL / UNKNOWN`, replay identity and minimized counterexamples.
+- [**Context Kit 0.2.0 candidate / 0.1.0 tagged**](capabilities/context/README.md) — deterministic bounded capsules, metadata-first exact-JIT retrieval and protected continuity carriers.
+- [**Context Economy 0.1.0**](capabilities/context-economy/README.md) - deterministic context-selection primitives with synthetic checks.
+- [**W_Flow Core 0.1.0**](capabilities/wflow/README.md) — provider-neutral, replayable work-loop and state semantics.
+- [**SimLab Core 0.1.0 public pilot**](capabilities/simlab/README.md) — deterministic synthetic verification with explicit `PASS / FAIL / UNKNOWN`, replay identity and minimized counterexamples.
 - Public Skills, workflows, runbooks, patterns, case studies and release-integrity methods.
 
 These are independently usable public capability surfaces, not a public release of the complete private PAI system.

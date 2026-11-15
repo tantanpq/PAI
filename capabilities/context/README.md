@@ -102,7 +102,7 @@ Release qualification on PR #15 and post-merge `main` both passed the same GitHu
 
 The first benchmark fixture incorrectly expected a lower-precedence unknown item to fit inside budget=5; it failed as it should. The fixture was corrected to budget=6 without changing compiler/test source bytes. Negative evidence is retained in PR #15.
 
-The v2 benchmark reports economy and continuity quality separately. The broader PAI campaign's 78.39% p95 reduction remains workload-specific provenance, not a universal package guarantee. See `RELEASE_RECEIPT.md` for the tagged 0.1 release identity, `RELEASE_CANDIDATE_0.2.0.md` for candidate evidence, and `PROVENANCE.md` for source lineage.
+The v2 benchmark reports economy and continuity quality separately. Private campaign workloads and measurements are not included or verified here. See `RELEASE_RECEIPT.md` for the tagged 0.1 release identity, `RELEASE_CANDIDATE_0.2.0.md` for candidate evidence, and `PROVENANCE.md` for source lineage.
 
 ## Protected boundary
 

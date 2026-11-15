@@ -21,6 +21,6 @@
 
 ## Claim boundary
 
-The source campaign's 78.39% p95 reduction is workload-specific. This package does not guarantee token or latency savings for other workloads, and it does not publish or recreate PAI authority, scheduling, continuity storage, deployment, or protected evaluation systems.
+Private campaign workloads and measurements are not included or verified here. This package does not guarantee token or latency savings, and it does not publish or recreate PAI authority, scheduling, continuity storage, deployment, or protected evaluation systems.
 
 Rollback is Git revert or release supersession to the preceding exact public commit. Terminal commit, release URL, Site Ops receipt, live readback, and rollback proof are recorded on issue 36 and in the owning Task Box receipt after publication.

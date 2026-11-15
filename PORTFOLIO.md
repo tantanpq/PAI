@@ -5,19 +5,17 @@ This page tracks public-facing PAI capability families without treating roadmap 
 | Capability family | Public value | Current public state | Protected value retained |
 | --- | --- | --- | --- |
 | Context & Continuity | bounded context packaging, metadata-first exact-JIT retrieval, source-aware resume and provider-neutral continuity patterns | **Context Kit 0.2.0 RELEASE CANDIDATE / 0.1.0 TAGGED** plus public runbooks/patterns | deep personal continuity, proprietary retrieval/routing/adaptation |
+| Context Economy | deterministic source-excerpt budgets, compact read models, tool-result envelopes, capability projections and repository-map selection | **0.1.0 SOURCE PACKAGE** with synthetic tests and benchmark | private campaign workloads and operational systems |
 | W_Flow | reusable resumable work-loop specifications and verification-friendly workflow patterns | **W_Flow Core 0.1.0 PUBLIC**; source/provenance, replay benchmark, public QA and clean-consumer evidence pinned | autonomous internal Program compilation/orchestration |
-| Assurance & SimLab | deterministic verification patterns, synthetic labs, failure/recovery reasoning | **SimLab Core 0.1.0 PUBLIC PILOT / PILOT_ONLY**; synthetic runner, public SimPack, PASS/FAIL/UNKNOWN, replay and counterexample evidence pinned; internally the line has advanced to R7 in daily use with a study layer (Sim Studio) - the public package remains the bounded pilot | protected R7 evaluators/property intelligence, failure intelligence, advanced repair/assurance engine |
+| Assurance & SimLab | deterministic verification patterns, synthetic labs, failure/recovery reasoning | **SimLab Core 0.1.0 PUBLIC PILOT / PILOT_ONLY**; synthetic runner, public SimPack, PASS/FAIL/UNKNOWN, replay and counterexample evidence pinned | protected R7 evaluators/property intelligence, failure intelligence, advanced repair/assurance engine |
 | Skills & Patterns | small reusable verification and engineering recipes | active public foundation with source resolution, route-policy integrity, release-scope, verification intake and test-environment isolation assets | private/customer-specific adaptations |
 | Packs & Labs | versioned examples, synthetic fixtures and reusable bounded distributions | Open Foundation Starter Pack plus first public SimPack available; broader lab/service maturity remains separately gated | private corpora, customer evidence, sovereign/private execution |
 | PAI Personal | user-owned continuity and productive assistance | not publicly released as a supported product | core product experience, private memory/continuity and adaptation |
-| Zline Assurance | deeper evidence-backed verification, published under the Zline name | standard locked; first full internal case completed; commercial pilot remains founder-gated | private reconstruction, customer-specific execution, proprietary assurance intelligence |
-| Mission Framework | autonomous mission cycles that execute recurring work end-to-end and verify their own outputs | **LIVE internally** - first full cycle passed 2026-10-30 with independent verification; public outputs are published content on zlinegroup.us | mission definitions, runtime and internal evidence |
-| Control planes (CP family) | bounded, auditable control surfaces for external tools and platforms | in daily internal use; free public subset published as [pai-cp-free](https://github.com/tantanpq/pai-cp-free) | full control-plane package and house-specific configuration |
-| Verifiable outcomes | signed outcome evidence checked by independent verifiers before work counts as done | evidence gates passed internally under a locked standard (v0.3); production enrollment in progress | trust roots, keys and ceremony material |
+| Zline Assurance | deeper evidence-backed verification, published under the Zline name | direction only; no service readiness or internal-case result established here | private reconstruction, customer-specific execution, proprietary assurance intelligence |
 
 ## Available now
 
-Start with [`capabilities/context/README.md`](capabilities/context/README.md), [`capabilities/wflow/README.md`](capabilities/wflow/README.md), [`capabilities/simlab/README.md`](capabilities/simlab/README.md), [`docs/QUICKSTART.md`](docs/QUICKSTART.md), or the [`Open Foundation Starter Pack`](packs/open-foundation-starter/README.md).
+Start with [`capabilities/context/README.md`](capabilities/context/README.md), [`capabilities/context-economy/README.md`](capabilities/context-economy/README.md), [`capabilities/wflow/README.md`](capabilities/wflow/README.md), [`capabilities/simlab/README.md`](capabilities/simlab/README.md), [`docs/QUICKSTART.md`](docs/QUICKSTART.md), or the [`Open Foundation Starter Pack`](packs/open-foundation-starter/README.md).
 
 The following material is already useful independently:
 
@@ -30,13 +28,13 @@ The following material is already useful independently:
 7. **Deterministic Source Resolution** — a skill + contract for resolving durable Program/context sources reproducibly without turning stale chat or cached runtime hints into authority.
 8. **Reachable-Path Policy Integrity** — a skill + checklist for proving that ordinary, retry, recovery, legacy and alternate routes enforce the same protected-effect invariant.
 9. **Verification Intake Checklist + Green Tests case study** — a bounded pattern and real public lesson showing why passing focused tests do not authorize the wrong release composition.
-10. **Test-Environment Isolation** — a case study + checklist for separating tests from mutable live policy while proving protected production bytes stayed unchanged; source evidence includes independent QA, 31/31 focused tests, 167/167 full-suite tests and a 219-entry deterministic tree replay.
+10. **Test-Environment Isolation** — a case study + checklist describing fixture isolation and checks for unchanged production bytes; the original suite, fixtures and verification logs are external and are not reproduced in this repository.
 11. **Open Foundation Starter Pack** — one curated path through the current resume, verification, assurance and synthetic-intake assets.
 12. **PAI Reliability Evidence archive** — a larger public collection of evidence summaries, case studies, patterns, demos, runbooks, skills and workflows accumulated before this monorepo became the primary public PAI surface.
 
 Archive: https://github.com/tantanpq/pai-reliability-evidence
 
-Sibling public repositories: [pai-cp-free](https://github.com/tantanpq/pai-cp-free) (free control-plane subset), [leona-scoring-standards](https://github.com/tantanpq/leona-scoring-standards) (published scoring standards; the live internal standard has since advanced), [business-idea-scorer](https://github.com/tantanpq/business-idea-scorer) (public V3 specification; internal skill at V4).
+Sibling public repositories: [pai-cp-free](https://github.com/tantanpq/pai-cp-free) (free control-plane subset), [leona-scoring-standards](https://github.com/tantanpq/leona-scoring-standards) (published scoring standards), [business-idea-scorer](https://github.com/tantanpq/business-idea-scorer) (public V3 specification).
 
 ## Initial productization frontier
 

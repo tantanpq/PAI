@@ -31,6 +31,6 @@ The Pack groups multiple independently useful assets into one bounded outcome: g
 
 It does not create a new runtime, scheduler, planner, queue, database, or authority system.
 
-## Software packages coming later
+## Executable source packages
 
-Context Kit, W_Flow, and SimLab Core are being prepared as separate versioned software/package candidates. Their executable publication is not implied by this starter pack and remains separately gated.
+The repository also contains [Context Kit](../../capabilities/context/README.md), [Context Economy](../../capabilities/context-economy/README.md), [W_Flow Core](../../capabilities/wflow/README.md), and the [SimLab Core synthetic pilot](../../capabilities/simlab/README.md). See their documentation for versions, tests and boundaries. The starter pack itself remains a reading path.

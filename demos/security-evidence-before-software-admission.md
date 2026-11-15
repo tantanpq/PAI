@@ -89,8 +89,8 @@ The admission step must not quietly:
 
 A remediation is a new governed change and needs its own evidence.
 
-## Verified behavior represented by this demo
+## Suggested checks for this demo
 
-The underlying bounded verification passed **7/7 focused tests** and included negative cases for unsigned candidates, untrusted signers, provenance/source mismatch, missing trusted repository evidence, and reachable high-severity vulnerabilities.
+An executable implementation should test unsigned candidates, untrusted signers, provenance/source mismatch, missing trusted-repository evidence, and reachable high-severity vulnerabilities. This repository supplies pseudocode and a decision table, not that implementation or its test suite; no reproduced test result is claimed.
 
 The public demo is an abstraction of that behavior. It is not production code, a universal vulnerability policy, or a security certification.

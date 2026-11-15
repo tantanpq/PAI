@@ -15,8 +15,8 @@ ONE PAI = MIND + BODY
     Examples / Docs / Case Studies
   Protected PAI core (private)
     Mind / Chief implementation
-    Mission Framework runtime (live autonomous cycles)
-    SimLab R7 verification system + Sim Studio study layer
+    mission-cycle runtime (not implemented here)
+    private verification and study systems (not implemented here)
     control-plane (CP) family
     outcome-projection trust machinery
     learning corpus and distillation
@@ -30,13 +30,13 @@ The public repository is a distribution and collaboration surface. It is not a m
 
 ## Naming model
 
-PAI's canonical vocabulary is locked (program-scoped lock). The root identity is:
+The public documentation uses this conceptual identity:
 
 `ONE PAI = MIND + BODY`
 
-One personal intelligence (the **Mind**) acts through replaceable execution surfaces (the **Body**). Locked names in public use include **PAI Personal**, **One PAI**, **Mind**, **Body**, **Chief** (the coordinating role inside the Mind; "Chief-in-Mind" appears only as a shorthand for this boundary in the lock package's checkpoint, not as a locked name), **Host**, **Farm** (a multi-host capacity topology for the one Body - never another scheduler, graph or authority), **Program**, **Campaign**, **Work Seed**, **Result Event** and **Operator Intent**.
+One personal intelligence (the **Mind**) acts through replaceable execution surfaces (the **Body**). Documentation terms include **PAI Personal**, **One PAI**, **Mind**, **Body**, **Chief** (the coordinating role inside the Mind), **Host**, **Farm** (a multi-host capacity topology for the one Body - never another scheduler, graph or authority), **Program**, **Campaign**, **Work Seed**, **Result Event** and **Operator Intent**.
 
-The following are cross-cutting semantics rather than hierarchy levels. **Naming-source note:** CAPABILITY / MODULE / PACK / LOOP are **not** part of the locked P1 registry above — their definitions come from the 2026-08-11 naming DRAFT (non-canonical, never locked) and are used in this repository as working terms only.
+These are documentation terms, not evidence of an implemented private runtime. The following are working definitions rather than hierarchy levels:
 
 - **CAPABILITY**: a demonstrated ability with evidence.
 - **MODULE**: a software implementation component.

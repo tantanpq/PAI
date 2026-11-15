@@ -17,7 +17,7 @@ Presence in this repository does not automatically imply `SUPPORTED_PRODUCT`.
 
 **Goal:** make useful context portable, bounded and reconstructable without treating chat memory as operational authority.
 
-Current public state: **Context Kit 0.2.0 — `RELEASE_CANDIDATE`**; 0.1.0 remains the tagged `PUBLIC_FOUNDATION` release.
+Current public state: [Context Kit](context/README.md) **0.2.0 — `RELEASE_CANDIDATE`**; 0.1.0 remains the tagged `PUBLIC_FOUNDATION` release.
 
 Released surface:
 
@@ -38,11 +38,15 @@ Protected boundary:
 - proprietary retrieval/ranking/routing/adaptation intelligence;
 - private user data and internal authority machinery.
 
+## Context Economy
+
+[Context Economy 0.1.0](context-economy/README.md) provides source-excerpt budgets, compact health views, tool-result envelopes, capability projections and repository-map selection. Its synthetic tests and benchmark are included; private workload savings are not verified here.
+
 ## W_Flow
 
 **Goal:** publish resumable, replay-safe work-loop specifications that are useful across providers and tools.
 
-Current public state: **W_Flow Core 0.1.0 — `PUBLIC_FOUNDATION`**.
+Current public state: [W_Flow Core](wflow/README.md) **0.1.0 — `PUBLIC_FOUNDATION`**.
 
 Released surface:
 
@@ -65,7 +69,7 @@ Protected boundary:
 
 **Goal:** make system claims falsifiable with deterministic checks, explicit evidence and reproducible failures.
 
-Current public state: **SimLab Core 0.1.0 — `PUBLIC PILOT / PILOT_ONLY`**.
+Current public state: [SimLab Core](simlab/README.md) **0.1.0 — `PUBLIC PILOT / PILOT_ONLY`**.
 
 Released pilot surface:
 

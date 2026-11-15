@@ -1,5 +1,7 @@
 # Green Tests, Wrong Release
 
+> Historical source narrative: the original candidate, test suites and QA logs are not included or reproduced here.
+
 ## Situation
 
 A release candidate contained the intended narrow change and passed its focused behavioral tests. If the release decision had stopped there, the candidate could have been treated as ready for the next governed stage.
@@ -49,7 +51,7 @@ If the complete candidate delta exceeds the authorized scope, fail closed even w
 
 ## Claim boundary
 
-This case study demonstrates bounded release-scope rejection from one verified QA result. It does not prove universal supply-chain security, formal verification, production readiness, or the significance of every omitted file.
+This case study illustrates bounded release-scope rejection described by the source narrative. It does not prove universal supply-chain security, formal verification, production readiness, or the significance of every omitted file.
 
 The public version intentionally excludes private fingerprints, paths, file counts, source code, runtime details, and internal identifiers.
 

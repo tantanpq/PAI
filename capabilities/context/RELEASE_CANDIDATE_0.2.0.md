@@ -16,7 +16,7 @@ This compatible candidate keeps the Context Capsule 0.1 API and adds Retrieval E
 
 ## Claim boundary
 
-The 78.39% p95 reduction belongs to the broader frozen PAI workload. It is provenance, not a universal saving guarantee. The public package claims deterministic bounded behavior only for its exact tests and fixtures.
+Private campaign workloads and measurements are not included or verified here. The public package claims deterministic bounded behavior only for its exact tests and fixtures.
 
 ## Rollback
 

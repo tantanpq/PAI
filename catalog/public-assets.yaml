@@ -168,7 +168,7 @@ assets:
     version: 0.1.0
     maturity: PUBLIC_FOUNDATION
     release_class: AUTO_RELEASE_AFTER_IQA
-    provenance: capabilities/context-economy/PROVENANCE.md; verified private campaign reduced to public-safe generic primitives
+    provenance: capabilities/context-economy/PROVENANCE.md; public-safe generic primitives; private campaign results not verified here
     license_source: Apache-2.0 repository software scope
   - asset_id: pai.wflow.core
     asset_class: package

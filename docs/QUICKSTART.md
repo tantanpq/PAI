@@ -53,10 +53,11 @@ Use only systems you own or are authorized to evaluate.
 - Deterministic verification: [`capabilities/simlab/`](../capabilities/simlab/)
 - Portfolio/maturity map: [`../PORTFOLIO.md`](../PORTFOLIO.md)
 
-The three software capability families are already published in this repository as GitHub source packages (see each capability README and [`LICENSE.md`](../LICENSE.md)):
+The four executable source packages are already published in this repository as GitHub source packages (see each capability README and [`LICENSE.md`](../LICENSE.md)):
 
-- Context Kit — `0.2.0 RELEASE CANDIDATE / 0.1.0 TAGGED` (Apache-2.0 software scope)
-- W_Flow Core — `PUBLIC 0.1.0` (Apache-2.0 software scope)
-- SimLab Core — `PUBLIC PILOT / PILOT_ONLY 0.1.0` (Apache-2.0 software scope)
+- [Context Kit](../capabilities/context/README.md) - `0.2.0 RELEASE CANDIDATE / 0.1.0 TAGGED` (Apache-2.0 software scope)
+- [Context Economy](../capabilities/context-economy/README.md) - `0.1.0 SOURCE PACKAGE` (Apache-2.0 software scope)
+- [W_Flow Core](../capabilities/wflow/README.md) - `PUBLIC 0.1.0` (Apache-2.0 software scope)
+- [SimLab Core](../capabilities/simlab/README.md) - `PUBLIC PILOT / PILOT_ONLY 0.1.0` (Apache-2.0 software scope)
 
 No npm or PyPI registry publication is claimed. Trademarks and Protected Core remain reserved/excluded. A change to the licensing strategy remains a founder/legal `HUMAN_GATE`.
